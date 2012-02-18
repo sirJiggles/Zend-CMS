@@ -1,1 +1,21 @@
-This project uses Zend Framework version 1.11.11, add a include path value in vhost definition to use
+This is intended to be a simple CMS like perch for the purpose of learning Zend Framework and some current 
+client projects.
+
+Core functionality of the system will be to have editable regions identified by classes on html elements for example
+
+<p class="editable:textInput:Title"></p>
+
+System should be able to identify the following in this instance :
+
+- Tag is editable
+- Tag is of type textInput
+- Editable title for client is "Title"
+
+Another thought is to have the editbale regions as view helpers, so rather than create a whole module library I 
+can just create new view helpers for different types of ediatble content for example "_gallery.phtml". This
+should enable flexability without chnaging to much core functionality for different clients ... or at least 
+thats the idea :D
+
+Notes:
+
+This project uses Zend Framework version 1.11.11, add a include path value in vhost definition to use.
