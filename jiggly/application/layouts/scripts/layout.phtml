@@ -1,11 +1,29 @@
-
 <h1>Jiggly CMS</h1>
 
+
 <?php 
-$messages = $this->_flashMessenger->getMessages();
-if (isset($messages[0]) && ($messages[0] != '')): ?>
+
+// Login\out controlls and welcome message
+
+$auth = Zend_Auth::getInstance();
+$loggedIn = false;
+if ($auth->hasIdentity()) {
+    // Identity exists; get it
+    $identity = $auth->getIdentity();
+    $loggedIn = true;
+}
+        
+if (!$loggedIn): ?>
+    <a href="/login">Login</a>
+<?php else: ?>
+    <h3>Hello again: <?php echo $identity; ?></h3>
+    <a href="/logout">Logout</a>
+<?php endif ?>
+
+
+<?php if (isset($this->messages[0]) && ($this->messages[0] != '')): ?>
     <div class="flash-messages">
-        <?php echo $messages[0]; ?>
+        <?php echo $this->messages[0]; ?>
     </div>
 <?php endif ?>
 

@@ -16,7 +16,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                                                          );
         //Add the route to the router.
         $router->addRoute('login', $route); 
+        
+        // Logout route
+        $route = new Zend_Controller_Router_Route_Static('logout',
+                                                          array( 'controller' => 'User',
+                                                                 'action' => 'logout')
+                                                         );
+        //Add the route to the router.
+        $router->addRoute('logout', $route); 
  
     }//end function _initRoutes
-   
+    
+
 }

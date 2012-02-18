@@ -2,8 +2,6 @@
 
 class UserController extends Zend_Controller_Action
 {
-    
-   
 
     public function indexAction()
     {
@@ -12,8 +10,10 @@ class UserController extends Zend_Controller_Action
     }
     
     /*
-     * Login action, used for logging users into the CMS
-     * This action contains 
+     * login action
+     * create a new login form and if the post value is set validate the user
+     * if the user passes validation redirect to the index
+     * if not show flash message
      */
     public function loginAction()
     {
@@ -31,34 +31,14 @@ class UserController extends Zend_Controller_Action
             // Check if the form data is valid
             if ($form->isValid($_POST)) {
                 
-                // Get the database adapter
-                $db = $this->_getParam('db');
-                
-                // Create a new instance of the auth adapter, letting it know how we will treat the creds
-                $adapter = new Zend_Auth_Adapter_DbTable(
-                    $db,
-                    'users',
-                    'username',
-                    'password',
-                    'MD5(CONCAT(?, password_salt))'
-                );
-                
                 // Get the values form the form
                 $values = $form->getValues();
                 
-                // Set the identity and credencial values for the auth adapter 
-                $adapter->setIdentity($values['username']);
-                $adapter->setCredential($values['password']);
-                
-                // Get an instance of Zend_Auth
-                $auth   = Zend_Auth::getInstance();
-                // Check if the values in the adapter are correct (authenticate)
-                $result = $auth->authenticate($adapter);
-               
-                print_r($result);
+                // Authenitcate the users (from the post data)
+                $auth = $this->_authenticateUser($values);
                 
                 // If the creds are correct
-                if ($result->isValid()) { 
+                if ($auth->isValid()) { 
                     
                     $this->_helper->flashMessenger->addMessage('Logged in!');
                     $this->_redirect('/');
@@ -68,18 +48,63 @@ class UserController extends Zend_Controller_Action
                     $this->_helper->flashMessenger->addMessage('Login details incorrect');
                 }
                 
-                //$this->view->messages = $this->_helper->flashMessenger->getMessages();
-                
-                //Zend_Debug::dump($values);
-                
-                
+                $this->view->messages = $this->_helper->flashMessenger->getMessages();
+ 
             }// End if form data is valid
         }// End if post data is set
         
     } // End login action
+    
+    /*
+     * Logout action, clear the identity and return to index page
+     */
+    public function logoutAction()
+    {
+        Zend_Auth::getInstance()->clearIdentity();
+        $this->_redirect('/');
+        return;
+    }
 
+    
+    /*
+     * authenticate user function
+     * This function validates the user in the users table using the post data
+     * from the login form
+     * 
+     * @param array $postData
+     * @return Zend_Auth_Adapter_Interface $result
+     */
+    protected function _authenticateUser(array $postData)
+    {
+        
+        try{
+            // Get the database adapter
+            $db = $this->_getParam('db');
+
+            // Create a new instance of the auth adapter, letting it know how we will treat the creds
+            $adapter = new Zend_Auth_Adapter_DbTable(
+                $db,
+                'users',
+                'username',
+                'password',
+                'SHA1(?)'
+            );
+
+            // Set the identity and credencial values for the auth adapter 
+            $adapter->setIdentity($postData['username']);
+            // String appended to password is salt, not perfect but works :)
+            $adapter->setCredential($postData['password'].'Jhw7skjw');
+
+            // Get an instance of Zend_Auth
+            $auth   = Zend_Auth::getInstance();
+            // Check if the values in the adapter are correct (authenticate)
+            $result = $auth->authenticate($adapter);
+            
+            return $result;
+            
+        }catch(Exception $e){
+            throw 'Unable to authenticate user: '.$e->getMessage();
+        } 
+    }
 
 }
-
-
-

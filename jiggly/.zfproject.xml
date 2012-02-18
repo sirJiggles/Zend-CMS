@@ -15,6 +15,7 @@
         <controllerFile controllerName="User">
           <actionMethod actionName="index"/>
           <actionMethod actionName="login"/>
+          <actionMethod actionName="logout"/>
         </controllerFile>
       </controllersDirectory>
       <formsDirectory>
@@ -40,6 +41,9 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="User">
             <viewScriptFile forActionName="login"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="User">
+            <viewScriptFile forActionName="logout"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>
