@@ -31,6 +31,9 @@ class UserController extends Zend_Controller_Action
             // Check if the form data is valid
             if ($form->isValid($_POST)) {
                 
+                // Clear the flash messages
+                $this->_helper->flashMessenger->clearCurrentMessages();
+                
                 // Get the values form the form
                 $values = $form->getValues();
                 
