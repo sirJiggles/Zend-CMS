@@ -1,0 +1,12 @@
+
+<h1>Jiggly CMS</h1>
+
+<?php 
+$messages = $this->_flashMessenger->getMessages();
+if (isset($messages[0]) && ($messages[0] != '')): ?>
+    <div class="flash-messages">
+        <?php echo $messages[0]; ?>
+    </div>
+<?php endif ?>
+
+<?php echo $this->layout()->content; ?>
