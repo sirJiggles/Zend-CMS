@@ -31,9 +31,6 @@ class UserController extends Zend_Controller_Action
             // Check if the form data is valid
             if ($form->isValid($_POST)) {
                 
-                // Clear the flash messages
-                $this->_helper->flashMessenger->clearCurrentMessages();
-                
                 // Get the values form the form
                 $values = $form->getValues();
                 
@@ -51,6 +48,7 @@ class UserController extends Zend_Controller_Action
                     $this->_helper->flashMessenger->addMessage('Login details incorrect');
                 }
                 
+                // Send flash messages to the view
                 $this->view->messages = $this->_helper->flashMessenger->getMessages();
  
             }// End if form data is valid
@@ -96,7 +94,7 @@ class UserController extends Zend_Controller_Action
             // Set the identity and credencial values for the auth adapter 
             $adapter->setIdentity($postData['username']);
             // String appended to password is salt, not perfect but works :)
-            $adapter->setCredential($postData['password'].'Jhw7skjw');
+            $adapter->setCredential($postData['password']."34idnTgs98");
 
             // Get an instance of Zend_Auth
             $auth   = Zend_Auth::getInstance();
