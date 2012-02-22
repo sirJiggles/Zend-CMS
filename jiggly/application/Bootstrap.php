@@ -27,5 +27,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
  
     }//end function _initRoutes
     
+    public function _initAcl()
+    {
+        // Create a new insance of the acl config (to load the config settings)
+        //$acl = Auth_AclConfig::setUpConfig();
+        
+        $acl = new Auth_AclConfig();
+        // Register the ACL plugin
+        $frontController = Zend_Controller_Front::getInstance();
+        $frontController->registerPlugin(new Auth_AuthPlugin());
+    }
 
 }

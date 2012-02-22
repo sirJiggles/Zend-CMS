@@ -78,6 +78,22 @@ class UserController extends Zend_Controller_Action
     protected function _authenticateUser(array $postData)
     {
         
+        
+        /*
+        $authAdapter = new Zend_Auth_Adapter_DbTable($db);
+        $authAdapter->setTableName('Users');
+        $authAdapter->setIdentityColumn('username');
+        $authAdapter->setCredentialColumn('password');
+        $authAdapter->setIdentity($username);
+        $authAdapter->setCredential(sha1($password));
+        $authAdapter->setCredentialTreatment('? AND active = 1');
+        $auth = Zend_Auth::getInstance();
+        $result = $auth->authenticate($authAdapter);
+        if ($result->isValid()) {
+            $data = $authAdapter->getResultRowObject(null, 'password'); // without password
+            $auth->getStorage()->write($data);*/
+        
+        
         try{
             // Get the database adapter
             $db = $this->_getParam('db');
