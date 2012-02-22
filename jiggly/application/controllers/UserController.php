@@ -65,6 +65,21 @@ class UserController extends Zend_Controller_Action
         $this->_redirect('/');
         return;
     }
+    
+    /*
+     * Manage the users action
+     * This is only accessable by admins
+     * This view gives admins the ability to add / remove / edit users
+     */
+    public function manageAction(){
+        
+        // Get new instance of the users model and fetch all users in the system
+        $usersModel = new Application_Model_User();
+        $users = $usersModel->getAllUsers();
+        
+        // Send the users to the view
+        $this->view->users = $users;
+    }
 
     
     /*
@@ -77,23 +92,7 @@ class UserController extends Zend_Controller_Action
      */
     protected function _authenticateUser(array $postData)
     {
-        
-        
-        /*
-        $authAdapter = new Zend_Auth_Adapter_DbTable($db);
-        $authAdapter->setTableName('Users');
-        $authAdapter->setIdentityColumn('username');
-        $authAdapter->setCredentialColumn('password');
-        $authAdapter->setIdentity($username);
-        $authAdapter->setCredential(sha1($password));
-        $authAdapter->setCredentialTreatment('? AND active = 1');
-        $auth = Zend_Auth::getInstance();
-        $result = $auth->authenticate($authAdapter);
-        if ($result->isValid()) {
-            $data = $authAdapter->getResultRowObject(null, 'password'); // without password
-            $auth->getStorage()->write($data);*/
-        
-        
+
         try{
             // Get the database adapter
             $db = $this->_getParam('db');
@@ -117,6 +116,16 @@ class UserController extends Zend_Controller_Action
             // Check if the values in the adapter are correct (authenticate)
             $result = $auth->authenticate($adapter);
             
+            /*
+             * If the result is valid add the data about the user to the 
+             * authentification storage (all but the password)
+             */
+            if ($result->isValid()){
+                $data = $adapter->getResultRowObject(null, 'password');
+                $auth->getStorage()->write($data);
+            }
+            
+            // Return the result to the login action
             return $result;
             
         }catch(Exception $e){

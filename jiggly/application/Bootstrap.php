@@ -11,7 +11,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $router = $frontController->getRouter();
         //Create a new static route. it is static because no pattern matching is required to identify the param location (1st argument)
         $route = new Zend_Controller_Router_Route_Static('login',
-                                                          array( 'controller' => 'User',
+                                                          array( 'controller' => 'user',
                                                                  'action' => 'login')
                                                          );
         //Add the route to the router.
@@ -19,7 +19,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         // Logout route
         $route = new Zend_Controller_Router_Route_Static('logout',
-                                                          array( 'controller' => 'User',
+                                                          array( 'controller' => 'user',
                                                                  'action' => 'logout')
                                                          );
         //Add the route to the router.

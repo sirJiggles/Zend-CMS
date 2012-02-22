@@ -16,13 +16,14 @@ class Auth_AclConfig extends Zend_Acl {
     public function __construct() {
         
         // Create new instance of Zend ACL
+        //$acl = new parent::init();
         $acl = new parent;
-        
+
         // List of the roles in the system
         $roles = array('admin', 'editor');
 
         // List of the controllers we are going to allocate
-        $controllers = array('user', 'index', 'admin');
+        $controllers = array('user', 'index', 'error');
 
         // Loop through the rolse and controllers and add them to the system
         foreach ($roles as $role) {
@@ -37,16 +38,17 @@ class Auth_AclConfig extends Zend_Acl {
 
         // Here comes credential definition for editor user.
         $acl->allow('editor'); // Has access to everything...
-        $acl->deny('editor', 'admin'); // ... except the admin controller.
-
+        $acl->deny('editor', 'user', 'manage');
+        $acl->deny('editor', 'user', 'edit');
+        $acl->deny('editor', 'user', 'remove');
+        
+        //$acl->deny('editor', 'admin'); // ... except the admin controller.
+         
         //Some examples for later on
 
         //$acl->allow('editor', null, 'list'); 
         // Has access to all controller list actions.
-
-        //$acl->deny('editor', 'user', 'add'); 
-        // Has access to the login action in user controller.
-
+        
         // Add acl to registery (so we can access from the authPlugin class)
         $registry = Zend_Registry::getInstance();
         $registry->set('acl', $acl);

@@ -52,7 +52,14 @@ class ErrorController extends Zend_Controller_Action
         $log = $bootstrap->getResource('Log');
         return $log;
     }
-
+    
+    /*
+     * forbidden action, action that calls 
+     * it set in the lib_auth_authplugin file
+     */
+    public function notTheDroidsAction(){
+        
+    }
 
 }
 

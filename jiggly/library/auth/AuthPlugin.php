@@ -39,7 +39,7 @@ class Auth_AuthPlugin extends Zend_Controller_Plugin_Abstract
                                          $request->getActionName());
             if (!$isAllowed) {
                 $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
-                $redirector->gotoUrlAndExit('/');
+                $redirector->gotoUrlAndExit('/error/not-the-droids');
             }
         }
     }

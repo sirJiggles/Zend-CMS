@@ -10,13 +10,17 @@ $loggedIn = false;
 if ($auth->hasIdentity()) {
     // Identity exists; get it
     $identity = $auth->getIdentity();
+    
+    //Zend_Debug::dump($identity);
+    //exit();
+    
     $loggedIn = true;
 }
         
 if (!$loggedIn): ?>
     <a href="/login">Login</a>
 <?php else: ?>
-    <h3>Hello again: <?php echo $identity; ?></h3>
+    <h3>Hello again: <?php echo $identity->real_name; ?></h3>
     <a href="/logout">Logout</a>
 <?php endif ?>
 
