@@ -77,8 +77,43 @@ class UserController extends Zend_Controller_Action
         $usersModel = new Application_Model_User();
         $users = $usersModel->getAllUsers();
         
-        // Send the users to the view
-        $this->view->users = $users;
+        /*
+         * This should NEVER happen, but if there are no users in the system
+         * and they have somehow logged in, redirect them back to index
+         */
+        if (isset($users)){
+            // Send the users to the view
+            $this->view->users = $users;
+        }
+    }
+    
+    
+    /*
+     * Edit users action
+     * This view expects an Id param sent to it and is where the
+     * users of the sytem can edit a single users details
+     */
+    public function editAction(){
+        
+        // Get the user buy the user ID parsed
+        $id = $this->getRequest()->getParam('id');
+        
+        // If the get param was sent and is in the correct format
+        if (isset($id) && is_numeric($id)){
+            $userModel = new Application_Model_User();
+            $user = $userModel->getUserById($id);
+            
+            // Redirect back to manage users if the user (by the id) was not found
+            if (isset($user)){
+                $this->view->user = $user;
+            }else{
+                $this->_redirect('/user/manage');
+            }
+        }else{
+            // Redirect back to manage users
+            $this->_redirect('/user/manage');
+        }
+        
     }
 
     

@@ -1,8 +1,14 @@
 <?php
 
+/*
+ * This is the login form for the system
+ * 
+ * Gareth Fuller
+ */
+
 class Application_Form_Login extends Zend_Form
 {
-
+    
     public function init()
     {
         // Username input field
