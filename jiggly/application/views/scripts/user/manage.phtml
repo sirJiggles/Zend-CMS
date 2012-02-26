@@ -1,9 +1,13 @@
+
+<!-- This is the table that contains all the users in the system -->
 <table>
     <thead>
         <th>Username</th>
         <th>Real Name</th>
         <th>Active</th>
         <th>Role</th>
+        <th>Edit</th>
+        <th>Remove</th>
     </thead>
     
     <tbody>
@@ -16,8 +20,8 @@
                     <td><?php echo $user->real_name; ?></td>
                     <td><?php echo ($user->active == 1) ? 'yes' : 'no'; ?></td>
                     <td><?php echo $user->role; ?></td>
-                    <td><a href="/user/edit/<?php echo $user->id; ?>" title="Edit <?php echo $user->real_name; ?>">Edit</a></td>
-                    <td><a href="/user/remove/<?php echo $user->id; ?>" title="Remove <?php echo $user->real_name; ?>">Remove</a></td>
+                    <td><a href="/user/edit/id/<?php echo $user->id; ?>" title="Edit <?php echo $user->real_name; ?>">Edit</a></td>
+                    <td><a href="/user/remove/id/<?php echo $user->id; ?>" title="Remove <?php echo $user->real_name; ?>">Remove</a></td>
                 </tr>
                 <?php   
             endforeach;
