@@ -1,0 +1,35 @@
+server {
+        listen 80;
+        server_name www.jiggly.dev jiggly.dev;
+        access_log /srv/www/logs/jiggly.dev/access.log;
+        error_log /srv/www/logs/jiggly.dev/error.log;
+        root /home/gareth/Dropbox/Zend-CMS/jiggly/public;
+
+        location / {
+                index index.php;
+        }
+
+
+        # Deny access to sensitive files.
+        location ~ (\.inc\.php|\.tpl|\.sql|\.tpl\.php|\.db)$ {
+                deny all;
+        }
+        location ~ \.htaccess {
+                deny all;
+        }
+
+        # Rewrite rule adapted from zendapp/public/.htaccess
+        if (!-e $request_filename) {
+                 rewrite ^.*$ /index.php last;
+        }
+
+        location ~ \.php$ {
+                fastcgi_pass 127.0.0.1:9000;
+                fastcgi_index index.php;
+                include fastcgi_params;
+                fastcgi_param PHP_VALUE "include_path=/home/gareth/Dropbox/library/Zend/1.11.11";
+                fastcgi_param APPLICATION_ENV development;
+        }
+
+
+}
