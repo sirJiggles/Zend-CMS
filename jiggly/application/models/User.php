@@ -38,7 +38,40 @@ class Application_Model_User extends Zend_Db_Table{
             return $row;
             
         } catch (Exception $e) {
-            echo 'Unable to getUserById: ',  $e->getMessage(), "\n";
+            throw new Exception('Unable to getUserById in User model: '.$e->getMessage());
+        }
+        
+    }
+    
+    
+    
+    /*
+     * Function to update users based on the post data
+     * 
+     * @param array $userData
+     * @param array $userId
+     * 
+     */
+    public function updateUser($formData, $userId){
+        
+        try {
+            
+            if (is_array($formData) && is_numeric($userId)){
+                // Unset the csrf token from the data array
+                unset($formData['csrf_token']);
+
+                // Apply encoding to the user password
+                $formData['password'] = sha1($formData['password'].'34idnTgs98');
+
+                $where = $this->getAdapter()->quoteInto('id = ?', $userId);
+
+                $this->update($formData, $where);
+            }else{
+                throw new Exception('Incorrect variable types passed to updateUser: expecting array and int');
+            }
+            
+        }catch (Exception $e) {
+            throw new Exception('Unable to updateUser in User model: '.$e->getMessage());
         }
         
     }

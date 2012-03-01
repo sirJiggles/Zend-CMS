@@ -103,6 +103,35 @@ class UserController extends Zend_Controller_Action
             $userModel = new Application_Model_User();
             $user = $userModel->getUserById($id);
             
+            // Get the user form
+            $userForm = new Application_Form_UserForm();
+            $userForm->setAction('/user/edit/id/'.$id);
+            $userForm->setMethod('post');
+            
+            // Update the user based on the form post
+            if ($this->getRequest()->isPost()){
+            
+                // Check if the form data is valid
+                if ($userForm->isValid($_POST)) {
+                    $userModel->updateUser($userForm->getValues(), $id);
+                    // Fetch the updated user
+                    $user = $userModel->getUserById($id);
+                    
+                    // Set the flash message
+                    $this->_helper->flashMessenger->addMessage('User details updated');
+                    
+                    // Send flash messages to the view
+                    $this->view->messages = $this->_helper->flashMessenger->getMessages();
+                    
+                }
+            }
+            
+            // Set the values for the form based on the user in the system 
+            $userForm->populate($user->toArray());
+            
+            // Send the form to the view
+            $this->view->userForm = $userForm;
+            
             // Redirect back to manage users if the user (by the id) was not found
             if (isset($user)){
                 $this->view->user = $user;
@@ -115,6 +144,7 @@ class UserController extends Zend_Controller_Action
         }
         
     }
+    
 
     
     /*
