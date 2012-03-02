@@ -57,12 +57,20 @@ class Application_Model_User extends Zend_Db_Table{
         try {
             
             if (is_array($formData) && is_numeric($userId)){
-                // Unset the csrf token from the data array
+                // Unset the csrf token and password repeat from the data array
                 unset($formData['csrf_token']);
+                unset($formData['password_repeat']);
 
-                // Apply encoding to the user password
-                $formData['password'] = sha1($formData['password'].'34idnTgs98');
-
+                /*
+                 * Apply encoding to the user password if the password is set
+                 * If the user password id not set, ignore updating
+                 */
+                if ($formData['password'] != ''){
+                    $formData['password'] = sha1($formData['password'].'34idnTgs98');
+                }else{
+                    unset($formData['password']);
+                }
+                
                 $where = $this->getAdapter()->quoteInto('id = ?', $userId);
 
                 $this->update($formData, $where);

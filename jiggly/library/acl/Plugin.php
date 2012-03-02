@@ -10,23 +10,24 @@ class Acl_Plugin extends Zend_Controller_Plugin_Abstract
 {
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        $loginController = 'user';
-        $loginAction     = 'login';
-
         $auth = Zend_Auth::getInstance();
-
+        $ident = $auth->getIdentity();
+        
         // If user is not logged in and is not requesting login page
-        // - redirect to login page.
-        if (!$auth->hasIdentity()
-                && $request->getControllerName() != $loginController
-                && $request->getActionName()     != $loginAction) {
+        $currentAction = $request->getActionName();
+        $currentController = $request->getControllerName();
+        
+        // Create a concat of the login path to cmpare against
+        $controllerActionConcat = $currentController.'/'.$currentAction;
+            
 
+        if ((!isset($ident)) && ($controllerActionConcat != 'user/login')) {
             $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
-            $redirector->gotoSimpleAndExit($loginAction, $loginController);
+            $redirector->gotoSimpleAndExit('login', 'user');
+
         }
 
-        // User is logged in or on login page.
-
+        // User is logged in or on login page
         if ($auth->hasIdentity()) {
             // Is logged in
             // Let's check the credential
@@ -35,8 +36,8 @@ class Acl_Plugin extends Zend_Controller_Plugin_Abstract
             $identity = $auth->getIdentity();
             // role is a column in the user table (database)
             $isAllowed = $acl->isAllowed($identity->role,
-                                         $request->getControllerName(),
-                                         $request->getActionName());
+                                         $currentController,
+                                         $currentAction);
             if (!$isAllowed) {
                 $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
                 $redirector->gotoUrlAndExit('/error/not-the-droids');
