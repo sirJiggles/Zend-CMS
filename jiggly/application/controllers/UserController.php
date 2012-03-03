@@ -23,7 +23,7 @@ class UserController extends Zend_Controller_Action
         $form->setMethod('post');
         
         // Disable the layout for this view
-        $this->_helper->layout()->disableLayout();
+        //$this->_helper->layout()->disableLayout();
         
         // Send the form to the view
         $this->view->loginForm = $form;
@@ -60,7 +60,7 @@ class UserController extends Zend_Controller_Action
                 }else{
                     // If the user got login details incorrect
                    
-                    $this->_helper->flashMessenger->addMessage('Login detailss incorrect');
+                    $this->_helper->flashMessenger->addMessage('Login details incorrect');
                     // Send flash messages to the view
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
                     
@@ -104,6 +104,9 @@ class UserController extends Zend_Controller_Action
             // Send the users to the view
             $this->view->users = $users;
         }
+        
+        // Show any flash messages 
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
     
     
@@ -132,15 +135,19 @@ class UserController extends Zend_Controller_Action
             
                 // Check if the form data is valid
                 if ($userForm->isValid($_POST)) {
-                    $userModel->updateUser($userForm->getValues(), $id);
-                    // Fetch the updated user
-                    $user = $userModel->getUserById($id);
+                    $updateAttempt = $userModel->updateUser($userForm->getValues(), $id);
                     
-                    // Set the flash message
-                    $this->_helper->flashMessenger->addMessage('User details updated');
+                    if ($updateAttempt){
+                        // Fetch the updated user
+                        $user = $userModel->getUserById($id);
+                        $this->_helper->flashMessenger->addMessage('User details updated');
+                    }else{
+                        $this->_helper->flashMessenger->addMessage('That username is alrady taken, please try again');
+                    }
                     
                     // Send flash messages to the view
-                    $this->view->messages = $this->_helper->flashMessenger->getMessages();
+                    $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+                    $this->_helper->flashMessenger->clearCurrentMessages();
                     
                 }
             }
@@ -164,6 +171,51 @@ class UserController extends Zend_Controller_Action
             return;
         }
         
+    }
+    
+    /*
+     * This is the add user function
+     * This is only visible to the admins of the system and is where
+     * users can be added to the system
+     */
+    public function addAction(){
+        
+        // Get an instance of our user form for adding the users
+        $userForm = new Application_Form_UserForm();
+        $userForm->setAction('/user/add');
+        $userForm->setMethod('post');
+        
+        // Set password as required for new users
+        $userForm->getElement('password')->setRequired(true);
+        $userForm->getElement('password_repeat')->setRequired(true);
+        
+        $this->view->userForm = $userForm;
+        
+        // Add the user based on the form post
+        if ($this->getRequest()->isPost()){
+
+            // Check if the form data is valid
+            if ($userForm->isValid($_POST)) {
+                
+                // Get an instance of the user model
+                $userModel = new Application_Model_User();
+                // Run the add user function with the form post values
+                $addAction = $userModel->addUser($userForm->getValues());
+                
+                if ($addAction){
+                    // Set the flash message
+                    $this->_helper->flashMessenger->addMessage('User added to the system!');
+                    $this->view->messages = $this->_helper->flashMessenger->getMessages();
+                    $this->_redirect('/user/manage');
+                }else{
+                    $this->_helper->flashMessenger->addMessage('That username is taken, please try again');
+                    $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+                    
+                }
+ 
+                return;
+            }
+        }
     }
     
 

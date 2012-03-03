@@ -50,6 +50,7 @@ class Application_Model_User extends Zend_Db_Table{
      * 
      * @param array $userData
      * @param array $userId
+     * @return boolean $result
      * 
      */
     public function updateUser($formData, $userId){
@@ -57,23 +58,47 @@ class Application_Model_User extends Zend_Db_Table{
         try {
             
             if (is_array($formData) && is_numeric($userId)){
-                // Unset the csrf token and password repeat from the data array
-                unset($formData['csrf_token']);
-                unset($formData['password_repeat']);
-
-                /*
-                 * Apply encoding to the user password if the password is set
-                 * If the user password id not set, ignore updating
+                
+                /* 
+                 * First get all the users and make sure the username they are tring
+                 * to does not already exist
                  */
-                if ($formData['password'] != ''){
-                    $formData['password'] = sha1($formData['password'].'34idnTgs98');
-                }else{
-                    unset($formData['password']);
+                $currentUsers = $this->fetchAll();
+                $nameTaken = false;
+                
+                foreach ($currentUsers as $currentUser){
+                    if ($currentUser['id'] != $userId){
+                        // Check if the new username is taken
+                        if ($currentUser['username'] == $formData['username']){
+                            $nameTaken = true;
+                            break;
+                        } 
+                    }
                 }
                 
-                $where = $this->getAdapter()->quoteInto('id = ?', $userId);
+                if (!$nameTaken){
+                    // Unset the csrf token and password repeat from the data array
+                    unset($formData['csrf_token']);
+                    unset($formData['password_repeat']);
 
-                $this->update($formData, $where);
+                    /*
+                    * Apply encoding to the user password if the password is set
+                    * If the user password id not set, ignore updating
+                    */
+                    if ($formData['password'] != ''){
+                        $formData['password'] = sha1($formData['password'].'34idnTgs98');
+                    }else{
+                        unset($formData['password']);
+                    }
+
+                    $where = $this->getAdapter()->quoteInto('id = ?', $userId);
+
+                    $this->update($formData, $where);
+                    
+                    return true;
+                }else{
+                    return false;
+                }
             }else{
                 throw new Exception('Incorrect variable types passed to updateUser: expecting array and int');
             }
@@ -84,4 +109,54 @@ class Application_Model_User extends Zend_Db_Table{
         
     }
     
+    /*
+     * Function for adding users to the system
+     * 
+     * @param array $postData
+     * @return boolean task result
+     * 
+     */
+    public function addUser($formData){
+        try {
+            
+            if (is_array($formData)){
+                
+                $currentUsers = $this->fetchAll();
+                $nameTaken = false;
+                
+                foreach ($currentUsers as $currentUser){
+                    if ($currentUser['username'] == $formData['username']){
+                        $nameTaken = true;
+                        break;
+                    } 
+                }
+                
+                if (!$nameTaken){
+                
+                    // Unset the csrf token and password repeat from the data array
+                    unset($formData['csrf_token']);
+                    unset($formData['password_repeat']);
+
+                    //Apply encoding to the user password if the password 
+                    $formData['password'] = sha1($formData['password'].'34idnTgs98');
+
+                    $formData['active'] =  1;
+
+                    // Add database record
+                    $newRow = $this->createRow($formData);
+                    $newRow->save();
+                    
+                    return true;
+                }else{
+                    return false;
+                }
+                
+            }else{
+                throw new Exception('Incorrect variable types passed to addUser: expecting array of form data');
+            }
+            
+        }catch (Exception $e) {
+            throw new Exception('Unable to addUser in User model: '.$e->getMessage());
+        }
+    }
 }
