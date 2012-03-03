@@ -1,0 +1,18 @@
+<?php $auth = Zend_Auth::getInstance(); ?>
+<header>
+    <?php if ($auth->hasIdentity()): ?>
+    <?php $identity = $auth->getIdentity(); ;?>
+    <div id="left-side">
+        Hello again: <?php echo $identity->first_name .' '. $identity->last_name; ?>
+    </div>
+    <div id=""right-side">
+        <nav>
+            <a href="/logout">Logout</a>
+            <?php if ($identity->role == 'admin'): ?>
+                <a href="/user/manage">Manage Users</a>
+            <?php endif; ?>
+        </nav>
+    </div>
+    <?php endif; ?>
+
+</header>
