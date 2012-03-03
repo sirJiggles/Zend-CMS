@@ -22,12 +22,22 @@ class UserController extends Zend_Controller_Action
         $form->setAction('/login');
         $form->setMethod('post');
         
+        // Disable the layout for this view
+        $this->_helper->layout()->disableLayout();
+        
         // Send the form to the view
         $this->view->loginForm = $form;
         
         // If the user has posted the form
         if ($this->getRequest()->isPost()){
             
+            
+            // Init the capture tries, if not set set as 0
+            $captcha_session = new Zend_Session_Namespace('captcha');
+            if (empty($captcha_session->tries)){ 
+                $captcha_session->tries = 0;
+            }
+		
             // Check if the form data is valid
             if ($form->isValid($_POST)) {
                 
@@ -40,20 +50,29 @@ class UserController extends Zend_Controller_Action
                 // If the creds are correct
                 if ($auth->isValid()) { 
                     
-                    $this->_helper->flashMessenger->addMessage('Logged in!');
+                    // Reset captcha to 0 as they have logged in correctly
+                    $captcha_session->tries = 0;
+                    
+                    $this->_helper->flashMessenger->clearCurrentMessages();
+                    
                     $this->_redirect('/');
                     return;
                 }else{
                     // If the user got login details incorrect
-                    $this->_helper->flashMessenger->addMessage('Login details incorrect');
-                }
-                
-                // Send flash messages to the view
-                $this->view->messages = $this->_helper->flashMessenger->getMessages();
+                   
+                    $this->_helper->flashMessenger->addMessage('Login detailss incorrect');
+                    // Send flash messages to the view
+                    $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+                    
+                    // Set as +1 for attempts
+                    $captcha_session->tries = $captcha_session->tries + 1;
  
+                }
+
             }// End if form data is valid
+
         }// End if post data is set
-        
+
     } // End login action
     
     /*
@@ -137,10 +156,12 @@ class UserController extends Zend_Controller_Action
                 $this->view->user = $user;
             }else{
                 $this->_redirect('/user/manage');
+                return;
             }
         }else{
             // Redirect back to manage users
             $this->_redirect('/user/manage');
+            return;
         }
         
     }

@@ -26,17 +26,39 @@ class Application_Form_Login extends Zend_Form
                 ->addErrorMessage('Password is required')
                 ->setLabel('Password:');
         
-        // Prevent Cross site request forgery (CSRF) attack
-        /*$this->addElement('hash', 'csrf_token',  
-                    array('salt' => get_class($this) . 'ds38JHyw')); */
-        
         // Submit input field
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setValue('Login');
+
         
-        // Add elements to the form
-        $this->addElements(array($username, $password, $submit));
-      
+
+        // Captcha input (only show if 3 incorrect loggins)
+        $captcha_session = new Zend_Session_Namespace('captcha');
+ 
+        if ($captcha_session->tries > 1)
+        {
+            $privatekey = '6Lc-cs4SAAAAAJ-YKJtdlYoGLGPKIFGP3BcALePE';
+            $publickey = '6Lc-cs4SAAAAAPjbR9_bXExC7e3OKHaMeAdrijkp';
+
+            $recaptcha = new Zend_Service_ReCaptcha($publickey, $privatekey);
+            $recaptcha->setOption('theme', 'clean');
+
+            $captcha = new Zend_Form_Element_Captcha('captcha',
+                array(
+                    'captcha'       => 'ReCaptcha',
+                    'captchaOptions' => array('captcha' => 'ReCaptcha', 'service' => $recaptcha),
+                    'ignore' => true
+                    )
+            );
+
+            $this->addElements(array($username, $password, $captcha, $submit));
+        }else{
+            // Add the standard elements to the user form
+            $this->addElements(array($username, $password, $submit));
+        }
+        
+        
+        
     }
 }
 

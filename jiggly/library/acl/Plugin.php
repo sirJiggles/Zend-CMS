@@ -24,6 +24,7 @@ class Acl_Plugin extends Zend_Controller_Plugin_Abstract
         if ((!isset($ident)) && ($controllerActionConcat != 'user/login')) {
             $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
             $redirector->gotoSimpleAndExit('login', 'user');
+            return;
 
         }
 
@@ -41,6 +42,7 @@ class Acl_Plugin extends Zend_Controller_Plugin_Abstract
             if (!$isAllowed) {
                 $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
                 $redirector->gotoUrlAndExit('/error/not-the-droids');
+                return;
             }
         }
     }

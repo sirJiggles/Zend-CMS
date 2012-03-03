@@ -1,34 +1,28 @@
-<h1>Jiggly CMS</h1>
-
-
-<?php 
-
-// Login\out controlls and welcome message
-
-$auth = Zend_Auth::getInstance();
-$loggedIn = false;
-if ($auth->hasIdentity()) {
-    // Identity exists; get it
-    $identity = $auth->getIdentity();
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <?php echo $this->headTitle() ?>
+</head>
+<body>
+    <h1>Jiggly CMS</h1>
     
-    //Zend_Debug::dump($identity);
-    //exit();
-    
-    $loggedIn = true;
-}
+    <?php echo $this->render('header.phtml') ?>
+ 
+
+    <div id="content">
         
-if (!$loggedIn): ?>
-    <a href="/login">Login</a>
-<?php else: ?>
-    <h3>Hello again: <?php echo $identity->first_name .' '. $identity->last_name; ?></h3>
-    <a href="/logout">Logout</a>
-<?php endif ?>
-
-
-<?php if (isset($this->messages[0]) && ($this->messages[0] != '')): ?>
-    <div class="flash-messages">
-        <?php echo $this->messages[0]; ?>
+        <?php if (isset($this->messages[0]) && ($this->messages[0] != '')): ?>
+            <div class="flash-messages">
+                <?php echo $this->messages[0]; ?>
+            </div>
+        <?php endif ?>
+        
+        <?php echo $this->layout()->content; ?>
     </div>
-<?php endif ?>
-
-<?php echo $this->layout()->content; ?>
+ 
+    <?php echo $this->render('footer.phtml') ?>
+</body>
+</html>

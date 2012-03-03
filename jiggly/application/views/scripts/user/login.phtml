@@ -1,3 +1,9 @@
+<?php if (isset($this->messages[0]) && ($this->messages[0] != '')): ?>
+        <div class="flash-messages">
+            <?php echo $this->messages[0]; ?>
+        </div>
+    <?php endif ?>
+
 <h2>Login</h2>
 
 <?php echo $this->loginForm; ?>
