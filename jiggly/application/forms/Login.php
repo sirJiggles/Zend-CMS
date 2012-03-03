@@ -11,12 +11,24 @@ class Application_Form_Login extends Zend_Form
     
     public function init()
     {
+        $this->setAttrib('class', 'login');
+        
+        $customDecorators = array(
+                            'ViewHelper',
+                            'Description',
+                            'Errors',
+                            array(array('Input' => 'HtmlTag'), array('tag' => 'dd')),
+                            array('Label', array('tag' => 'dt')),
+                            array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'item-wrapper')));
+        
+        
         // Username input field
         $username = new Zend_Form_Element_Text('username');
         $username->addFilter('StringTrim')
                 ->setRequired(true)
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->addErrorMessage('Username is required')
+                ->setDecorators($customDecorators)
                 ->setLabel('Username:');
         
         // Password input field
@@ -24,18 +36,20 @@ class Application_Form_Login extends Zend_Form
         $password->setRequired(true)
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->addErrorMessage('Password is required')
+                ->setDecorators($customDecorators)
                 ->setLabel('Password:');
         
         // Submit input field
-        $submit = new Zend_Form_Element_Submit('submit');
-        $submit->setValue('Login');
+        $submit = new Zend_Form_Element_Submit('Login');
+        $submit->setValue('Login')
+                ->setAttrib('class', 'button');
 
         
 
         // Captcha input (only show if 3 incorrect loggins)
         $captcha_session = new Zend_Session_Namespace('captcha');
  
-        if ($captcha_session->tries > 1)
+        if ($captcha_session->tries > 999)
         {
             $privatekey = '6Lc-cs4SAAAAAJ-YKJtdlYoGLGPKIFGP3BcALePE';
             $publickey = '6Lc-cs4SAAAAAPjbR9_bXExC7e3OKHaMeAdrijkp';

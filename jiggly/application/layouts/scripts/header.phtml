@@ -7,9 +7,9 @@
     </div>
     <div id=""right-side">
         <nav>
-            <a href="/logout">Logout</a>
+            <a class="button" href="/logout">Logout</a>
             <?php if ($identity->role == 'admin'): ?>
-                <a href="/user/manage">Manage Users</a>
+                <a class="button" href="/user/manage">Manage Users</a>
             <?php endif; ?>
         </nav>
     </div>

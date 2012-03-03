@@ -141,6 +141,9 @@ class UserController extends Zend_Controller_Action
                         // Fetch the updated user
                         $user = $userModel->getUserById($id);
                         $this->_helper->flashMessenger->addMessage('User details updated');
+                        $this->view->messages = $this->_helper->flashMessenger->getMessages();
+                        $this->_redirect('/user/manage');
+                        return;
                     }else{
                         $this->_helper->flashMessenger->addMessage('That username is alrady taken, please try again');
                     }
@@ -204,9 +207,10 @@ class UserController extends Zend_Controller_Action
                 
                 if ($addAction){
                     // Set the flash message
-                    $this->_helper->flashMessenger->addMessage('User added to the system!');
+                    $this->_helper->flashMessenger->addMessage('User added to the system');
                     $this->view->messages = $this->_helper->flashMessenger->getMessages();
                     $this->_redirect('/user/manage');
+                    return;
                 }else{
                     $this->_helper->flashMessenger->addMessage('That username is taken, please try again');
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
@@ -218,6 +222,36 @@ class UserController extends Zend_Controller_Action
         }
     }
     
+    /*
+     * This is the view action for removing users from the system
+     */
+    public function removeAction(){
+        // Get the user buy the user ID parsed
+        $id = $this->getRequest()->getParam('id');
+        
+        // If the get param was sent and is in the correct format
+        if (isset($id) && is_numeric($id)){
+            
+            $userModel = new Application_Model_User();
+            $removeStatus = $userModel->removeUser($id);
+            
+            if ($removeStatus){
+                $this->_helper->flashMessenger->addMessage('User removed from the system');
+               
+            }else{
+                $this->_helper->flashMessenger->addMessage('Could not find the user to remove');
+            }
+            
+            $this->view->messages = $this->_helper->flashMessenger->getMessages();
+            $this->_redirect('/user/manage');
+            return;
+            
+        }else{
+            // Redirect back to manage users
+            $this->_redirect('/user/manage');
+            return;
+        }
+    }
 
     
     /*

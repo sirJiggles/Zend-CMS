@@ -43,6 +43,25 @@ class Application_Model_User extends Zend_Db_Table{
         
     }
     
+    /*
+     * This is the function to remove users from the system
+     * 
+     * @param int $id
+     * @return boolean task status
+     */
+    public function removeUser($id){
+        try {
+            $where = $this->getAdapter()->quoteInto('id = ?', $id);
+            $result = $this->delete($where);
+ 
+            Zend_Debug::dump($result);
+            return $result;
+            
+        } catch (Exception $e) {
+            throw new Exception('Unable to removeUser in User model: '.$e->getMessage());
+        }
+    }
+    
     
     
     /*

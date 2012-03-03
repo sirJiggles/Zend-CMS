@@ -42,8 +42,8 @@ body, button, input, select, textarea { font-family: sans-serif; color: #222; }
  * Also: hot pink! (or customize the background color to match your design)
  */
 
- ::-moz-selection { background: #d6f346; color: #000; text-shadow: none; }
-::selection { background: #d6f346; color: #000; text-shadow: none; }
+ ::-moz-selection { background: #e25150; color: #fff; text-shadow: none; }
+::selection { background: #e25150; color: #fff; text-shadow: none; }
 
 
 /* =============================================================================
@@ -218,35 +218,153 @@ td { vertical-align: top; }
     
 }
 
+/* Info popups */
 
-#flash-message{
-    margin:10px;
-    background-color: #4fef55;
-    border-style: solid;
-    border-width: 3px;
-    border-color: #49cf4e;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    float:left;
-    padding:7px;
+.ui-state-highlight p{
+    margin:0px;
 }
 
+.ui-state-highlight{
+    margin-top: 10px; 
+    padding: 10px;
+    float:left;
+}
+
+.ui-icon{
+    float: left; 
+    margin-right: 10px;
+}
+    
 ul.errors{
     list-style-type: none;
 }
 
 ul.errors{
-    margin:10px;
+    margin:0px;
+    margin-top:40px;
     border-style: solid;
     border-width: 3px;
     border-color: #e25150;
     background-color: #f77573;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    float:left;
     padding:7px; 
+    color:#fff;
+    margin-bottom:10px;
 }
 
+/*================ Stles for system buttons==============*/
+a.button{
+    color:#fff;
+}
+a.button:hover{
+    color:#fff;
+}
+
+/*================ Styles for the system tables=========*/
+table tr.odd{
+    background-color:#FADBDB; 
+}
+
+table th{
+    background-color:#fb416e;
+    color:#fff;
+    padding:10px;
+}
+
+table td{
+    padding:10px 10px 0px 10px;
+    
+}
+
+table td a.button{
+    margin-top:-10px;
+    margin-left:-10px;
+    margin-right:-10px;
+}
+
+/*==================== Form styes ====================*/
+
+form{
+    float:left;
+    display:block;
+}
+
+form.user{
+    width:350px;
+}
+
+form.login{
+    width:270px;
+}
+
+form div.item-wrapper{
+    float:left;
+    display:block;
+    width:100%;
+}
+
+form dl{
+    display:block;
+    float:left;
+}
+
+form dl dd{
+    display:block;
+    float:right;
+    margin:0px;
+}
+
+form dl dt{
+    display:block;
+    float:left;
+    margin:0px;
+}
+
+form input{
+    height:30px;
+    width:160px;
+    background-color:#FADBDB;
+    float:left;
+    font-size: 16px;
+    padding-left:10px;
+    border: none;
+    color: #fb416e;
+}
+
+form input:focus{
+    background-color:#fb416e;
+    color:#fff;
+}
+
+form label{
+    font-size:16px;
+    float:left;
+    font-weight: bold;
+    padding-top:7px;
+    margin-right:10px;
+    color: #fb416e;
+    height:30px;
+}
+
+form select{
+    background-color:#FADBDB;
+    border: none;
+    float:left;
+    font-size: 16px;
+    padding-left:10px;
+    height:30px;
+    color: #fb416e;
+}
+
+form select:focus{
+
+}
+
+form select:hover{
+    background-color:#fb416e;
+    color:#fff;
+}
 
 
 

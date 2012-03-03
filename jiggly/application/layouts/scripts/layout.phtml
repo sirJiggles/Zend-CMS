@@ -14,7 +14,7 @@
     <?php 
         echo $this->headTitle();
         $this->headLink()->prependStylesheet("/assets/css/style.css")
-                         ->prependStylesheet('/assets/css/redmond/jquery-ui-1.8.18.custom.css'); 
+                         ->prependStylesheet('/assets/css/custom-theme/jquery-ui-1.8.18.custom.css'); 
         echo $this->headLink();
         $this->headScript()->prependFile("/assets/js/script.js")
                            ->prependFile("/assets/js/libs/jquery-ui-1.8.18.custom.min.js")
@@ -44,14 +44,18 @@
     <div id="content">
         
         <?php if (isset($this->messages[0]) && ($this->messages[0] != '')): ?>
-            <div id="flash-message">
-                <?php echo $this->messages[0]; ?>
+            
+            <div class="ui-state-highlight ui-corner-all"> 
+                    <p><span class="ui-icon ui-icon-info"></span>
+                    <?php echo $this->messages[0]; ?></p>
             </div>
+   
             <div class="clear-both"></div>
         <?php endif ?>
         
         <?php echo $this->layout()->content; ?>
     </div>
- 
+    
+    <div class="clear-both"></div>
     <?php echo $this->render('footer.phtml') ?>
 </body>
