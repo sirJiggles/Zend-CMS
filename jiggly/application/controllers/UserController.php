@@ -23,7 +23,7 @@ class UserController extends Zend_Controller_Action
         $form->setMethod('post');
         
         // Disable the layout for this view
-        //$this->_helper->layout()->disableLayout();
+        $this->_helper->layout()->setLayout('login');
         
         // Send the form to the view
         $this->view->loginForm = $form;

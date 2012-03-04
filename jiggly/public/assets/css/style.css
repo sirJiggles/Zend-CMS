@@ -253,6 +253,48 @@ ul.errors{
     margin-bottom:10px;
 }
 
+body{
+    padding:20px;
+}
+
+/*================ Login page ======================*/
+
+
+body.login{
+    text-align: center;
+    padding:0px;
+    margin:0px;
+}
+body.login #content{
+    margin:0 auto;
+    width:496px;
+    height:460px;
+    background-image: url('/assets/img/jiggly.jpg');
+    display:block;
+    text-align: left;
+    background-repeat: no-repeat;
+    padding:300px 0px 0px 230px;
+}
+
+body.login h1{
+    margin-bottom:-30px;
+}
+
+
+/*=============== Headings ==============*/
+
+h1 a{
+   color:#fb416e;
+   text-decoration: none;
+   outline:none;
+}
+
+
+h2{
+    color:#FB416E;
+}
+
+
 /*================ Stles for system buttons==============*/
 a.button{
     color:#fff;

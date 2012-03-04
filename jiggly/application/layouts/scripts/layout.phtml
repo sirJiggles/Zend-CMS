@@ -19,7 +19,9 @@
         $this->headScript()->prependFile("/assets/js/script.js")
                            ->prependFile("/assets/js/libs/jquery-ui-1.8.18.custom.min.js")
                            ->prependFile("/assets/js/libs/jquery-1.6.2.min.js")
-                           ->prependFile("/assets/js/libs/modernizr-2.0.6.min.js") ;
+                           ->prependFile("/assets/js/libs/modernizr-2.0.6.min.js")
+                           ->prependFile("/assets/js/mylibs/Bauhaus_93_400.font.js")
+                           ->prependFile("/assets/js/mylibs/cufon.js");
         echo $this->headScript();
     ?>
     
@@ -27,6 +29,10 @@
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
         <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
     <![endif]-->
+    
+    <script type="text/javascript">
+            Cufon.replace('h1');
+    </script>
     
     <meta name="description" content="Jiggly CMS, content management for the people!">
     <meta name="author" content="Gareth Fuller">

@@ -49,7 +49,7 @@ class Application_Form_Login extends Zend_Form
         // Captcha input (only show if 3 incorrect loggins)
         $captcha_session = new Zend_Session_Namespace('captcha');
  
-        if ($captcha_session->tries > 999)
+        if ($captcha_session->tries > 2)
         {
             $privatekey = '6Lc-cs4SAAAAAJ-YKJtdlYoGLGPKIFGP3BcALePE';
             $publickey = '6Lc-cs4SAAAAAPjbR9_bXExC7e3OKHaMeAdrijkp';
