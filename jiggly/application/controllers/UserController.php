@@ -275,13 +275,14 @@ class UserController extends Zend_Controller_Action
                 'users',
                 'username',
                 'password',
-                'SHA1(?)'
+                'SHA1(?) AND active = 1'
             );
 
             // Set the identity and credencial values for the auth adapter 
             $adapter->setIdentity($postData['username']);
             // String appended to password is salt, not perfect but works :)
             $adapter->setCredential($postData['password']."34idnTgs98");
+            
 
             // Get an instance of Zend_Auth
             $auth   = Zend_Auth::getInstance();

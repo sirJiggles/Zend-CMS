@@ -72,6 +72,8 @@ class Application_Form_UserForm extends Zend_Form
                 ->setDecorators($customDecorators)
                 ->addMultiOption('editor', 'Editor');
         
+       
+        
         
         // Prevent Cross site request forgery (CSRF) attack
         $this->addElement('hash', 'csrf_token',  
@@ -83,9 +85,24 @@ class Application_Form_UserForm extends Zend_Form
         $submit->setValue('Save')
                 ->setAttrib('class', 'button');
         
-        // Add elements to the form
-        $this->addElements(array($firstName, $lastName, $username, $password, $passwdRepeat, $role, $submit));
+        // Work out if we are in the edit user location, if so display the staus select box
+        if(Zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'edit'){
+             
+            // Status input field
+            $status = new Zend_Form_Element_Select('active');
+            $status->setLabel('Active')
+                    ->addMultiOption('1', 'Yes')
+                    ->setDecorators($customDecorators)
+                    ->addMultiOption('0', 'No');
+            
+            $this->addElements(array($firstName, $lastName, $username, $password, $passwdRepeat, $role, $status, $submit));
+        }else{
+            $this->addElements(array($firstName, $lastName, $username, $password, $passwdRepeat, $role, $submit));
+        }
+         
       
     }
+    
+    
 }
 
