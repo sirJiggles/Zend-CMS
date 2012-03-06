@@ -1,3 +1,11 @@
 
-<?php echo $this->loginForm; ?>
+<?php echo $this->loginForm; ?> 
+
+<?php if ($this->forgotPasswordLink): ?>
+
+<a href="/user/forgot-password" title="Forgotten Password?">Forgotten password?</a>
+
+<? endif; ?>
+
+
 

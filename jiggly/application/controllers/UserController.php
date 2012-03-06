@@ -17,26 +17,36 @@ class UserController extends Zend_Controller_Action
      */
     public function loginAction()
     {
-        // Get a new instance of the login form an set the prams action and method
-        $form = new Application_Form_Login();
-        $form->setAction('/login');
-        $form->setMethod('post');
         
         // Disable the layout for this view
         $this->_helper->layout()->setLayout('login');
         
-        // Send the form to the view
-        $this->view->loginForm = $form;
+        // Init the tries, if not set set as 0
+        $attemptsSession = new Zend_Session_Namespace('attempts');
+        if (empty($attemptsSession->tries)){ 
+            $attemptsSession->tries = 0;
+        }
         
-        // If the user has posted the form
-        if ($this->getRequest()->isPost()){
+        if ($attemptsSession->tries > 2){
+            $this->view->forgotPasswordLink = true;
+        }else{
             
+            // Get a new instance of the login form an set the prams action and method
+            $form = new Application_Form_Login();
+            $form->setAction('/login');
+            $form->setMethod('post');
+
+            // Send the form to the view
+            $this->view->loginForm = $form;
+ 
+        }
+        
+        // Show any flash messages (this can be overriden later) 
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
+        
+        // If the user has posted the form (and the attempts is les than || == 2
+        if ($this->getRequest()->isPost() && $attemptsSession->tries <= 2){
             
-            // Init the capture tries, if not set set as 0
-            $captcha_session = new Zend_Session_Namespace('captcha');
-            if (empty($captcha_session->tries)){ 
-                $captcha_session->tries = 0;
-            }
 		
             // Check if the form data is valid
             if ($form->isValid($_POST)) {
@@ -50,8 +60,8 @@ class UserController extends Zend_Controller_Action
                 // If the creds are correct
                 if ($auth->isValid()) { 
                     
-                    // Reset captcha to 0 as they have logged in correctly
-                    $captcha_session->tries = 0;
+                    // Reset attempts to 0 as they have logged in correctly
+                    $attemptsSession->tries = 0;
                     
                     $this->_helper->flashMessenger->clearCurrentMessages();
                     
@@ -63,15 +73,19 @@ class UserController extends Zend_Controller_Action
                     $this->_helper->flashMessenger->addMessage('Login details incorrect');
                     // Send flash messages to the view
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
-                    
+
                     // Set as +1 for attempts
-                    $captcha_session->tries = $captcha_session->tries + 1;
+                    $attemptsSession->tries = $attemptsSession->tries + 1;
+                    
  
                 }
 
             }// End if form data is valid
 
         }// End if post data is set
+        
+        
+        
 
     } // End login action
     
@@ -252,6 +266,60 @@ class UserController extends Zend_Controller_Action
             return;
         }
     }
+    
+    
+    /*
+     * This is the forgotten password action
+     */
+    public function forgotPasswordAction(){
+        
+        // Get the forgot password form and display it
+        $passwordForm = new Application_Form_ForgotPassword();
+        $passwordForm->setAction('/user/forgot-password');
+        $passwordForm->setMethod('post');
+        
+        // Send it on up to the view
+        $this->view->passswordForm = $passwordForm;
+        
+        if ($this->getRequest()->isPost()){
+
+            // Check if the form data is valid
+            if ($passwordForm->isValid($_POST)) {
+
+                // Get an instance of the user model
+                $userModel = new Application_Model_User();
+                
+                // Get the user by the email address
+                $foundUser = $userModel->getByEmailAddress($passwordForm->getValue('email'));
+
+                if (isset($foundUser)){
+                    // Set the flash message
+                    $this->_helper->flashMessenger->addMessage('An email has been sent to your account');
+                    $this->view->messages = $this->_helper->flashMessenger->getMessages();
+                    
+                    
+                    // Send the email with the link to activate the new password
+                    
+                    
+                    // Clear the session attempts value (let them try login again with new password)
+                    $attemptsSession = new Zend_Session_Namespace('attempts');
+                    $attemptsSession->tries = 0;
+                    
+                    $this->_redirect('/user/login');
+                    
+                    return;
+                }else{
+                    $this->_helper->flashMessenger->addMessage('Unable to find that email address in the system');
+                    $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+
+                }
+
+                return;
+            }
+        }
+        
+    }
+    
 
     
     /*
@@ -302,7 +370,7 @@ class UserController extends Zend_Controller_Action
             return $result;
             
         }catch(Exception $e){
-            throw 'Unable to authenticate user: '.$e->getMessage();
+            echo 'Unable to authenticate user: '.$e->getMessage();
         } 
     }
 

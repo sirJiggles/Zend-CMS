@@ -26,7 +26,7 @@ class Application_Model_User extends Zend_Db_Table{
      * the users table
      * 
      * @param int $id
-     * @return Zend_Db_Table $user
+     * @return Zend_Db_Table_Row $user
      */
     public function getUserById($id){
         
@@ -38,7 +38,7 @@ class Application_Model_User extends Zend_Db_Table{
             return $row;
             
         } catch (Exception $e) {
-            throw new Exception('Unable to getUserById in User model: '.$e->getMessage());
+            echo 'Unable to getUserById in User model: '.$e->getMessage();
         }
         
     }
@@ -53,12 +53,10 @@ class Application_Model_User extends Zend_Db_Table{
         try {
             $where = $this->getAdapter()->quoteInto('id = ?', $id);
             $result = $this->delete($where);
- 
-            Zend_Debug::dump($result);
             return $result;
             
         } catch (Exception $e) {
-            throw new Exception('Unable to removeUser in User model: '.$e->getMessage());
+            echo 'Unable to removeUser in User model: '.$e->getMessage();
         }
     }
     
@@ -123,7 +121,7 @@ class Application_Model_User extends Zend_Db_Table{
             }
             
         }catch (Exception $e) {
-            throw new Exception('Unable to updateUser in User model: '.$e->getMessage());
+            echo 'Unable to updateUser in User model: '.$e->getMessage();
         }
         
     }
@@ -175,7 +173,39 @@ class Application_Model_User extends Zend_Db_Table{
             }
             
         }catch (Exception $e) {
-            throw new Exception('Unable to addUser in User model: '.$e->getMessage());
+            echo 'Unable to addUser in User model: '.$e->getMessage();
         }
     }
+    
+    
+    /*
+     * This function gets users from the users table by the email address passed
+     * 
+     * @param string $emailAddress
+     * @return Zend_Db_Table_Row $user
+     */
+    public function getByEmailAddress($emailAddress){
+        
+        try {
+            if (is_string($emailAddress)){
+                
+                $selectStatememt = $this->select()
+                                    ->where('email_address = ?', $emailAddress);
+                
+                $row = $this->fetchRow($selectStatememt);
+
+                return $row;
+            }else{
+                throw new Exception('Unable to fetch user by email address given in User::getByEmailAddress, argument must be string');
+            }
+            
+        } catch (Exception $e) {
+            echo 'Unable to removeUser in User model: '.$e->getMessage();
+        }
+        
+        
+        
+    }
+    
+    
 }

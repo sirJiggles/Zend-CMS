@@ -19,9 +19,12 @@ class Acl_Plugin extends Zend_Controller_Plugin_Abstract
         
         // Create a concat of the login path to cmpare against
         $controllerActionConcat = $currentController.'/'.$currentAction;
+        
+        //Create an arry of allowed URL's for access without loggin
+        $noLoginRequiredLinks = array('user/login',
+                                      'user/forgot-password');
             
-
-        if ((!isset($ident)) && ($controllerActionConcat != 'user/login')) {
+        if ((!isset($ident)) && (!in_array($controllerActionConcat, $noLoginRequiredLinks))){
             $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
             $redirector->gotoSimpleAndExit('login', 'user');
             return;
