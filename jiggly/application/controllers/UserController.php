@@ -298,16 +298,46 @@ class UserController extends Zend_Controller_Action
                     $this->view->messages = $this->_helper->flashMessenger->getMessages();
                     
                     
-                    // Send the email with the link to activate the new password
+                    /* 
+                     * Here we generate a new link for the user to click on to activate thier new password as we don't want
+                     * the user to have the new password sent to their email address in plain text.
+                     */
+                    $newPasswordLink = $this->_generatePasswordLink($foundUser->id);
                     
+                    
+                    // Create an instance of our view template for the email and send the params
+                    $emailTemplateView = new Zend_View();
+                    $emailTemplateView->setScriptPath(APPLICATION_PATH . '/views/emails/');
+                    
+                    $userName = $foundUser->first_name.' '.$foundUser->last_name;
+                    
+                    // Assign valeues
+                    $emailTemplateView->assign('name', $userName);
+                    $emailTemplateView->assign('passwordLink', $newPasswordLink);
+                    
+                    // Using the template and the values create an instance of the rendered view that is going to 
+                    // go in the email
+                    $bodyHtml = $emailTemplateView->render('forgoten-password.phtml');
+                    
+  
+                    // Send the email with the link to activate the new password
+                    $mail = new Zend_Mail();
+                    //$mail->setBodyText('My Nice Test Text');
+                    $mail->setBodyHtml($bodyHtml);
+                    $mail->setFrom('jiggly@cms.com', 'Jiggly CMS');
+                    //$mail->
+                    $mail->addTo($foundUser->email_address, $userName);
+                    $mail->setSubject('Jiggly CMS - Password Reset');
+                    $mail->send();
+                   
                     
                     // Clear the session attempts value (let them try login again with new password)
                     $attemptsSession = new Zend_Session_Namespace('attempts');
                     $attemptsSession->tries = 0;
                     
                     $this->_redirect('/user/login');
-                    
                     return;
+                    
                 }else{
                     $this->_helper->flashMessenger->addMessage('Unable to find that email address in the system');
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
@@ -372,6 +402,47 @@ class UserController extends Zend_Controller_Action
         }catch(Exception $e){
             echo 'Unable to authenticate user: '.$e->getMessage();
         } 
+    }
+    
+    
+    /*
+     * This is the function that generates new password links that go into the
+     * forgotten passowrd email content
+     * 
+     * @param int $userId
+     * @return string $passwordLink
+     */
+    protected function _generatePasswordLink($userId){
+        
+        
+        try{
+            // Sanity checking
+            if (is_numeric($userId)){
+                
+                // Get an instance of the user from the model
+                $userModel = new Application_Model_User();
+                
+                $randomHash = $userId.':'.mt_rand();
+                
+                $userModel->updateForgotPasswordHash($userId, $randomHash);
+                
+                
+                // Construct the new password link
+                $newPasswordLink = 'http://' . $_SERVER['SERVER_NAME'].'/user/activatePassword/'.$randomHash;
+
+                
+                return $newPasswordLink;
+                
+            }else{
+                throw new Exception('Incorrect arguments passed to User::_generatePasswordLink, expected userId type int');
+            }
+
+            
+        }catch(Exception $e){
+            echo 'Unable to generate a password link: '.$e->getMessage();
+        }
+
+        
     }
 
 }

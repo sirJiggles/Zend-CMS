@@ -202,10 +202,32 @@ class Application_Model_User extends Zend_Db_Table{
         } catch (Exception $e) {
             echo 'Unable to removeUser in User model: '.$e->getMessage();
         }
-        
-        
-        
     }
     
+    
+    
+    /*
+     * This function updates the user's forgot password hash 
+     * 
+     * @param int $userId
+     * @param mixed $hash
+     */
+    public function updateForgotPasswordHash($userId, $hash){
+        
+         try {
+            if (is_numeric($userId)){
+
+                $where = $this->getAdapter()->quoteInto('id = ?', $userId);
+                
+                $this->update(array('forgot_password_hash' => $hash), $where);
+                
+            }else{
+                throw new Exception('Unable to update forgotten pasword hash in  User::updateForgotPasswordHash, userId must be int');
+            }
+            
+        } catch (Exception $e) {
+            echo 'Unable to updateForgotPasswordHash in User model: '.$e->getMessage();
+        }
+    }
     
 }
