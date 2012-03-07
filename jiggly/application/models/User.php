@@ -230,4 +230,74 @@ class Application_Model_User extends Zend_Db_Table{
         }
     }
     
+    /*
+     * This function validates a hash used for the remember password 
+     * functionality.
+     * 
+     * @param int $userId
+     * @param int $hash
+     * @return boolean $result
+     */
+    public function validateHash($userId, $hash){
+        try {
+            if (is_numeric($userId) && is_numeric($hash)){
+
+                $selectStatememt = $this->select()
+                                    ->where('id = ?', $userId)
+                                    ->where('forgot_password_hash = ?', $hash);
+                
+                $row = $this->fetchRow($selectStatememt);
+                
+                Zend_Debug::dump($selectStatememt);
+                exit();
+                
+                // If the user id and the validfation hash both match and we find a result return true else return false
+                if ($row instanceof Zend_Db_Table_Row){
+                    return true;
+                }else{
+                    return false;
+                }
+                
+            }else{
+                throw new Exception('Unable to validate password hash in  User::validateHash, both arguments must be of type int');
+            }
+            
+        } catch (Exception $e) {
+            echo 'Unable to validate hash in User model: '.$e->getMessage();
+        }
+        
+    }
+    
+    /*
+     * This function updates the users details and removes the forgot password hash
+     * 
+     * @param array $formData
+     * @param int $userId
+     * 
+     */
+    public function updateForgotPassword($formData, $userId){
+         try {
+            if (is_array($formData) && is_numeric($userId)){
+
+                $where = $this->getAdapter()->quoteInto('id = ?', $userId);
+                
+                // Unset values we are not going to use
+                unset($formData['hash']);
+                unset($formData['password_repeat']);
+                
+                $formData['forgot_password_hash'] = '';
+                $formData['password'] = sha1($formData['password'].'34idnTgs98');
+                
+                $this->update($formData, $where);
+                
+            }else{
+                throw new Exception('Unable to update user password in User::updateForgotPassword, arguments must be 1:array and 2:userId');
+            }
+            
+        } catch (Exception $e) {
+            echo 'Unable to update user forgot password: '.$e->getMessage();
+        }
+    }
+    
+    
 }

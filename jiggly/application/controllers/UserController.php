@@ -2,6 +2,20 @@
 
 class UserController extends Zend_Controller_Action
 {
+    
+    protected $_userModel = '';
+
+    
+    /*
+     * Init function for the controller 
+     */
+    public function init(){
+
+        // As we connect to the user model many times inthis controller we will create a global instance
+        $this->_userModel = new Application_Model_User();
+    }
+
+
 
     public function indexAction()
     {
@@ -107,8 +121,7 @@ class UserController extends Zend_Controller_Action
     public function manageAction(){
         
         // Get new instance of the users model and fetch all users in the system
-        $usersModel = new Application_Model_User();
-        $users = $usersModel->getAllUsers();
+        $users = $this->_userModel->getAllUsers();
         
         /*
          * This should NEVER happen, but if there are no users in the system
@@ -136,8 +149,8 @@ class UserController extends Zend_Controller_Action
         
         // If the get param was sent and is in the correct format
         if (isset($id) && is_numeric($id)){
-            $userModel = new Application_Model_User();
-            $user = $userModel->getUserById($id);
+         
+            $user = $this->_userModel->getUserById($id);
             
             // Get the user form
             $userForm = new Application_Form_UserForm();
@@ -149,11 +162,11 @@ class UserController extends Zend_Controller_Action
             
                 // Check if the form data is valid
                 if ($userForm->isValid($_POST)) {
-                    $updateAttempt = $userModel->updateUser($userForm->getValues(), $id);
+                    $updateAttempt = $this->_userModel->updateUser($userForm->getValues(), $id);
                     
                     if ($updateAttempt){
                         // Fetch the updated user
-                        $user = $userModel->getUserById($id);
+                        $user = $this->_userModel->getUserById($id);
                         $this->_helper->flashMessenger->addMessage('User details updated');
                         $this->view->messages = $this->_helper->flashMessenger->getMessages();
                         $this->_redirect('/user/manage');
@@ -212,12 +225,10 @@ class UserController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()){
 
             // Check if the form data is valid
-            if ($userForm->isValid($_POST)) {
-                
-                // Get an instance of the user model
-                $userModel = new Application_Model_User();
+            if ($userForm->isValid($_POST)) { 
+             
                 // Run the add user function with the form post values
-                $addAction = $userModel->addUser($userForm->getValues());
+                $addAction = $this->_userModel->addUser($userForm->getValues());
                 
                 if ($addAction){
                     // Set the flash message
@@ -246,8 +257,7 @@ class UserController extends Zend_Controller_Action
         // If the get param was sent and is in the correct format
         if (isset($id) && is_numeric($id)){
             
-            $userModel = new Application_Model_User();
-            $removeStatus = $userModel->removeUser($id);
+            $removeStatus = $this->_userModel->removeUser($id);
             
             if ($removeStatus){
                 $this->_helper->flashMessenger->addMessage('User removed from the system');
@@ -285,12 +295,9 @@ class UserController extends Zend_Controller_Action
 
             // Check if the form data is valid
             if ($passwordForm->isValid($_POST)) {
-
-                // Get an instance of the user model
-                $userModel = new Application_Model_User();
                 
                 // Get the user by the email address
-                $foundUser = $userModel->getByEmailAddress($passwordForm->getValue('email'));
+                $foundUser = $this->_userModel->getByEmailAddress($passwordForm->getValue('email'));
 
                 if (isset($foundUser)){
                     // Set the flash message
@@ -350,7 +357,89 @@ class UserController extends Zend_Controller_Action
         
     }
     
+    /*
+     * Function for activating the users passwords
+     * 
+     * This function gets the request url, splits it up and checks if it matches the hash in the db
+     * if the hash and id combo is valid then we present the user with a reset password form
+     * after the form is submitted we set the new password and remove the has from the users record
+     * 
+     */
+    public function activatePasswordAction(){
+        
+        // Get the hash from the request param
+        $hash = $this->getRequest()->getParam('req');
 
+        // If the get param was sent and is in the correct format
+        if (isset($hash) && $hash != ''){
+ 
+            // Validate that the hash is correct based on the users ID etc
+            $validateHash = $this->_validateHash($hash);
+            
+            // If the hash was found in the db
+            if ($validateHash){
+                
+                // Get a new change password form
+                $changePasswordForm = new Application_Form_ChangePassword();
+                $changePasswordForm->setAction('/user/activate/password');
+                $changePasswordForm->setMethod('post');
+                
+                // Set the hidden hash element to be the value of the current users hash (so we can validate on post req)
+                $changePasswordForm->getElement('hash')->setValue($hash);
+                
+                // Send the view to the form
+                $this->view->form = $changePasswordForm;
+                
+            }else{
+                //$this->_invalidPasswordResetValidation();
+                echo "hash invalid";
+            }
+            
+            // Handle the post of the change password form
+            
+             
+            if ($this->getRequest()->isPost()){
+
+                // Chnage users password
+                if ($changePasswordForm->isValid($_POST)) {
+                    
+                    // Get the form values
+                    $formValues = $changePasswordForm->getValues();
+                    
+                    // Check the hash value again from the hidden post input
+                    $validateHash = $this->_validateHash($formValues['hash']);
+                    
+                    if ($validateHash){
+                        
+                        // Change users account details as per thier post data
+                        $this->_userModel->updateForgotPassword($formValues);
+                        
+                    }else{
+                        $this->_invalidPasswordResetValidation();
+                    }
+                    
+                    
+                }else{
+                    $this->_invalidPasswordResetValidation();
+                }
+                
+            }
+        }else{
+            $this->_invalidPasswordResetValidation();
+        }
+        
+    }
+    
+    /*
+     * This is function to set the flash messages for incorrect validation
+     * in the forgotten password section
+     */
+    protected function _invalidPasswordResetValidation(){
+        $this->_helper->flashMessenger->addMessage('To reset your password use the link in the forgot password email');
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
+        $this->_redirect('/user/login');
+        return;
+    }
     
     /*
      * authenticate user function
@@ -419,16 +508,13 @@ class UserController extends Zend_Controller_Action
             // Sanity checking
             if (is_numeric($userId)){
                 
-                // Get an instance of the user from the model
-                $userModel = new Application_Model_User();
-                
                 $randomHash = $userId.':'.mt_rand();
                 
-                $userModel->updateForgotPasswordHash($userId, $randomHash);
+                $this->_userModel->updateForgotPasswordHash($userId, $randomHash);
                 
                 
                 // Construct the new password link
-                $newPasswordLink = 'http://' . $_SERVER['SERVER_NAME'].'/user/activatePassword/'.$randomHash;
+                $newPasswordLink = 'http://' . $_SERVER['SERVER_NAME'].'/user/activate-password/req/'.$randomHash;
 
                 
                 return $newPasswordLink;
@@ -443,6 +529,34 @@ class UserController extends Zend_Controller_Action
         }
 
         
+    }
+    
+    /*
+     * This function validates the hash that has been set to the activate
+     * password action. It checks the database for the user id and forgot_password_hash value
+     * 
+     * @param mixed $hash
+     * @return boolean $result
+     */
+    protected function _validateHash($hash){
+        
+        try{
+            
+            // Break the hash into parts based on the : symbol, then using this get the id and hash
+            $parts = explode(":", $hash);
+            $userId = $parts[0];
+            $hashPure = $parts[1];
+  
+            // Validate the hash in the model
+            $result = $this->_userModel->validateHash($userId, $hashPure);
+            
+            // Return the result
+            return $result;
+            
+            
+        }catch(Exception $e){
+            echo "Unable to validate the hash in User::_validateHash: ".$e->getMessage();
+        }
     }
 
 }

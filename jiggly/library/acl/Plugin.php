@@ -10,7 +10,7 @@ class Acl_Plugin extends Zend_Controller_Plugin_Abstract
 {
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        $auth = Zend_Auth::getInstance();
+        /*$auth = Zend_Auth::getInstance();
         $ident = $auth->getIdentity();
         
         // If user is not logged in and is not requesting login page
@@ -22,7 +22,8 @@ class Acl_Plugin extends Zend_Controller_Plugin_Abstract
         
         //Create an arry of allowed URL's for access without loggin
         $noLoginRequiredLinks = array('user/login',
-                                      'user/forgot-password');
+                                      'user/forgot-password',
+                                      'user/activate-password');
             
         if ((!isset($ident)) && (!in_array($controllerActionConcat, $noLoginRequiredLinks))){
             $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
@@ -47,6 +48,6 @@ class Acl_Plugin extends Zend_Controller_Plugin_Abstract
                 $redirector->gotoUrlAndExit('/error/not-the-droids');
                 return;
             }
-        }
+        }*/
     }
 }
