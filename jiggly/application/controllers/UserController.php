@@ -321,6 +321,7 @@ class UserController extends Zend_Controller_Action
                     // Assign valeues
                     $emailTemplateView->assign('name', $userName);
                     $emailTemplateView->assign('passwordLink', $newPasswordLink);
+                    $emailTemplateView->assign('username', $foundUser->username);
                     
                     // Using the template and the values create an instance of the rendered view that is going to 
                     // go in the email
@@ -369,6 +370,12 @@ class UserController extends Zend_Controller_Action
         
         // Get the hash from the request param
         $hash = $this->getRequest()->getParam('req');
+        
+        
+        // Get a new change password form
+        $changePasswordForm = new Application_Form_ChangePassword();
+        $changePasswordForm->setAction('/user/activate-password');
+        $changePasswordForm->setMethod('post');
 
         // If the get param was sent and is in the correct format
         if (isset($hash) && $hash != ''){
@@ -379,11 +386,6 @@ class UserController extends Zend_Controller_Action
             // If the hash was found in the db
             if ($validateHash){
                 
-                // Get a new change password form
-                $changePasswordForm = new Application_Form_ChangePassword();
-                $changePasswordForm->setAction('/user/activate/password');
-                $changePasswordForm->setMethod('post');
-                
                 // Set the hidden hash element to be the value of the current users hash (so we can validate on post req)
                 $changePasswordForm->getElement('hash')->setValue($hash);
                 
@@ -391,40 +393,45 @@ class UserController extends Zend_Controller_Action
                 $this->view->form = $changePasswordForm;
                 
             }else{
-                //$this->_invalidPasswordResetValidation();
-                echo "hash invalid";
+                $this->_invalidPasswordResetValidation();
             }
             
-            // Handle the post of the change password form
-            
-             
-            if ($this->getRequest()->isPost()){
+        // Handle the password reset form post
+        }else if ($this->getRequest()->isPost()){
 
-                // Chnage users password
-                if ($changePasswordForm->isValid($_POST)) {
+            // Chnage users password
+            if ($changePasswordForm->isValid($_POST)) {
+
+                // Get the form values
+                $formValues = $changePasswordForm->getValues();
+
+                // Check the hash value again from the hidden post input
+                $validateHash = $this->_validateHash($formValues['hash']);
+
+                if ($validateHash){
+
+                    // Change users account details as per thier post data
+                    $this->_userModel->updateForgotPassword($formValues);
                     
-                    // Get the form values
-                    $formValues = $changePasswordForm->getValues();
+                    // Redirect back to login page and let the user know the passwprd has been reset
                     
-                    // Check the hash value again from the hidden post input
-                    $validateHash = $this->_validateHash($formValues['hash']);
-                    
-                    if ($validateHash){
-                        
-                        // Change users account details as per thier post data
-                        $this->_userModel->updateForgotPassword($formValues);
-                        
-                    }else{
-                        $this->_invalidPasswordResetValidation();
-                    }
-                    
-                    
+                    $this->_helper->flashMessenger->addMessage('Password changed');
+                    $this->view->messages = $this->_helper->flashMessenger->getMessages();
+                    $this->_redirect('/user/login');
+                    return;
+
                 }else{
                     $this->_invalidPasswordResetValidation();
                 }
-                
+
+
             }
+            
+            // Send the view to the form
+            $this->view->form = $changePasswordForm;
+
         }else{
+        
             $this->_invalidPasswordResetValidation();
         }
         
@@ -507,14 +514,14 @@ class UserController extends Zend_Controller_Action
         try{
             // Sanity checking
             if (is_numeric($userId)){
-                
-                $randomHash = $userId.':'.mt_rand();
+               
+                $randomHash = mt_rand();
                 
                 $this->_userModel->updateForgotPasswordHash($userId, $randomHash);
                 
                 
                 // Construct the new password link
-                $newPasswordLink = 'http://' . $_SERVER['SERVER_NAME'].'/user/activate-password/req/'.$randomHash;
+                $newPasswordLink = 'http://' . $_SERVER['SERVER_NAME'].'/user/activate-password/req/'.$userId.':'.$randomHash;
 
                 
                 return $newPasswordLink;

@@ -219,7 +219,7 @@ class Application_Model_User extends Zend_Db_Table{
 
                 $where = $this->getAdapter()->quoteInto('id = ?', $userId);
                 
-                $this->update(array('forgot_password_hash' => $hash), $where);
+                $this->update(array('forgot_password_hash' => $hash, 'active' => 0), $where);
                 
             }else{
                 throw new Exception('Unable to update forgotten pasword hash in  User::updateForgotPasswordHash, userId must be int');
@@ -247,10 +247,7 @@ class Application_Model_User extends Zend_Db_Table{
                                     ->where('forgot_password_hash = ?', $hash);
                 
                 $row = $this->fetchRow($selectStatememt);
-                
-                Zend_Debug::dump($selectStatememt);
-                exit();
-                
+
                 // If the user id and the validfation hash both match and we find a result return true else return false
                 if ($row instanceof Zend_Db_Table_Row){
                     return true;
@@ -275,11 +272,17 @@ class Application_Model_User extends Zend_Db_Table{
      * @param int $userId
      * 
      */
-    public function updateForgotPassword($formData, $userId){
+    public function updateForgotPassword($formData){
          try {
-            if (is_array($formData) && is_numeric($userId)){
+            if (is_array($formData)){
 
+                // Get the user ID
+                $parts = explode(':', $formData['hash']);
+                $userId = $parts[0];
+                
                 $where = $this->getAdapter()->quoteInto('id = ?', $userId);
+                
+                
                 
                 // Unset values we are not going to use
                 unset($formData['hash']);
@@ -287,11 +290,12 @@ class Application_Model_User extends Zend_Db_Table{
                 
                 $formData['forgot_password_hash'] = '';
                 $formData['password'] = sha1($formData['password'].'34idnTgs98');
+                $formData['active'] = 1;
                 
                 $this->update($formData, $where);
                 
             }else{
-                throw new Exception('Unable to update user password in User::updateForgotPassword, arguments must be 1:array and 2:userId');
+                throw new Exception('Unable to update user password in User::updateForgotPassword, arguments must be 1:array');
             }
             
         } catch (Exception $e) {
