@@ -1,12 +1,25 @@
 <?php
 
-class UserController extends Zend_Test_PHPUnit_ControllerTestCase
+class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
+    public function setUp()
+    {
+        //$this->bootstrap = array($this, 'appBootstrap');
+        parent::setUp();
+    }
+    
+    public function appBootstrap()
+    {
+        //$this->frontController
+        //     ->registerPlugin(new Bugapp_Plugin_Initialize('development'));
+    }
+
+
     // Test the logout action
     public function testLogoutAction(){
         $this->dispatch('/user/logout');
         $this->assertAction('logout');
-        $this->assertRedirect();
+        $this->assertRedirect('/');
     }
     
     // Test users with the right creds are logged in correctly

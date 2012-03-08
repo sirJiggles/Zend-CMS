@@ -10,7 +10,7 @@ defined('APPLICATION_ENV')
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
-    realpath(APPLICATION_PATH . '/../../../library/Zend/1.11.11'),
+    realpath('/Subversion/library/Zend/1.11.11'),
     realpath(APPLICATION_PATH . '/../library'),
     get_include_path(),
 )));
