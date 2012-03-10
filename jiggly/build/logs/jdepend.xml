@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PDepend>
+  <Packages>
+    <Package name="+global">
+      <Stats>
+        <TotalClasses>32</TotalClasses>
+        <ConcreteClasses>32</ConcreteClasses>
+        <AbstractClasses>0</AbstractClasses>
+        <Ca>0</Ca>
+        <Ce>2</Ce>
+        <A>0</A>
+        <I>1</I>
+        <D>0</D>
+      </Stats>
+      <ConcreteClasses>
+        <Class sourceFile="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/application/Bootstrap.php">Bootstrap</Class>
+        <Class sourceFile="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/application/controllers/ErrorController.php">ErrorController</Class>
+        <Class sourceFile="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/application/controllers/IndexController.php">IndexController</Class>
+        <Class sourceFile="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/application/controllers/UserController.php">UserController</Class>
+        <Class sourceFile="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/application/forms/ChangePassword.php">Application_Form_ChangePassword</Class>
+        <Class sourceFile="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/application/forms/ForgotPassword.php">Application_Form_ForgotPassword</Class>
+        <Class sourceFile="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/application/forms/Login.php">Application_Form_Login</Class>
+        <Class sourceFile="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/application/forms/UserForm.php">Application_Form_UserForm</Class>
+        <Class sourceFile="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/application/models/User.php">Application_Model_User</Class>
+      </ConcreteClasses>
+      <AbstractClasses/>
+      <DependsUpon>
+        <Package>+core</Package>
+        <Package>+spl</Package>
+      </DependsUpon>
+      <UsedBy/>
+    </Package>
+  </Packages>
+  <Cycles/>
+</PDepend>
