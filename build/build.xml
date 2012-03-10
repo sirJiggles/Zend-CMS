@@ -1,0 +1,8 @@
+<phpunit printsummary="true" codecoverage="true">
+    <formatter todir="reports" type="xml" outfile="coverage/coverage.xml" />
+    <batchtest>
+        <fileset dir="test">
+            <include name="**/*Test.php" />
+        </fileset>
+    </batchtest>
+</phpunit>
