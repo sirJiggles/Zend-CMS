@@ -8,9 +8,9 @@
 	 colors="true"
 	 bootstrap="tests/bootstrap.php">
   <testsuites>
-  <testsuite name="Jiggly">
-      <directory suffix="Test.php">tests</directory>
-  </testsuite>
+  #<testsuite name="Jiggly">
+  #    <directory suffix="Test.php">tests</directory>
+  #</testsuite>
   </testsuites>
 
   <logging>
