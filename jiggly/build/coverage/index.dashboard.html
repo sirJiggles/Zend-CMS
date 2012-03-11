@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Jiggly</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="jquery.min.js" type="text/javascript"></script>
+    <script src="highcharts.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+          var classCoverageDistribution = new Highcharts.Chart({
+             chart: {
+                renderTo: 'classCoverageDistribution',
+                type: 'column'
+             },
+             title: {text: ''},
+             legend: {enabled: false},
+             credits: {enabled: false},
+             tooltip: {enabled: false},
+             xAxis: {
+                 labels: {style: {fontSize: '8px'}},
+                 categories: [
+                 '0%','0-10%','10-20%','20-30%','30-40%','40-50%','50-60%','60-70%','70-80%','80-90%','90-100%','100%'
+                 ]
+            },
+            yAxis: {
+                title: '',
+                labels: {style: {fontSize: '8px'}},
+            },
+            series: [{
+                data: [13,3,1,0,0,1,0,0,0,0,0,1]
+            }],
+          });
+
+        var classComplexity = new Highcharts.Chart({
+            chart: {
+              renderTo: 'classComplexity',
+              type: 'scatter'
+            },
+            title: {text: ''},
+            legend: {enabled: false},
+            credits: {enabled: false},
+            xAxis: {
+               labels: {enabled: false},
+            },
+            yAxis: {
+              title: '',
+              labels: {enabled: false},
+            },
+            tooltip: {
+                formatter: function() {
+                    return this.point.config[2];
+                }
+            },
+            series: [{
+              data: [[2.0408163265306,38,"<a href=\"Controller_Action_HelperBroker.php.html#40\">Zend_Controller_Action_HelperBroker<\/a>"],[0,29,"<a href=\"Controller_Action_HelperBroker_PriorityStack.php.html#30\">Zend_Controller_Action_HelperBroker_PriorityStack<\/a>"],[15.748031496063,113,"<a href=\"Controller_Front.php.html#38\">Zend_Controller_Front<\/a>"],[0,10,"<a href=\"Controller_Plugin_Abstract.php.html#30\">Zend_Controller_Plugin_Abstract<\/a>"],[0,52,"<a href=\"Controller_Plugin_Broker.php.html#33\">Zend_Controller_Plugin_Broker<\/a>"],[0,33,"<a href=\"Controller_Request_Abstract.php.html#28\">Zend_Controller_Request_Abstract<\/a>"],[3.9156626506024,178,"<a href=\"Controller_Request_Http.php.html#37\">Zend_Controller_Request_Http<\/a>"],[0,21,"<a href=\"Controller_Request_HttpTestCase.php.html#36\">Zend_Controller_Request_HttpTestCase<\/a>"],[0,109,"<a href=\"Controller_Response_Abstract.php.html#32\">Zend_Controller_Response_Abstract<\/a>"],[100,0,"<a href=\"Controller_Response_Http.php.html#36\">Zend_Controller_Response_Http<\/a>"],[0,17,"<a href=\"Controller_Response_HttpTestCase.php.html#34\">Zend_Controller_Response_HttpTestCase<\/a>"],[1.0416666666667,85,"<a href=\"Layout.php.html#30\">Zend_Layout<\/a>"],[0,41,"<a href=\"Loader.php.html#30\">Zend_Loader<\/a>"],[0,82,"<a href=\"Loader_Autoloader.php.html#35\">Zend_Loader_Autoloader<\/a>"],[42.5,17,"<a href=\"Registry.php.html#30\">Zend_Registry<\/a>"],[0,119,"<a href=\"Session.php.html#49\">Zend_Session<\/a>"],[0,21,"<a href=\"Session_Abstract.php.html#33\">Zend_Session_Abstract<\/a>"],[0,59,"<a href=\"Session_Namespace.php.html#44\">Zend_Session_Namespace<\/a>"],[0,23,"<a href=\"Uri.php.html#30\">Zend_Uri<\/a>"]],
+              marker: {
+                  symbol: 'diamond'
+              }
+            }],
+        });
+    });
+    </script>
+  </head>
+
+  <body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr><td class="title">Jiggly</td></tr>
+      <tr><td><div align="center"><p><a href="index.html">Back to Code Coverage report</a></p></div></td></tr>
+      <tr><td class="ruler"><img src="glass.png" width="3" height="3" alt=""></td></tr>
+    </table>
+
+    <br />
+
+    <center>
+      <table width="90%" cellpadding="2" cellspacing="1" border="0">
+        <tr>
+          <td valign="top">
+            <h2>Class Coverage Distribution</h2>
+            <div id="classCoverageDistribution"></div>
+          </td>
+
+          <td valign="top">
+            <h2>Class Complexity</h2>
+            <div id="classComplexity"></div>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <h2>Top Project Risks</h2>
+            <ul>
+              <li><a href="Controller_Request_Http.php.html#37">Zend_Controller_Request_Http</a> (28283)</li>
+              <li><a href="Session.php.html#49">Zend_Session</a> (14280)</li>
+              <li><a href="Controller_Response_Abstract.php.html#32">Zend_Controller_Response_Abstract</a> (11990)</li>
+              <li><a href="Controller_Front.php.html#38">Zend_Controller_Front</a> (7749)</li>
+              <li><a href="Layout.php.html#30">Zend_Layout</a> (7086)</li>
+              <li><a href="Loader_Autoloader.php.html#35">Zend_Loader_Autoloader</a> (6806)</li>
+              <li><a href="Session_Namespace.php.html#44">Zend_Session_Namespace</a> (3540)</li>
+              <li><a href="Controller_Plugin_Broker.php.html#33">Zend_Controller_Plugin_Broker</a> (2756)</li>
+              <li><a href="Loader.php.html#30">Zend_Loader</a> (1722)</li>
+              <li><a href="Controller_Action_HelperBroker.php.html#40">Zend_Controller_Action_HelperBroker</a> (1395)</li>
+
+            </ul>
+          </td>
+
+          <td valign="top">
+            <h2>Least Tested Methods</h2>
+            <ul>
+              <li><a href="Layout.php.html#439">Zend_Layout::setContentKey</a> (0%)</li>
+              <li><a href="Layout.php.html#426">Zend_Layout::getLayoutPath</a> (0%)</li>
+              <li><a href="Layout.php.html#416">Zend_Layout::setLayoutPath</a> (0%)</li>
+              <li><a href="Layout.php.html#405">Zend_Layout::getViewScriptPath</a> (0%)</li>
+              <li><a href="Layout.php.html#450">Zend_Layout::getContentKey</a> (0%)</li>
+              <li><a href="Layout.php.html#461">Zend_Layout::_setMvcEnabled</a> (0%)</li>
+              <li><a href="Layout.php.html#505">Zend_Layout::setView</a> (0%)</li>
+              <li><a href="Layout.php.html#494">Zend_Layout::getMvcSuccessfulActionOnly</a> (0%)</li>
+              <li><a href="Layout.php.html#483">Zend_Layout::setMvcSuccessfulActionOnly</a> (0%)</li>
+              <li><a href="Layout.php.html#472">Zend_Layout::getMvcEnabled</a> (0%)</li>
+
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </center>
+
+    <br />
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr><td class="ruler"><img src="glass.png" width="3" height="3" alt=""></td></tr>
+      <tr><td class="versionInfo">Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 1.1.2</a> using <a href="http://www.php.net/" target="_top">PHP 5.3.10</a> and PHPUnit 3.6.10 at Sun Mar 11 20:59:32 UTC 2012.</td></tr>
+    </table>
+
+    <br/>
+  </body>
+</html>
