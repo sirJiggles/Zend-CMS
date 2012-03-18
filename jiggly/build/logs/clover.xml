@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1331503689">
-  <project timestamp="1331503689">
+<coverage generated="1332071371">
+  <project timestamp="1332071371">
     <file name="/var/www/library/Zend/1.11.11/Zend/Controller/Action/HelperBroker.php">
       <class name="Zend_Controller_Action_HelperBroker" namespace="global" fullPackage="Zend_Controller.Zend_Controller_Action" category="Zend" package="Zend_Controller" subpackage="Zend_Controller_Action">
         <metrics methods="20" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="98" coveredstatements="2" elements="118" coveredelements="3"/>

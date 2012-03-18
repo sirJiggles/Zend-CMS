@@ -1,2 +1,0 @@
-Directories,Files,Lines of Code (LOC),Cyclomatic Complexity / Lines of Code,Comment Lines of Code (CLOC),Non-Comment Lines of Code (NCLOC),Namespaces,Interfaces,Classes,Abstract Classes,Concrete Classes,Average Class Length (NCLOC),Methods,Non-Static Methods,Static Methods,Public Methods,Non-Public Methods,Average Method Length (NCLOC),Cyclomatic Complexity / Number of Methods,Anonymous Functions,Functions,Constants,Global Constants,Class Constants
-3,9,1263,0.080239520958084,428,835,0,0,9,0,9,105.88888888889,34,34,0,28,6,28.029411764706,2.9705882352941,0,0,0,0,0

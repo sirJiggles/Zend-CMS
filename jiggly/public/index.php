@@ -15,8 +15,8 @@ set_include_path(implode(PATH_SEPARATOR, array(
    
 )));
 
-#print_r(get_include_path());
-#exit();
+//print_r(get_include_path());
+//exit();
 
 /** Zend_Application */
 require_once 'Zend/Application.php';
