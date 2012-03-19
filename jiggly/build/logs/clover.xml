@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1332192361">
-  <project timestamp="1332192361">
+<coverage generated="1332200000">
+  <project timestamp="1332200000">
     <file name="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/application/Bootstrap.php">
       <class name="Bootstrap" namespace="global">
         <metrics methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="19" coveredstatements="0" elements="21" coveredelements="0"/>

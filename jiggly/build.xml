@@ -67,11 +67,22 @@
   <echo message="Generated checkstyle report xml file" />  
  </target>
 
+<!--
  <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
   <exec executable="phpdoc" escape="true">
    <arg line="-d ${source} -t ${project.basedir}/build/api" />
   </exec>
   <echo message="Generated API documentation" />
+ </target>
+-->
+
+ <target name="docs">
+  <docblox title="Generae API Documentation" destdir="${project.basedir}/build/api">
+   <fileset dir="${source}">
+    <include name="*.php"/>
+   </fileset>
+  </docblox>
+  <echo message="Generated the API documentation" />
  </target>
 
  <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
@@ -83,7 +94,7 @@
   <echo message="Generated code browser files" />
  </target>
 
- <target name="build" depends="clean,phpunit,phpcb,phpdoc,phpcs,phploc,pdepend,phpcpd,phpmd">
+ <target name="build" depends="clean,phpunit,phpcb,docs,phpcs,phploc,pdepend,phpcpd,phpmd">
   <echo message="Finished ... you rock Gareth!" />
  </target>
 </project>
