@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="${projectName}" default="build" basedir=".">
- <property name="source" value="./application"/>
+
+<project name="Jiggly" default="build" basedir=".">
+ <property name="source" value="./application" />
 
  <target name="clean" description="Clean up and create artifact directories">
   <delete dir="${project.basedir}/build/api"/>
@@ -18,66 +19,71 @@
  </target>
 
  <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
-    <exec executable="phpunit" dir="${project.basedir}/tests"/>
+    <exec executable="phpunit" dir="${project.basedir}/tests" escape="true"/>
+    <echo message="Generated PHPUnit test report xml file" />
  </target>
 
  <target name="pdepend" description="Generate jdepend.xml and software metrics charts using PHP_Depend">
-  <exec executable="pdepend">
+  <exec executable="pdepend" escape="true">
    <arg line="--jdepend-xml=${project.basedir}/build/logs/jdepend.xml
-              
---jdepend-chart=${project.basedir}/build/pdepend/dependencies.svg
-              
---overview-pyramid=${project.basedir}/build/pdepend/overview-pyramid.svg
+              --jdepend-chart=${project.basedir}/build/pdepend/dependencies.svg
+              --overview-pyramid=${project.basedir}/build/pdepend/overview-pyramid.svg
               ${source}" />
   </exec>
+  <echo message="Created jdepend xml"/>
  </target>
 
  <target name="phpmd" description="Generate pmd.xml using PHPMD">
-  <exec executable="phpmd">
+  <exec executable="phpmd" escape="true">
    <arg line="${source}
               xml
               codesize,design,naming,unusedcode
               --reportfile ${project.basedir}/build/logs/pmd.xml" />
   </exec>
+  <echo message="Created Project mass detection xml" />
  </target>
 
  <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
-  <exec executable="phpcpd">
-   <arg line="--log-pmd ${project.basedir}/build/logs/pmd-cpd.xml 
-${source}" />
+  <exec executable="phpcpd" escape="true">
+   <arg line="--log-pmd ${project.basedir}/build/logs/pmd-cpd.xml ${source}" />
   </exec>
+  <echo message="Created pmd-cpd.xml file" />
  </target>
 
  <target name="phploc" description="Generate phploc.csv">
-  <exec executable="phploc">
-   <arg line="--log-csv ${project.basedir}/build/logs/phploc.csv 
-${source}" />
+  <exec executable="phploc" escape="true">
+   <arg line="--log-csv ${project.basedir}/build/logs/phploc.csv ${source}" />
   </exec>
+  <echo message="Generated phploc CSV file for graphs" />
  </target>
 
  <target name="phpcs" description="Generate checkstyle.xml using PHP_CodeSniffer">
-  <exec executable="phpcs" output="/dev/null">
+  <exec executable="phpcs" output="/dev/null" escape="true">
    <arg line="--report=checkstyle
               --report-file=${project.basedir}/build/logs/checkstyle.xml
               --standard=PEAR
               ${source}" />
   </exec>
+  <echo message="Generated checkstyle report xml file" />  
  </target>
 
  <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
-  <exec executable="phpdoc">
+  <exec executable="phpdoc" escape="true">
    <arg line="-d ${source} -t ${project.basedir}/build/api" />
   </exec>
+  <echo message="Generated API documentation" />
  </target>
 
  <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
-  <exec executable="phpcb">
+  <exec executable="phpcb" escape="true">
    <arg line="--log    ${project.basedir}/build/logs
               --source ${source}
               --output ${project.basedir}/build/code-browser" />
   </exec>
+  <echo message="Generated code browser files" />
  </target>
 
- <target name="build" depends="clean,phpunit,phpcb"/>
-
+ <target name="build" depends="clean,phpunit,phpcb,phpdoc,phpcs,phploc,pdepend,phpcpd,phpmd">
+  <echo message="Finished ... you rock Gareth!" />
+ </target>
 </project>
