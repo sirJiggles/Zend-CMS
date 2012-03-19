@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="" tests="1" assertions="1" failures="0" errors="0" time="0.021113">
-    <testsuite name="Application Test Suite" tests="1" assertions="1" failures="0" errors="0" time="0.021113">
-      <testsuite name="UserControllerTest" file="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="1" assertions="1" failures="0" errors="0" time="0.021113">
-        <testcase name="testCanDoUnitTest" class="UserControllerTest" file="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="17" assertions="1" time="0.021113"/>
+  <testsuite name="" tests="1" assertions="1" failures="0" errors="0" time="0.021240">
+    <testsuite name="Application Test Suite" tests="1" assertions="1" failures="0" errors="0" time="0.021240">
+      <testsuite name="UserControllerTest" file="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="1" assertions="1" failures="0" errors="0" time="0.021240">
+        <testcase name="testCanDoUnitTest" class="UserControllerTest" file="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="17" assertions="1" time="0.021240"/>
       </testsuite>
     </testsuite>
     <testsuite name="Library Test Suite" tests="0" assertions="0" failures="0" errors="0" time="0.000000"/>

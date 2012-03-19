@@ -79,7 +79,7 @@
  <target name="docs">
   <docblox title="Generae API Documentation" destdir="${project.basedir}/build/api">
    <fileset dir="${source}">
-    <include name="*.php"/>
+    <include name="**/*.php"/>
    </fileset>
   </docblox>
   <echo message="Generated the API documentation" />
