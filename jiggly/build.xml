@@ -102,7 +102,6 @@
   <copy todir="/var/www/vhosts/jigglycms.com/Zend-CMS">
    <fileset dir="/var/lib/jenkins/jobs/Jiggly/workspace">
      <include>**</include>
-     <!-- <exclude>**/.svn/**</exclude> -->
    </fileset>
   </copy>
   <echo message="set up staging site again" />
