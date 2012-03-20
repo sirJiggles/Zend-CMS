@@ -1,113 +1,154 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="Jiggly" default="build" basedir=".">
- <property name="source" value="./application" />
+    
+    <!-- Define our source variable -->
+    <property name="source" value="./application" />
+ 
+    <!-- Define the variables used for the database construction -->
+    <property name="db.host" value="localhost" />
+    <property name="db.user" value="jiggly_usr" />
+    <property name="db.pass" value="ilovelisa12" />
+    <property name="db.name" value="jiggly" />
+    <property name="mysql.path" value="/usr/bin/mysql" />
+     <!-- these two filenames will contain the generated SQL to do the deploy and roll it back -->
+    <property name="build.dbdeploy.deployfile" value="db/deploy/deploy-${DSTAMP}${TSTAMP}.sql" />
+    <property name="build.dbdeploy.undofile" value="db/deploy/undo-${DSTAMP}${TSTAMP}.sql" />
+ 
+    <target name="build" depends="
+    clean,
+    phpunit,
+    phpcb,
+    docs,
+    phpcs,
+    phploc,
+    pdepend,
+    phpcpd,
+    phpmd,
+    rebuild-staging,
+    deploy-database">  
+    </target>
 
- <target name="clean" description="Clean up and create artifact directories">
-  <delete dir="${project.basedir}/build/api"/>
-  <delete dir="${project.basedir}/build/code-browser"/>
-  <delete dir="${project.basedir}/build/coverage"/>
-  <delete dir="${project.basedir}/build/logs"/>
-  <delete dir="${project.basedir}/build/pdepend"/>
+    <target name="clean" description="Clean up and create artifact directories">
+        <delete dir="${project.basedir}/build/api"/>
+        <delete dir="${project.basedir}/build/code-browser"/>
+        <delete dir="${project.basedir}/build/coverage"/>
+        <delete dir="${project.basedir}/build/logs"/>
+        <delete dir="${project.basedir}/build/pdepend"/>
 
-  <mkdir dir="${project.basedir}/build/api"/>
-  <mkdir dir="${project.basedir}/build/code-browser"/>
-  <mkdir dir="${project.basedir}/build/coverage"/>
-  <mkdir dir="${project.basedir}/build/logs"/>
-  <mkdir dir="${project.basedir}/build/pdepend"/>
- </target>
+        <mkdir dir="${project.basedir}/build/api"/>
+        <mkdir dir="${project.basedir}/build/code-browser"/>
+        <mkdir dir="${project.basedir}/build/coverage"/>
+        <mkdir dir="${project.basedir}/build/logs"/>
+        <mkdir dir="${project.basedir}/build/pdepend"/>
+    </target>
 
- <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
-    <exec executable="phpunit" dir="${project.basedir}/tests" escape="true"/>
-    <echo message="Generated PHPUnit test report xml file" />
- </target>
+    <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml">
+        <exec executable="phpunit" dir="${project.basedir}/tests" escape="true"/>
+        <echo message="Generated PHPUnit test report xml file" />
+    </target>
 
- <target name="pdepend" description="Generate jdepend.xml and software metrics charts using PHP_Depend">
-  <exec executable="pdepend" escape="true">
-   <arg line="--jdepend-xml=${project.basedir}/build/logs/jdepend.xml
+    <target name="pdepend" description="Generate jdepend.xml and software metrics charts using PHP_Depend">
+        <exec executable="pdepend" escape="true">
+            <arg line="--jdepend-xml=${project.basedir}/build/logs/jdepend.xml
               --jdepend-chart=${project.basedir}/build/pdepend/dependencies.svg
               --overview-pyramid=${project.basedir}/build/pdepend/overview-pyramid.svg
               ${source}" />
-  </exec>
-  <echo message="Created jdepend xml"/>
- </target>
+        </exec>
+        <echo message="Created jdepend xml"/>
+    </target>
 
- <target name="phpmd" description="Generate pmd.xml using PHPMD">
-  <exec executable="phpmd" escape="true">
-   <arg line="${source}
+    <target name="phpmd" description="Generate pmd.xml using PHPMD">
+        <exec executable="phpmd" escape="true">
+            <arg line="${source}
               xml
               codesize,design,naming,unusedcode
               --reportfile ${project.basedir}/build/logs/pmd.xml" />
-  </exec>
-  <echo message="Created Project mass detection xml" />
- </target>
+        </exec>
+        <echo message="Created Project mass detection xml" />
+    </target>
 
- <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
-  <exec executable="phpcpd" escape="true">
-   <arg line="--log-pmd ${project.basedir}/build/logs/pmd-cpd.xml ${source}" />
-  </exec>
-  <echo message="Created pmd-cpd.xml file" />
- </target>
+    <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
+        <exec executable="phpcpd" escape="true">
+            <arg line="--log-pmd ${project.basedir}/build/logs/pmd-cpd.xml ${source}" />
+        </exec>
+        <echo message="Created pmd-cpd.xml file" />
+    </target>
 
- <target name="phploc" description="Generate phploc.csv">
-  <exec executable="phploc" escape="true">
-   <arg line="--log-csv ${project.basedir}/build/logs/phploc.csv ${source}" />
-  </exec>
-  <echo message="Generated phploc CSV file for graphs" />
- </target>
+    <target name="phploc" description="Generate phploc.csv">
+        <exec executable="phploc" escape="true">
+            <arg line="--log-csv ${project.basedir}/build/logs/phploc.csv ${source}" />
+        </exec>
+        <echo message="Generated phploc CSV file for graphs" />
+    </target>
 
- <target name="phpcs" description="Generate checkstyle.xml using PHP_CodeSniffer">
-  <exec executable="phpcs" output="/dev/null" escape="true">
-   <arg line="--report=checkstyle
+    <target name="phpcs" description="Generate checkstyle.xml using PHP_CodeSniffer">
+        <exec executable="phpcs" output="/dev/null" escape="true">
+            <arg line="--report=checkstyle
               --report-file=${project.basedir}/build/logs/checkstyle.xml
               --standard=Generic
               ${source}" />
-  </exec>
-  <echo message="Generated checkstyle report xml file" />  
- </target>
+        </exec>
+        <echo message="Generated checkstyle report xml file" />  
+    </target>
 
-<!--
- <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
-  <exec executable="phpdoc" escape="true">
-   <arg line="-d ${source} -t ${project.basedir}/build/api" />
-  </exec>
-  <echo message="Generated API documentation" />
- </target>
--->
+    <target name="docs">
+        <docblox title="Generae API Documentation" destdir="${project.basedir}/build/api">
+            <fileset dir="${source}">
+                <include name="**/*.php"/>
+            </fileset>
+        </docblox>
+        <echo message="Generated the API documentation" />
+    </target>
 
- <target name="docs">
-  <docblox title="Generae API Documentation" destdir="${project.basedir}/build/api">
-   <fileset dir="${source}">
-    <include name="**/*.php"/>
-   </fileset>
-  </docblox>
-  <echo message="Generated the API documentation" />
- </target>
-
- <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
-  <exec executable="phpcb" escape="true">
-   <arg line="--log    ${project.basedir}/build/logs
+    <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
+        <exec executable="phpcb" escape="true">
+            <arg line="--log    ${project.basedir}/build/logs
               --source ${source}
               --output ${project.basedir}/build/code-browser" />
-  </exec>
-  <echo message="Generated code browser files" />
- </target>
+        </exec>
+        <echo message="Generated code browser files" />
+    </target>
 
- <!-- Clean up the staging site and re-build it ... we have the technology -->
- <target name="rebuild-staging" description="Clean up staging site and rebuild it using git repo">
-  <delete dir="/var/www/vhosts/jigglycms.com/Zend-CMS/*"/>
+    <!-- Clean up the staging site and re-build it ... we have the technology -->
+    <target name="rebuild-staging" description="Clean up staging site and rebuild it using git repo">
+        <delete dir="/var/www/vhosts/jigglycms.com/Zend-CMS/*"/>
   
-  <echo message="cleaned up old staging files" />
-  <copy todir="/var/www/vhosts/jigglycms.com/Zend-CMS">
-   <fileset dir="/var/lib/jenkins/jobs/Jiggly/workspace">
-     <include name="**"/>
-   </fileset>
-  </copy>
-  <echo message="set up staging site again" />
- </target>
+        <echo message="cleaned up old staging files" />
+        <copy todir="/var/www/vhosts/jigglycms.com/Zend-CMS">
+            <fileset dir="/var/lib/jenkins/jobs/Jiggly/workspace">
+                <include name="**"/>
+            </fileset>
+        </copy>
+        <echo message="set up staging site again" />
+    </target>
+ 
+    <!-- Buid the Database -->
+ 
+    <!-- Sets the DSTAMP, TSTAMP and TODAY properties -->
+    <tstamp/>
+
+    <!-- create our migration task -->
+    <target name="migrate" description="Database Migrations">  
+
+        <!-- load the dbdeploy task -->
+        <!--<taskdef name="dbdeploy" classname="phing.tasks.ext.dbdeploy.DbDeployTask"/>-->
+
+        <!-- generate the deployment scripts -->
+        <dbdeploy 
+            url="mysql:host=${db.host};dbname=${db.name}" 
+            userid="${db.user}" 
+            password="${db.pass}" 
+            dir="${project.basedir}/db/deltas" 
+            outputfile="${project.basedir}/${build.dbdeploy.deployfile}" 
+            undooutputfile="${project.basedir}/${build.dbdeploy.undofile}" />
+
+        <!-- execute the SQL - Use mysql command line to avoid trouble with large files or many statements and PDO -->
+        <exec
+            command="${mysql.path} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; ${build.dbdeploy.deployfile}"
+            dir="${project.basedir}"
+            checkreturn="true" />
+    </target>
 
 
- <target name="build" depends="clean,phpunit,phpcb,docs,phpcs,phploc,pdepend,phpcpd,phpmd,rebuild-staging">
-  <echo message="Finished ... you rock Gareth!" />
- </target>
 </project>
