@@ -94,6 +94,21 @@
   <echo message="Generated code browser files" />
  </target>
 
+ <!-- Clean up the staging site and re-build it ... we have the technology -->
+ <target name="rebuild-staging" description="Clean up staging site and rebuild it using git repo">
+  <delete dir="/var/www/vhosts/jigglycms.com/Zend-CMS"/>
+  <mkdir dir="/var/www/vhosts/jigglycms.com/Zend-CMS"/>
+  <echo message="cleaned up old staging files" />
+  <copy todir="/var/www/vhosts/jigglycms.com/Zend-CMS">
+   <fileset dir="/var/lib/jenkins/jobs/Jiggly/workspace">
+     <include>**</include>
+     <!-- <exclude>**/.svn/**</exclude> -->
+   </fileset>
+  </copy>
+  <echo message="set up staging site again" />
+ </target>
+
+
  <target name="build" depends="clean,phpunit,phpcb,docs,phpcs,phploc,pdepend,phpcpd,phpmd">
   <echo message="Finished ... you rock Gareth!" />
  </target>
