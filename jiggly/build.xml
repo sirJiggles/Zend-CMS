@@ -129,7 +129,7 @@
     <tstamp/>
 
     <!-- create our migration task -->
-    <target name="migrate" description="Database Migrations">  
+    <target name="deploy-database" description="Database Migrations">  
 
         <!-- load the dbdeploy task -->
         <!--<taskdef name="dbdeploy" classname="phing.tasks.ext.dbdeploy.DbDeployTask"/>-->
