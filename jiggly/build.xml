@@ -109,7 +109,7 @@
  </target>
 
 
- <target name="build" depends="clean,phpunit,phpcb,docs,phpcs,phploc,pdepend,phpcpd,phpmd">
+ <target name="build" depends="clean,phpunit,phpcb,docs,phpcs,phploc,pdepend,phpcpd,phpmd,rebuild-staging">
   <echo message="Finished ... you rock Gareth!" />
  </target>
 </project>
