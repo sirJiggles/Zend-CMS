@@ -60,7 +60,7 @@
   <exec executable="phpcs" output="/dev/null" escape="true">
    <arg line="--report=checkstyle
               --report-file=${project.basedir}/build/logs/checkstyle.xml
-              --standard=Squiz
+              --standard=Generic
               ${source}" />
   </exec>
   <echo message="Generated checkstyle report xml file" />  
