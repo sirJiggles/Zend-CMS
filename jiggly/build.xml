@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <project name="Jiggly" default="build" basedir=".">
  <property name="source" value="./application" />
 
@@ -61,7 +60,7 @@
   <exec executable="phpcs" output="/dev/null" escape="true">
    <arg line="--report=checkstyle
               --report-file=${project.basedir}/build/logs/checkstyle.xml
-              --standard=PEAR
+              --standard=Squiz
               ${source}" />
   </exec>
   <echo message="Generated checkstyle report xml file" />  
