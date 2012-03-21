@@ -12,8 +12,8 @@
     <property name="db.name" value="jiggly" />
     <property name="mysql.path" value="/usr/bin/mysql" />
      <!-- these two filenames will contain the generated SQL to do the deploy and roll it back -->
-    <property name="build.dbdeploy.deployfile" value="db/deploy/deploy-${DSTAMP}${TSTAMP}.sql" />
-    <property name="build.dbdeploy.undofile" value="db/deploy/undo-${DSTAMP}${TSTAMP}.sql" />
+    <property name="dbdeploy.deployfile" value="db/deploy/deploy-${DSTAMP}${TSTAMP}.sql" />
+    <property name="dbdeploy.undofile" value="db/deploy/undo-${DSTAMP}${TSTAMP}.sql" />
  
     <target name="build" depends="
     clean,
@@ -132,7 +132,7 @@
     <target name="deploy-database" description="Database Migrations">  
 
         <!-- load the dbdeploy task -->
-        <!--<taskdef name="dbdeploy" classname="phing.tasks.ext.dbdeploy.DbDeployTask"/>-->
+        <!-- <taskdef name="dbdeploy" classname="phing.tasks.ext.dbdeploy.DbDeployTask"/>-->
 
         <!-- generate the deployment scripts -->
         <dbdeploy 
@@ -140,12 +140,12 @@
             userid="${db.user}" 
             password="${db.pass}" 
             dir="${project.basedir}/db/deltas" 
-            outputfile="${project.basedir}/${build.dbdeploy.deployfile}" 
-            undooutputfile="${project.basedir}/${build.dbdeploy.undofile}" />
+            outputfile="${project.basedir}/${dbdeploy.deployfile}" 
+            undooutputfile="${project.basedir}/${dbdeploy.undofile}" />
 
         <!-- execute the SQL - Use mysql command line to avoid trouble with large files or many statements and PDO -->
         <exec
-            command="${mysql.path} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; ${build.dbdeploy.deployfile}"
+            command="${mysql.path} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; ${dbdeploy.deployfile}"
             dir="${project.basedir}"
             checkreturn="true" />
     </target>
