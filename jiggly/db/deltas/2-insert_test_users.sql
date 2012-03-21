@@ -5,6 +5,6 @@ INSERT INTO `users` VALUES(2, 'gfuller2', '36bdf929501b3f9dcc0428edbc5832c250e43
 
 --//@UNDO
 
-DELETE FROM `user` WHERE `id` = 1 AND `id` = 2;
+--DELETE FROM `user` WHERE `id` = 1 AND `id` = 2;
 
 --//

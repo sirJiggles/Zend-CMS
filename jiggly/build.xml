@@ -7,8 +7,8 @@
  
     <!-- Define the variables used for the database construction -->
     <property name="db.host" value="localhost" />
-    <property name="db.user" value="jiggly_usr" />
-    <property name="db.pass" value="ilovelisa12" />
+    <property name="db.user" value="jiggly" />
+    <property name="db.pass" value="wrOy6QbkE8lUIQ" />
     <property name="db.name" value="jiggly" />
     <property name="mysql.path" value="/usr/bin/mysql" />
      <!-- these two filenames will contain the generated SQL to do the deploy and roll it back -->

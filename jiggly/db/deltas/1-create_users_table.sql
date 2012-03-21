@@ -13,10 +13,10 @@ CREATE TABLE `users` (
   UNIQUE KEY `username` (`username`),
   KEY `password` (`password`),
   KEY `role` (`role`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=3;
 
 --//@UNDO
 
-DROP TABLE `users`;
+--DROP TABLE `users`;
 
 --//
