@@ -17,6 +17,6 @@ CREATE TABLE `users` (
 
 --//@UNDO
 
---DROP TABLE `users`;
+DROP TABLE `users`;
 
 --//
