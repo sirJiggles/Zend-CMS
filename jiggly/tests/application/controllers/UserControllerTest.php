@@ -1,24 +1,22 @@
 <?php
 
-class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
+//Include the set up tear down functions
+require_once TESTS_PATH . '/application/ControllerTestCase.php';
+
+// Include the contrioller we are going to test
+require_once APPLICATION_PATH . '/controllers/UserController.php';
+
+class UserControllerTest extends ControllerTestCase
 {
-    public function setUp()
+   
+     public function testDefaultShouldInvokeIndexAction()
     {
-        //$this->bootstrap = array($this, 'appBootstrap');
-        parent::setUp();
+        $this->dispatch('/');
+        $this->assertController('index');
+        $this->assertAction('index');
     }
     
-    public function appBootstrap()
-    {
-        //$this->frontController
-        //     ->registerPlugin(new Bugapp_Plugin_Initialize('development'));
-    }
-
-    public function testCanDoUnitTest() {
-        $this->assertTrue(true);
-    }
-
-/*
+    
     // Test the logout action
     public function testLogoutAction(){
         $this->dispatch('/user/logout');
@@ -49,5 +47,5 @@ class UserControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
         $this->assertQueryCount('form#login', 1);
     }
     
-*/
+
 }
