@@ -135,18 +135,19 @@
         <!-- <taskdef name="dbdeploy" classname="phing.tasks.ext.dbdeploy.DbDeployTask"/>-->
 
         <!-- generate the deployment scripts -->
-        <dbdeploy 
-            url="mysql:host=${db.host};dbname=${db.name}" 
-            userid="${db.user}" 
-            password="${db.pass}" 
-            dir="${project.basedir}/db/deltas" 
-            outputfile="${project.basedir}/${dbdeploy.deployfile}" 
+        <dbdeploy
+            url="mysql:host=${db.host};dbname=${db.name}"
+            userid="${db.user}"
+            password="${db.pass}"
+            dir="${project.basedir}/db/deltas"
+            outputfile="${project.basedir}/${dbdeploy.deployfile}"
             undooutputfile="${project.basedir}/${dbdeploy.undofile}" />
-
+              
         <!-- execute the SQL - Use mysql command line to avoid trouble with large files or many statements and PDO -->
-        <!--<exec
-            command="${mysql.path} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; ${dbdeploy.deployfile}"
-            dir="${project.basedir}" -->
+        <echo message="the command we are trying to run: ${mysql.path} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; ${dbdeploy.deployfile}" />
+        <exec command="${mysql.path} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; ${dbdeploy.deployfile}" checkreturn="true" />
+        <echo message="Ran mysql command to run deploy file" />
+
     </target>
 
 
