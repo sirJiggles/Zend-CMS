@@ -144,10 +144,9 @@
             undooutputfile="${project.basedir}/${dbdeploy.undofile}" />
 
         <!-- execute the SQL - Use mysql command line to avoid trouble with large files or many statements and PDO -->
-        <exec
+        <!--<exec
             command="${mysql.path} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; ${dbdeploy.deployfile}"
             dir="${project.basedir}"
-            checkreturn="true" />
     </target>
 
 
