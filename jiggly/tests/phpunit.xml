@@ -1,4 +1,4 @@
-<phpunit bootstrap="./bootstrap.php">
+<phpunit bootstrap="bootstrap.php">
     
     <testsuite name="Application Test Suite">
         <directory>./application</directory>
@@ -9,6 +9,7 @@
         <blacklist>
             <directory suffix=".php">/var/www/library/Zend</directory>
             <directory suffix=".php">/Subversion/libary/Zend</directory>
+            <directory suffix=".php">/home/gareth/Dropbox/libary/Zend</directory>
 	</blacklist>
         
         <whitelist>
@@ -17,8 +18,9 @@
             
             <!-- exclude view files and bootstrap -->
             <exclude>
-                <directory suffix=".phtml">../application/views</directory>
+                <directory suffix=".phtml">../application</directory>
                 <file>../application/Bootstrap.php</file>
+                <file>../application/controllers/ErrorController.php</file>
             </exclude>
             
         </whitelist>

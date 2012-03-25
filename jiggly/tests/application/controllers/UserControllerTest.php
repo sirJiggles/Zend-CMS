@@ -1,22 +1,42 @@
 <?php
 
-//Include the set up tear down functions
-require_once TESTS_PATH . '/application/ControllerTestCase.php';
-
-// Include the contrioller we are going to test
-require_once APPLICATION_PATH . '/controllers/UserController.php';
+// Get the user controller from the application
+//require_once '../application/controllers/UserController.php';
 
 class UserControllerTest extends ControllerTestCase
 {
-   
-     public function testDefaultShouldInvokeIndexAction()
+    
+    // The variable to hold out controller instance
+    //protected  $userController;
+    
+   /* public function setUp(){
+        parent::setUp();
+        // Get an instance of the user controller
+       //$this->userController = new UserController();
+        
+        // Set the parent up
+    }*/
+    
+    /*
+     * Test that the index page exists
+     */
+    public function testLandOnIndexPage()
     {
-        $this->dispatch('/');
-        $this->assertController('index');
+        $this->assertTrue(true);
+        $this->dispatch('user');
+        $this->assertController('user');
         $this->assertAction('index');
     }
     
+    public function testLoginPageHasCorrectForm(){
+        $this->dispatch('/user/login');
+        $this->assertAction('login');
+        $this->assertQueryCount('Form.login', 1);
+        //$this->assertQ
+    }
     
+
+    /*
     // Test the logout action
     public function testLogoutAction(){
         $this->dispatch('/user/logout');
@@ -41,11 +61,7 @@ class UserControllerTest extends ControllerTestCase
     }
     
     // Test the login page contains the correct form
-    public function testLoginPageHasCorrectForm(){
-        $this->dispatch('/user/login');
-        $this->assertAction('login');
-        $this->assertQueryCount('form#login', 1);
-    }
-    
+   
+    */
 
 }

@@ -30,12 +30,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     public function _initAcl()
     {
         // Added to get working on ubuntu machine (must be mod issue but dont have time for this shit)
-        //require_once '/home/gareth/Dropbox/Zend-CMS/jiggly/library/acl/Config.php';
-        //require_once '/home/gareth/Dropbox/Zend-CMS/jiggly/library/acl/Plugin.php';
+        require_once '/home/gareth/Dropbox/Zend-CMS/jiggly/library/acl/Config.php';
+        require_once '/home/gareth/Dropbox/Zend-CMS/jiggly/library/acl/Plugin.php';
 
         // Added to get working on dedicated machine (must be mod issue but dont have time for this shit)
-        require_once '/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/library/acl/Config.php';   
-        require_once '/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/library/acl/Plugin.php';
+        //require_once '/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/library/acl/Config.php';   
+        //require_once '/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/library/acl/Plugin.php';
 
         // Create a new insance of the acl config (to load the config settings)
         $acl = new Acl_Config();

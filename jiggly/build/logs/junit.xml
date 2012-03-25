@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="" tests="1" assertions="1" failures="0" errors="0" time="0.021587">
-    <testsuite name="Application Test Suite" tests="1" assertions="1" failures="0" errors="0" time="0.021587">
-      <testsuite name="UserControllerTest" file="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="1" assertions="1" failures="0" errors="0" time="0.021587">
-        <testcase name="testCanDoUnitTest" class="UserControllerTest" file="/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="17" assertions="1" time="0.021587"/>
-      </testsuite>
+  <testsuite name="Application Test Suite" tests="2" assertions="7" failures="0" errors="1" time="0.115754">
+    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="2" assertions="7" failures="0" errors="1" time="0.115754">
+      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="23" assertions="4" time="0.066153"/>
+      <testcase name="testLoginPageHasCorrectForm" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="31" assertions="3" time="0.049601">
+        <error type="PHPUnit_Framework_Error_Notice">UserControllerTest::testLoginPageHasCorrectForm
+Declaration of Zend_Test_PHPUnit_Constraint_DomQuery::evaluate() should be compatible with that of PHPUnit_Framework_Constraint::evaluate()
+
+/home/gareth/Dropbox/library/Zend/1.11.11/Zend/Test/PHPUnit/Constraint/DomQuery.php:425
+/home/gareth/Dropbox/library/Zend/1.11.11/Zend/Test/PHPUnit/ControllerTestCase.php:409
+/home/gareth/Dropbox/library/Zend/1.11.11/Zend/Test/PHPUnit/ControllerTestCase.php:409
+/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php:34
+</error>
+      </testcase>
     </testsuite>
-    <testsuite name="Library Test Suite" tests="0" assertions="0" failures="0" errors="0" time="0.000000"/>
   </testsuite>
 </testsuites>
