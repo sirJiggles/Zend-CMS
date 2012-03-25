@@ -1,5 +1,17 @@
 <?php
 
+/*
+ * This is the errors controller, this is called when there is an application
+ * Error in the system.
+ * 
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Controllers
+ */
+
 class ErrorController extends Zend_Controller_Action
 {
 

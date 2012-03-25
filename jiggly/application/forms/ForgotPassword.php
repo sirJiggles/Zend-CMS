@@ -1,9 +1,14 @@
 <?php
 
 /*
- * This is the forgotten password form for the system
+ * This is the form for dealing with users that have forgotten their password
  * 
- * Gareth Fuller
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Forms
  */
 
 class Application_Form_ForgotPassword extends Zend_Form

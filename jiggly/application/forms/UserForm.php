@@ -1,11 +1,15 @@
 <?php
 
 /*
- * This is the user form, its used for both the edit user and add user actions
+ * This form is used for both adding and editing users within the system
  * 
- * Gareth Fuller
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Forms
  */
-
 class Application_Form_UserForm extends Zend_Form
 {
     

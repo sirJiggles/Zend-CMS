@@ -1,5 +1,18 @@
 <?php
 
+/*
+ * This is not so much a controller but more a bootstrap for all of our
+ * model and controller tests, all test classes extend this class 
+ * and inherit the default setup, tear down and login functions
+ * 
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Test_Bootstraps
+ */
+
 class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
 {
     /*

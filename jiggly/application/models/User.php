@@ -1,12 +1,16 @@
 <?php
 
 /*
- * This is the model with all of the users functions inside it
- * (connects to users table)
+ * This is the model that handles all of the User specific fucntionality
  * 
- * Gareth Fuller
+ * 
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Modles
  */
-
 class Application_Model_User extends Zend_Db_Table{
     
     protected $_name = 'users';

@@ -1,17 +1,20 @@
 <?php
 
-
 /*
  * This is the ACL configuration file that is loaded by the bootstrap
  * This is where we define the roels and what they have access to
  * Roles are the types of user 
  * Resources are the controllers
+ *
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
  * 
- * Gareth Fuller
- * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Access
  */
 
-class Acl_Config extends Zend_Acl {
+class Access_Config extends Zend_Acl {
     
     public function __construct() {
        

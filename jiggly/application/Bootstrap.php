@@ -1,5 +1,18 @@
 <?php
 
+/*
+ * This is the main Bootstrap file for out application, here we run
+ * our initiation of our roots and the access plugin that handles
+ * the ACL in the application.
+ * 
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Bootstraps
+ */
+
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
    
@@ -29,20 +42,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     
     public function _initAcl()
     {
-        // Added to get working on ubuntu machine (must be mod issue but dont have time for this shit)
-        //require_once '/home/gareth/Dropbox/Zend-CMS/jiggly/library/acl/Config.php';
-        //require_once '/home/gareth/Dropbox/Zend-CMS/jiggly/library/acl/Plugin.php';
-
-        // Added to get working on dedicated machine (must be mod issue but dont have time for this shit)
-        require_once '/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/library/acl/Config.php';   
-        require_once '/var/www/vhosts/jigglycms.com/Zend-CMS/jiggly/library/acl/Plugin.php';
-
         // Create a new insance of the acl config (to load the config settings)
-        $acl = new Acl_Config();
-        
+        $acl = new Access_Config();
         // Register the ACL plugin
         $frontController = Zend_Controller_Front::getInstance();
-        $frontController->registerPlugin(new Acl_Plugin());
+        $frontController->registerPlugin(new Access_Plugin());
+        
+        
     }
 
 }

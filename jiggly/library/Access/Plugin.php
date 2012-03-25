@@ -4,9 +4,15 @@
  * This is the class that deals with user authentification
  * and redirecting 
  * 
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Access
  */
 
-class Acl_Plugin extends Zend_Controller_Plugin_Abstract
+class Access_Plugin extends Zend_Controller_Plugin_Abstract
 {
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {

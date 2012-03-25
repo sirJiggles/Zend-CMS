@@ -1,9 +1,14 @@
 <?php
 
 /*
- * This is the form for changing the users password in the system
+ * This is the form for chaning the users password in the system
  * 
- * Gareth Fuller
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Forms
  */
 
 class Application_Form_ChangePassword extends Zend_Form

@@ -1,9 +1,14 @@
 <?php
 
 /*
- * This is the login form for the system
+ * This is the main login form for the system
  * 
- * Gareth Fuller
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Forms
  */
 
 class Application_Form_Login extends Zend_Form

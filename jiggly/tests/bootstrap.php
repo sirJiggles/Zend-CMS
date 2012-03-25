@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * This is the bootstrap file for our test suite
+ * 
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Test_Bootstraps
+ */
+
 // Set error reporting
 error_reporting( E_ALL | E_STRICT );
 
@@ -16,10 +27,6 @@ define('TESTS_PATH', realpath(dirname(__FILE__)));
 
 // Ensure library/ is on include_path (we will just add all possible zf ones for now as deving on multiple machines)
 set_include_path(implode(PATH_SEPARATOR, array(
-    realpath('/var/www/library/Zend/1.11.11'),
-    realpath('/Subversion/libary/Zend/1.11.11'),
-    realpath('/home/gareth/Dropbox/library/Zend/1.11.11'),
-    realpath(APPLICATION_PATH . '../library'),
     get_include_path(),
 )));
 

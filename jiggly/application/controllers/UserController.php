@@ -1,5 +1,18 @@
 <?php
 
+/*
+ * This is the user controller, this controller handles the login / logout
+ * functionality as well as dealing with things like forgotten password,
+ * password reset and all other user specific functionality
+ * 
+ * All code in this project is under the GNU general public licence, full 
+ * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
+ * 
+ * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
+ * @copyright Copyright (c) Gareth Fuller
+ * @package Controllers
+ */
+
 class UserController extends Zend_Controller_Action
 {
     
