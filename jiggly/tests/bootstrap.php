@@ -27,6 +27,9 @@ define('TESTS_PATH', realpath(dirname(__FILE__)));
 
 // Ensure library/ is on include_path (we will just add all possible zf ones for now as deving on multiple machines)
 set_include_path(implode(PATH_SEPARATOR, array(
+    realpath('/var/www/library/Zend/1.11.11'),
+    realpath('/Subversion/libary/Zend/1.11.11'),
+    realpath('/home/gareth/Dropbox/library/Zend/1.11.11'),
     get_include_path(),
 )));
 

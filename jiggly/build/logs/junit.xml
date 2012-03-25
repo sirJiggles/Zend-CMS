@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Application Test Suite" tests="2" assertions="6" failures="0" errors="0" time="0.092238">
-    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="2" assertions="6" failures="0" errors="0" time="0.092238">
-      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="23" assertions="4" time="0.055303"/>
-      <testcase name="testLoginPageHasCorrectForm" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="31" assertions="2" time="0.036935"/>
+  <testsuite name="Application Test Suite" tests="2" assertions="6" failures="0" errors="0" time="0.140354">
+    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="2" assertions="6" failures="0" errors="0" time="0.140354">
+      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="35" assertions="4" time="0.107618"/>
+      <testcase name="testLoginPageHasCorrectForm" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="43" assertions="2" time="0.032736"/>
     </testsuite>
   </testsuite>
 </testsuites>
