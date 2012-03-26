@@ -12,22 +12,22 @@
  * @package Test_Controllers
  */
 
-// Get the user controller from the application
-//require_once '../application/controllers/UserController.php';
+// Get an instance the user model file
+require_once '../application/models/User.php';
 
 class UserControllerTest extends ControllerTestCase
 {
     
-    // The variable to hold out controller instance
-    //protected  $userController;
+    // The variable to hold out model instance
+    protected  $_userModel;
     
-   /* public function setUp(){
-        parent::setUp();
-        // Get an instance of the user controller
-       //$this->userController = new UserController();
-        
-        // Set the parent up
-    }*/
+    public function setUp(){
+       // Set the parent up
+       parent::setUp();
+       // Get an instance of the user controller
+       $this->_userModel = new Application_Model_User();
+       
+    }
     
     /*
      * Test that the index page exists
@@ -43,8 +43,8 @@ class UserControllerTest extends ControllerTestCase
     public function testLoginPageHasCorrectForm(){
         $this->dispatch('/user/login');
         $this->assertAction('login');
-        //$this->assertQueryCount('Form.login', 1);
-        //$this->assertQ
+        // Check that there is a login for on this page
+        $this->assertQueryCount('form#loginForm', 1, 'Unable to locate the login form');
     }
     
 

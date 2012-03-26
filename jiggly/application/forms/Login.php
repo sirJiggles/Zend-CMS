@@ -17,7 +17,7 @@ class Application_Form_Login extends Zend_Form
     public function init()
     {
         $this->setAttrib('class', 'login');
-        //$this->setAttrib($key, $value)
+        $this->setAttrib('id', 'loginForm');
         
         $customDecorators = array(
                             'ViewHelper',
