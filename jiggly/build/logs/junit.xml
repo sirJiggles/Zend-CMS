@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Application Test Suite" tests="3" assertions="9" failures="1" errors="0" time="0.093746">
-    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="3" assertions="9" failures="1" errors="0" time="0.093746">
-      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="35" assertions="4" time="0.049087"/>
-      <testcase name="testLoginPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="46" assertions="3" time="0.033147"/>
-      <testcase name="testLoginCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="59" assertions="2" time="0.011512">
-        <failure type="PHPUnit_Framework_AssertionFailedError">UserControllerTest::testLoginCorrect
-Failed asserting last controller used &lt;"user"&gt; was "index"
+  <testsuite name="Application Test Suite" tests="3" assertions="10" failures="1" errors="0" time="0.099053">
+    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="3" assertions="10" failures="1" errors="0" time="0.099053">
+      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="35" assertions="4" time="0.051038"/>
+      <testcase name="testLoginPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="46" assertions="4" time="0.035840"/>
+      <testcase name="testLoginCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="59" assertions="2" time="0.012175">
+        <failure type="Zend_Test_PHPUnit_Constraint_Exception">UserControllerTest::testLoginCorrect
+Failed asserting response redirects to "/index"
 
-/home/gareth/Dropbox/library/Zend/1.11.11/Zend/Test/PHPUnit/ControllerTestCase.php:1000
+/home/gareth/Dropbox/library/Zend/1.11.11/Zend/Test/PHPUnit/Constraint/Redirect.php:190
+/home/gareth/Dropbox/library/Zend/1.11.11/Zend/Test/PHPUnit/ControllerTestCase.php:731
 /home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php:76
 </failure>
       </testcase>

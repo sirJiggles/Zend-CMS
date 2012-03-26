@@ -47,7 +47,7 @@ class UserControllerTest extends ControllerTestCase
         $this->dispatch('/user/login');
         $this->assertAction('login');
         // Check that there is a login for on this page
-        //$this->assertQueryCount('form#loginForm', 1, 'Unable to locate the login form');
+        $this->assertQueryCount('form#loginForm', 1, 'Unable to locate the login form');
         
         $loginForm = new Application_Form_Login();
         $this->assertInstanceOf('Zend_Form', $loginForm);
@@ -61,10 +61,7 @@ class UserControllerTest extends ControllerTestCase
         //first logout of the system
         $this->logout();
         
-        // Go to the correct place
-        //$this->dispatch('/user/login');
-        //$this->assertAction('login');
-        
+        // Spoof the login of correct details
         $this->request->setMethod('POST')
               ->setPost(array(
                   'username' => 'gfuller',
@@ -73,9 +70,11 @@ class UserControllerTest extends ControllerTestCase
         $this->dispatch('/user/login');
         
         // Check that we are redirected to the correct place
-        $this->assertController('index');
-        $this->assertAction('/');
+        $this->assertRedirectTo('/');
+        
     }
+    
+    
     
     
     
