@@ -106,7 +106,7 @@
     
     <target name="docs" description="Generate API documentation using PHPDocumentor">
         <exec executable="phpdoc" escape="true">
-            <arg line="-d ${source} -t ${basedir}/build/api" />
+            <arg line="-d ${source} -t ${project.basedir}/build/api" />
         </exec>
     </target>
     
