@@ -40,12 +40,44 @@ class UserControllerTest extends ControllerTestCase
         $this->assertAction('index');
     }
     
-    public function testLoginPageHasCorrectForm(){
+    /*
+     * Check there is the correct form on the login page
+     */
+    public function testLoginPage(){
         $this->dispatch('/user/login');
         $this->assertAction('login');
         // Check that there is a login for on this page
-        $this->assertQueryCount('form#loginForm', 1, 'Unable to locate the login form');
+        //$this->assertQueryCount('form#loginForm', 1, 'Unable to locate the login form');
+        
+        $loginForm = new Application_Form_Login();
+        $this->assertInstanceOf('Zend_Form', $loginForm);
     }
+    
+    /*
+     * Check that with the correct details we can login
+     */
+    public function testLoginCorrect(){
+        
+        //first logout of the system
+        $this->logout();
+        
+        // Go to the correct place
+        //$this->dispatch('/user/login');
+        //$this->assertAction('login');
+        
+        $this->request->setMethod('POST')
+              ->setPost(array(
+                  'username' => 'gfuller',
+                  'password' => 'monkey12'
+              ));
+        $this->dispatch('/user/login');
+        
+        // Check that we are redirected to the correct place
+        $this->assertController('index');
+        $this->assertAction('/');
+    }
+    
+    
     
 
     /*

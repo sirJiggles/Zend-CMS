@@ -75,8 +75,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function loginAdmin ()
     {
-        // Remove any previous fake accounts
-        Zend_Auth::getInstance()->getStorage()->clear();
+        $this->logout();
         
         // create a fake identity
         $identity = new stdClass();
@@ -101,8 +100,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function loginEditor ()
     {
-        // Remove any previous fake accounts
-        Zend_Auth::getInstance()->getStorage()->clear();
+        $this->logout();
         
         // create a fake identity
         $identity = new stdClass();
@@ -118,5 +116,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
         // Run a test to make sure we have aithentification
         $auth = Zend_Auth::getInstance();
         $this->assertTrue($auth->hasIdentity());
+    }
+    
+    public function logout(){
+         // Remove any previous fake accounts
+        Zend_Auth::getInstance()->getStorage()->clear();
     }
 }

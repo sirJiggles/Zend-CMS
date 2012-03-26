@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Application Test Suite" tests="2" assertions="7" failures="0" errors="0" time="0.086446">
-    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="2" assertions="7" failures="0" errors="0" time="0.086446">
-      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="35" assertions="4" time="0.051721"/>
-      <testcase name="testLoginPageHasCorrectForm" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="43" assertions="3" time="0.034725"/>
+  <testsuite name="Application Test Suite" tests="3" assertions="9" failures="1" errors="0" time="0.093746">
+    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="3" assertions="9" failures="1" errors="0" time="0.093746">
+      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="35" assertions="4" time="0.049087"/>
+      <testcase name="testLoginPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="46" assertions="3" time="0.033147"/>
+      <testcase name="testLoginCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="59" assertions="2" time="0.011512">
+        <failure type="PHPUnit_Framework_AssertionFailedError">UserControllerTest::testLoginCorrect
+Failed asserting last controller used &lt;"user"&gt; was "index"
+
+/home/gareth/Dropbox/library/Zend/1.11.11/Zend/Test/PHPUnit/ControllerTestCase.php:1000
+/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php:76
+</failure>
+      </testcase>
     </testsuite>
   </testsuite>
 </testsuites>

@@ -92,15 +92,25 @@
         <echo message="Generated checkstyle report xml file" />  
     </target>
 
+    <!-- Had to remove this for now beause phing requires 5.6 phpunit and 5.6
+    does not work with 90% of Zend_Test ... will uncomment when things are less
+    shite 
     <target name="docs">
-        <docblox title="Generae API Documentation" destdir="${project.basedir}/build/api">
+        <docblox title="Jiggly CMS Documentation" destdir="${project.basedir}/build/api">
             <fileset dir="${source}">
                 <include name="**/*.php"/>
             </fileset>
         </docblox>
         <echo message="Generated the API documentation" />
     </target>
-
+    -->
+    
+    <target name="phpdoc" description="Generate API documentation using PHPDocumentor">
+        <exec executable="phpdoc" escape="true">
+            <arg line="-d ${source} -t ${basedir}/build/api" />
+        </exec>
+    </target>
+    
     <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
         <exec executable="phpcb" escape="true">
             <arg line="--log    ${project.basedir}/build/logs
