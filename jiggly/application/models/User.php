@@ -24,6 +24,26 @@ class Application_Model_User extends Zend_Db_Table{
         return $this->fetchAll();
     }
     
+    /*
+     * Function to grab users by the username param
+     * 
+     * @param string $username
+     * @return Zend_Db_Table_Row $user
+     */
+    public function getUserByUsername($username){
+        
+        try {
+            $selectStatememt = $this->select()
+                                    ->where('username = ?', $username);
+            $row = $this->fetchRow($selectStatememt);
+           
+            return $row;
+            
+        } catch (Exception $e) {
+            echo 'Unable to getUserByUsername in User model: '.$e->getMessage();
+        }
+        
+    }
     
     /*
      * Function to get a user by an Id from 

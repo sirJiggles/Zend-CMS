@@ -2,7 +2,7 @@
 
 /*
  * This is the controller for testing the user controller in the system that
- * deals with all useresq functionality.
+ * deals with all user-esq functionality.
  * 
  * All code in this project is under the GNU general public licence, full 
  * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
@@ -29,20 +29,17 @@ class UserControllerTest extends ControllerTestCase
        
     }
     
-    /*
-     * Test that the index page exists
-     */
+    // Test that the index page exists
     public function testLandOnIndexPage()
     {
         $this->assertTrue(true);
         $this->dispatch('user');
         $this->assertController('user');
         $this->assertAction('index');
+        $this->assertResponseCode(200);
     }
     
-    /*
-     * Check there is the correct form on the login page
-     */
+    // Check there is the correct form on the login page
     public function testLoginPage(){
         $this->dispatch('/user/login');
         $this->assertAction('login');
@@ -53,9 +50,7 @@ class UserControllerTest extends ControllerTestCase
         $this->assertInstanceOf('Zend_Form', $loginForm);
     }
     
-    /*
-     * Check that with the correct details we can login
-     */
+    // Check that with the correct details we can login
     public function testLoginCorrect(){
         
         //first logout of the system
@@ -71,40 +66,88 @@ class UserControllerTest extends ControllerTestCase
         
         // Check that we are redirected to the correct place
         $this->assertRedirectTo('/');
-        
+       
     }
     
-    
-    
-    
-    
-
-    /*
-    // Test the logout action
-    public function testLogoutAction(){
-        $this->dispatch('/user/logout');
-        $this->assertAction('logout');
-        $this->assertRedirect('/');
-    }
-    
-    // Test users with the right creds are logged in correctly
-    public function testCorrectLogin(){
+    // Check the user is dealt with correctly for incorrect login
+    public function testIncorrectLogin(){
+        $this->logout();
         
+        // Spoof the login of correct details
         $this->request->setMethod('POST')
               ->setPost(array(
                   'username' => 'gfuller',
-                  'password' => 'monkey12'
+                  'password' => 'someincorrectpassword'
               ));
         $this->dispatch('/user/login');
-        $this->assertRedirectTo('/');
- 
-        $this->resetRequest()
-             ->resetResponse();
         
+        // Check they are shown the "incorrect login message"
+        $this->assertQueryContentContains('.ui-state-highlight p', 'Login details incorrect');
     }
     
-    // Test the login page contains the correct form
-   
-    */
+    // Test to make sure editors are not able to access the user section
+    public function testEditorNoAccessAdmin(){
+        // Lets first login as an editor
+        $this->loginEditor();
+        
+        // Now we will attempt to access the user admin section
+        $this->dispatch('/user/manage');
+        $this->assertRedirectTo('/error/not-the-droids');
+    }
+    
+    // Test to make sure the admin users can see the user manage section
+    public function testAdminHasAccessAdmin(){
+        // should be admin as default so just check the dispatch
+        $this->dispatch('/user/manage');
+        $this->assertNotRedirect();
+        $this->assertController('user');
+        $this->assertAction('manage');
+        $this->assertResponseCode(200);
+    }
+    
+    // Test that we can add a user to the system as admin correctly
+    public function testAddUserCorrect(){
+        
+        /* 
+         * First we will remove the user from the db (if they are there) as
+         * if previous tests failed the old user may still exist and this
+         * step wil fail even if correct
+         */
+        $this->_removeTestUser();
+        
+        // Spoof the new user details
+        $this->request->setMethod('POST')
+              ->setPost(array(
+                  'username' => 'phpUnitTestUser',
+                  'password' => 'phpUnitTestPassword',
+                  'password_repeat' => 'phpUnitTestPassword',
+                  'first_name' => 'PHP',
+                  'last_name' => 'UNIT',
+                  'role' => 'admin'
+              ));
+        
+        // Make sure we are in the right place and have the right things on screen
+        $this->dispatch('/user/add');
+        $this->assertAction('add');
+        
+        // Assert that we are redirected to the user manage screen, thus added
+        $this->assertRedirectTo('/user/manage');
+    }
+    
+    
+    /*
+     * This is a utils function for this controller that will remove the 
+     * php unit test user from the database as if previous tests failed
+     * and the test user still existed, future test will fail even if correct
+     * as you cannot add duplicate users to the system
+     */
+    protected function _removeTestUser(){
+        $userObject = $this->_userModel->getUserByUsername('phpUnitTestUser');
+        
+        if ($userObject != null){
+            $this->_userModel->removeUser($userObject->id);
+        }
+    }
+    
 
 }

@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Application Test Suite" tests="3" assertions="10" failures="1" errors="0" time="0.099053">
-    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="3" assertions="10" failures="1" errors="0" time="0.099053">
-      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="35" assertions="4" time="0.051038"/>
-      <testcase name="testLoginPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="46" assertions="4" time="0.035840"/>
-      <testcase name="testLoginCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="59" assertions="2" time="0.012175">
-        <failure type="Zend_Test_PHPUnit_Constraint_Exception">UserControllerTest::testLoginCorrect
-Failed asserting response redirects to "/index"
-
-/home/gareth/Dropbox/library/Zend/1.11.11/Zend/Test/PHPUnit/Constraint/Redirect.php:190
-/home/gareth/Dropbox/library/Zend/1.11.11/Zend/Test/PHPUnit/ControllerTestCase.php:731
-/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php:76
-</failure>
-      </testcase>
+  <testsuite name="Application Test Suite" tests="7" assertions="24" failures="0" errors="0" time="0.255369">
+    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="7" assertions="24" failures="0" errors="0" time="0.255369">
+      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="33" assertions="5" time="0.051481"/>
+      <testcase name="testLoginPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="43" assertions="4" time="0.035893"/>
+      <testcase name="testLoginCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="54" assertions="2" time="0.012155"/>
+      <testcase name="testIncorrectLogin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="73" assertions="2" time="0.015188"/>
+      <testcase name="testEditorNoAccessAdmin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="89" assertions="3" time="0.005319"/>
+      <testcase name="testAdminHasAccessAdmin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="99" assertions="5" time="0.014067"/>
+      <testcase name="testAddUserCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="109" assertions="3" time="0.121266"/>
     </testsuite>
   </testsuite>
 </testsuites>

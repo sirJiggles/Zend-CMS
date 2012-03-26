@@ -24,6 +24,7 @@ class Application_Form_UserForm extends Zend_Form
                                 array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'item-wrapper')));
        
         $this->setAttrib('class', 'user');
+        $this->setAttrib('id', 'userForm');
         
         // Username input field
         $username = new Zend_Form_Element_Text('username');
@@ -80,8 +81,8 @@ class Application_Form_UserForm extends Zend_Form
         
         
         // Prevent Cross site request forgery (CSRF) attack
-        $this->addElement('hash', 'csrf_token',  
-                    array('salt' => get_class($this) . 'ds38JHyw')); 
+        /*$this->addElement('hash', 'csrf_token',  
+                    array('salt' => get_class($this) . 'ds38JHyw')); */
         
         
         // Submit input field

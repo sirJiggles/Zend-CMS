@@ -73,7 +73,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
      * we fake some creds in the zend auth storage (admin user) so we can
      * actually dispatch our tests later on.
      */
-    public function loginAdmin ()
+    public function loginAdmin()
     {
         $this->logout();
         
@@ -98,7 +98,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
      * but in this function the fake user that we create is an editor as 
      * appose to an admin user 
      */
-    public function loginEditor ()
+    public function loginEditor()
     {
         $this->logout();
         

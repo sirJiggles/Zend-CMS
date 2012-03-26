@@ -51,7 +51,7 @@ class Access_Plugin extends Zend_Controller_Plugin_Abstract
                                          $currentAction);
             if (!$isAllowed) {
                 $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
-                $redirector->gotoUrlAndExit('/error/not-the-droids');
+                $redirector->gotoUrl('/error/not-the-droids');
                 return;
             }
         }
