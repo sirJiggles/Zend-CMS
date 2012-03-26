@@ -117,20 +117,96 @@ class UserControllerTest extends ControllerTestCase
         
         // Spoof the new user details
         $this->request->setMethod('POST')
-              ->setPost(array(
-                  'username' => 'phpUnitTestUser',
-                  'password' => 'phpUnitTestPassword',
-                  'password_repeat' => 'phpUnitTestPassword',
-                  'first_name' => 'PHP',
-                  'last_name' => 'UNIT',
-                  'role' => 'admin'
-              ));
+             ->setPost($this->_getUserFormSampleData());
         
         // Make sure we are in the right place and have the right things on screen
         $this->dispatch('/user/add');
         $this->assertAction('add');
         
         // Assert that we are redirected to the user manage screen, thus added
+        $this->assertRedirectTo('/user/manage');
+    }
+    
+    // Test required inpts for the add / edit user form
+    public function testRequiredInputsUserForm(){
+        
+        $sampleData = $this->_getUserFormSampleData();
+        $sampleData['last_name'] = '';
+        $sampleData['password'] = '';
+        $sampleData['first_name'] = '';
+        $sampleData['username'] = '';
+        $sampleData['password_repeat'] = '';
+        $this->request->setMethod('POST')
+            ->setPost($sampleData);
+        
+        // Post the data to the following location
+        $this->dispatch('/user/add');
+        $this->assertAction('add');
+        
+        // Check our error messages on the screen
+        $this->assertQueryContentContains('ul.errors li', 'Last name is required');
+        $this->assertQueryContentContains('ul.errors li', 'Password is required');
+        $this->assertQueryContentContains('ul.errors li', 'Username is required');
+        $this->assertQueryContentContains('ul.errors li', 'First name is required');
+        $this->assertQueryContentContains('ul.errors li', 'Passwords don\'t match');
+        
+    }
+    
+    // Test the error message for when the asswords don't match
+    public function testPasswordsDontMatch(){
+        $sampleData = $this->_getUserFormSampleData();
+        $sampleData['password'] = 'somediff';
+        $this->request->setMethod('POST')
+             ->setPost($sampleData);
+        
+        // Post the data to the following location
+        $this->dispatch('/user/add');
+        $this->assertAction('add');
+        
+        $this->assertQueryContentContains('ul.errors li', 'Passwords don\'t match');
+    }
+    
+    /*
+     * By the time we get to this test we should have added our test user so now
+     * we just need to try and add it again and test the error message
+     */
+    public function testUserNameTaken(){
+        
+        $this->request->setMethod('POST')
+             ->setPost($this->_getUserFormSampleData());
+        
+        // Post the data to the following location
+        $this->dispatch('/user/add');
+        $this->assertAction('add');
+        
+        $this->assertQueryContentContains('.ui-state-highlight p', 'That username is taken, please try again');
+    }
+    
+    /*
+     * As we have already checked the validation of the user from
+     * we can now just focus on checking if we can actually edit
+     * the user.
+     */
+    public function testEditUser(){
+        $sampleData = $this->_getUserFormSampleData();
+        $sampleData['password'] = 'changed';
+        $sampleData['password_repeat'] = 'changed';
+        $sampleData['role'] = 'editor';
+        $sampleData['active'] = 0;
+        $sampleData['first_name'] = 'Unit';
+        $sampleData['last_name'] = 'Edited';
+        
+        $this->request->setMethod('POST')
+             ->setPost($sampleData);
+        
+        // We have to get the user from the model as we need the id in the uri
+        $testUser = $this->_getTestUser();
+        
+        // Post the data to the following location
+        $this->dispatch('/user/edit/id/'.$testUser->id);
+        $this->assertAction('edit');
+        
+        // Test that taken to manage page (where flash message is displayed)
         $this->assertRedirectTo('/user/manage');
     }
     
@@ -147,6 +223,36 @@ class UserControllerTest extends ControllerTestCase
         if ($userObject != null){
             $this->_userModel->removeUser($userObject->id);
         }
+    }
+    
+    /*
+     * This utils function just grabs the test user form the system
+     * 
+     * @return Zend_Db_Table_Row $userObject
+     */
+    protected function _getTestUser(){
+        $userObject = $this->_userModel->getUserByUsername('phpUnitTestUser');
+        if ($userObject != null){
+            return $userObject;
+        }
+    }
+    
+    /*
+     * As we use an array of user data to test the edit and add user form 
+     * we can call it from here rather than use it multiple times
+     * 
+     * @return array @sampleData
+     */
+    protected function _getUserFormSampleData(){
+        $sampleData = array(
+            'username' => 'phpUnitTestUser',
+            'password' => 'phpUnitTestPassword',
+            'password_repeat' => 'phpUnitTestPassword',
+            'first_name' => 'PHP',
+            'last_name' => 'UNIT',
+            'role' => 'admin'
+        );
+        return $sampleData;
     }
     
 
