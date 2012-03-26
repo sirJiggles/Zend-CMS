@@ -195,19 +195,20 @@ class UserController extends Zend_Controller_Action
                 }
             }
             
+            // Redirect back to manage users if the user (by the id) was not found
+            if ($user == null){
+                $this->_redirect('/user/manage');
+                return;
+            }
+            
+            
             // Set the values for the form based on the user in the system 
             $userForm->populate($user->toArray());
             
             // Send the form to the view
             $this->view->userForm = $userForm;
-            
-            // Redirect back to manage users if the user (by the id) was not found
-            if (isset($user)){
-                $this->view->user = $user;
-            }else{
-                $this->_redirect('/user/manage');
-                return;
-            }
+
+            $this->view->user = $user;
         }else{
             // Redirect back to manage users
             $this->_redirect('/user/manage');

@@ -70,7 +70,7 @@ class UserControllerTest extends ControllerTestCase
     }
     
     // Check the user is dealt with correctly for incorrect login
-    public function testIncorrectLogin(){
+    public function testInCorrectLogin(){
         $this->logout();
         
         // Spoof the login of correct details
@@ -113,7 +113,7 @@ class UserControllerTest extends ControllerTestCase
          * if previous tests failed the old user may still exist and this
          * step wil fail even if correct
          */
-        $this->_removeTestUser();
+        $this->_removeTestUsers();
         
         // Spoof the new user details
         $this->request->setMethod('POST')
@@ -170,7 +170,7 @@ class UserControllerTest extends ControllerTestCase
      * By the time we get to this test we should have added our test user so now
      * we just need to try and add it again and test the error message
      */
-    public function testUserNameTaken(){
+    public function testUserNameTakenAdd(){
         
         $this->request->setMethod('POST')
              ->setPost($this->_getUserFormSampleData());
@@ -200,7 +200,7 @@ class UserControllerTest extends ControllerTestCase
              ->setPost($sampleData);
         
         // We have to get the user from the model as we need the id in the uri
-        $testUser = $this->_getTestUser();
+        $testUser = $this->_getTestUserOne();
         
         // Post the data to the following location
         $this->dispatch('/user/edit/id/'.$testUser->id);
@@ -210,6 +210,101 @@ class UserControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/user/manage');
     }
     
+    /*
+     * We need to add a second user to the system for testing some edit
+     * functionality
+     */
+    public function testAddSecondUser(){
+        $sampleData = $this->_getUserFormSampleData();
+        $sampleData['username'] = 'PHPUnitUserTwo';
+        
+        $this->request->setMethod('POST')
+             ->setPost($sampleData);
+        // Make sure we are in the right place and have the right things on screen
+        $this->dispatch('/user/add');
+        $this->assertAction('add');
+        // Assert that we are redirected to the user manage screen, thus added
+        $this->assertRedirectTo('/user/manage'); 
+    }
+    
+    /*
+    * By the time we get to this test we should have added our test user so now
+    * we just need to try and add it again and test the error message
+    */
+    public function testUserNameTakenEdit(){
+        
+        // Change the sample data username to be the same as the second test user
+        $sampleData = $this->_getUserFormSampleData();
+        $sampleData['username'] = 'PHPUnitUserTwo';
+        
+        $this->request->setMethod('POST')
+             ->setPost($sampleData);
+        
+        // Get first test user object
+        $testUser = $this->_getTestUserOne();
+        
+        // Post edit to edit the firs test users account, should throw error!
+        $this->dispatch('/user/edit/id/'.$testUser->id);
+        $this->assertAction('edit');
+        
+        $this->assertQueryContentContains('.ui-state-highlight p', 'That username is alrady taken, please try again');
+    }
+    
+    // Test incorrect request to edit user action
+    public function testIncorrectArgsEdit(){
+        $this->dispatch('/user/edit/id/sdasd');
+        $this->assertRedirectTo('/user/manage');
+    }
+    
+    // Test user not found given correct args (hopefully no one will have this id)
+    public function testUserNotFoundEdit(){
+        $this->dispatch('/user/edit/id/9999999999999999999999');
+        $this->assertRedirectTo('/user/manage');
+    }
+    
+    // Test the logout action
+    public function testLogout(){
+        $this->dispatch('/user/logout');
+        $this->assertRedirectTo('/');
+    }
+    
+    // Test unable to find user to remove by git params
+    public function testCantLocateRemoveUserId(){
+        $this->dispatch('/user/remove/id/9999999999999999999999');
+        $this->assertRedirectTo('/user/manage');
+        
+        // Make sure user has not been removed
+        $userObject = $this->_getTestUserTwo();
+        $this->assertEquals('PHPUnitUserTwo', $userObject->username, 'User two has been removed for some reason!');
+    }
+    
+    // Test unable to find user to remove by git params
+    public function testCantRemoveUserIdIncorrect(){
+        $this->dispatch('/user/remove/id/fsdfdssf');
+        $this->assertRedirectTo('/user/manage');
+        
+        // Make sure user has not been removed
+        $userObject = $this->_getTestUserTwo();
+        $this->assertEquals('PHPUnitUserTwo', $userObject->username, 'User two has been removed for some reason!');
+    }
+    
+    
+    // Test the remove user action on our second test user account
+    public function testRemoveUser(){
+        
+        $userObject = $this->_getTestUserTwo();
+        if ($userObject != null){
+            $this->dispatch('/user/remove/id/'.$userObject->id);
+            $this->assertRedirectTo('/user/manage');
+            
+            // Test the user has been removed from the db
+            $userObject = $this->_getTestUserTwo();
+            $this->assertEquals(null, $userObject, 'User Two has not been removed');
+        }
+    }
+    
+    
+    
     
     /*
      * This is a utils function for this controller that will remove the 
@@ -217,21 +312,39 @@ class UserControllerTest extends ControllerTestCase
      * and the test user still existed, future test will fail even if correct
      * as you cannot add duplicate users to the system
      */
-    protected function _removeTestUser(){
+    protected function _removeTestUsers(){
+        // Remove first test user
         $userObject = $this->_userModel->getUserByUsername('phpUnitTestUser');
+        if ($userObject != null){
+            $this->_userModel->removeUser($userObject->id);
+        }
         
+        // Remove second test user
+        $userObject = $this->_userModel->getUserByUsername('PHPUnitUserTwo');
         if ($userObject != null){
             $this->_userModel->removeUser($userObject->id);
         }
     }
     
     /*
-     * This utils function just grabs the test user form the system
+     * This utils function just grabs the first test user form the system
      * 
      * @return Zend_Db_Table_Row $userObject
      */
-    protected function _getTestUser(){
+    protected function _getTestUserOne(){
         $userObject = $this->_userModel->getUserByUsername('phpUnitTestUser');
+        if ($userObject != null){
+            return $userObject;
+        }
+    }
+    
+    /*
+     * This utils function just grabs the second test user form the system
+     * 
+     * @return Zend_Db_Table_Row $userObject
+     */
+    protected function _getTestUserTwo(){
+        $userObject = $this->_userModel->getUserByUsername('PHPUnitUserTwo');
         if ($userObject != null){
             return $userObject;
         }
@@ -250,7 +363,7 @@ class UserControllerTest extends ControllerTestCase
             'password_repeat' => 'phpUnitTestPassword',
             'first_name' => 'PHP',
             'last_name' => 'UNIT',
-            'role' => 'admin'
+            'role' => 'editor'
         );
         return $sampleData;
     }
