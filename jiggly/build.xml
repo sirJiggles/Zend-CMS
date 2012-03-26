@@ -18,7 +18,6 @@
     <target name="build" depends="
     clean,
     phpunit,
-    phpcb,
     docs,
     phpcs,
     phploc,
@@ -111,14 +110,18 @@
         </exec>
     </target>
     
+    <!-- Cannot have code browser functionality due to conflicting plugins, this
+    is not the end of the world though will use again in the future 
+    need to change minusminus args to - - (without the space) as breaking
+    comment bloc
     <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
         <exec executable="phpcb" escape="true">
-            <arg line="--log    ${project.basedir}/build/logs
-              --source ${source}
-              --output ${project.basedir}/build/code-browser" />
+            <arg line="minusminuslog    ${project.basedir}/build/logs
+              minusminussource ${source}
+              minusminusoutput ${project.basedir}/build/code-browser" />
         </exec>
         <echo message="Generated code browser files" />
-    </target>
+    </target> -->
 
     <!-- Buid the Database -->
  
