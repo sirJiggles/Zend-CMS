@@ -303,6 +303,37 @@ class UserControllerTest extends ControllerTestCase
         }
     }
     
+     // Test that after a few incorrect logins we are shown the forgot password link
+    public function testShownForgotPasswordLink(){
+        $this->logout();
+        
+        // Create an array of incorrect login details that we will try to break into the site with
+        $fakeDetails = array('username' => 'gfuller', 'password' => 'someincorrectpassword');
+        
+        // Prepare our incorrect login details for the first time
+        $this->request->setMethod('POST')
+                    ->setPost($fakeDetails);
+        $this->dispatch('/user/login');
+        
+        // Prepare our incorrect login details for the second time
+        $this->request->setMethod('POST')
+                    ->setPost($fakeDetails);
+        $this->dispatch('/user/login');
+        
+        // Prepare our incorrect login details for the third time
+        $this->request->setMethod('POST')
+                    ->setPost($fakeDetails);
+        $this->dispatch('/user/login');
+        
+        // Prepare our incorrect login details for the fourth time
+        $this->request->setMethod('POST')
+                    ->setPost($fakeDetails);
+        $this->dispatch('/user/login');
+        
+        // Check the contents of the page contains the forgot password link
+        $this->assertQueryContentContains('#content a', 'Forgotten account details?');
+    }
+    
     
     
     
