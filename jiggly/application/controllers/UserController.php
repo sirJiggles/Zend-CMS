@@ -158,16 +158,16 @@ class UserController extends Zend_Controller_Action
     public function editAction(){
         
         // Get the user buy the user ID parsed
-        $id = $this->getRequest()->getParam('id');
+        $userID = $this->getRequest()->getParam('id');
         
         // If the get param was sent and is in the correct format
-        if (isset($id) && is_numeric($id)){
+        if (isset($userID) && is_numeric($userID)){
          
-            $user = $this->_userModel->getUserById($id);
+            $user = $this->_userModel->getUserById($userID);
             
             // Get the user form
             $userForm = new Application_Form_UserForm();
-            $userForm->setAction('/user/edit/id/'.$id);
+            $userForm->setAction('/user/edit/id/'.$userID);
             $userForm->setMethod('post');
             
             // Update the user based on the form post
@@ -175,7 +175,7 @@ class UserController extends Zend_Controller_Action
             
                 // Check if the form data is valid
                 if ($userForm->isValid($_POST)) {
-                    $updateAttempt = $this->_userModel->updateUser($userForm->getValues(), $id);
+                    $updateAttempt = $this->_userModel->updateUser($userForm->getValues(), $userID);
                     
                     // Duplicate entries checking
                     if (is_string($updateAttempt)){
@@ -192,7 +192,7 @@ class UserController extends Zend_Controller_Action
                         }
                     }else{
                         // Fetch the updated user
-                        $user = $this->_userModel->getUserById($id);
+                        $user = $this->_userModel->getUserById($userID);
                         $this->_helper->flashMessenger->addMessage('User details updated');
                         $this->view->messages = $this->_helper->flashMessenger->getMessages();
                         $this->_redirect('/user/manage');
@@ -283,10 +283,10 @@ class UserController extends Zend_Controller_Action
      */
     public function removeAction(){
         // Get the user buy the user ID parsed
-        $id = $this->getRequest()->getParam('id');
+        $userID = $this->getRequest()->getParam('id');
         
         // If the get param was sent and is in the correct format
-        if (isset($id) && is_numeric($id)){
+        if (isset($userID) && is_numeric($userID)){
             
             $removeStatus = $this->_userModel->removeUser($id);
             
@@ -492,11 +492,11 @@ class UserController extends Zend_Controller_Action
 
         try{
             // Get the database adapter
-            $db = $this->_getParam('db');
+            $dataBase = $this->_getParam('db');
 
             // Create a new instance of the auth adapter, letting it know how we will treat the creds
             $adapter = new Zend_Auth_Adapter_DbTable(
-                $db,
+                $dataBase,
                 'users',
                 'username',
                 'password',

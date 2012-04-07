@@ -49,14 +49,14 @@ class Application_Model_User extends Zend_Db_Table{
      * Function to get a user by an Id from 
      * the users table
      * 
-     * @param int $id
+     * @param int $userId
      * @return Zend_Db_Table_Row $user
      */
-    public function getUserById($id){
+    public function getUserById($userId){
         
         try {
             $selectStatememt = $this->select()
-                                    ->where('id = ?', $id);
+                                    ->where('id = ?', $userId);
             $row = $this->fetchRow($selectStatememt);
            
             return $row;
@@ -70,12 +70,12 @@ class Application_Model_User extends Zend_Db_Table{
     /*
      * This is the function to remove users from the system
      * 
-     * @param int $id
+     * @param int $userId
      * @return boolean task status
      */
-    public function removeUser($id){
+    public function removeUser($userId){
         try {
-            $where = $this->getAdapter()->quoteInto('id = ?', $id);
+            $where = $this->getAdapter()->quoteInto('id = ?', $userId);
             $result = $this->delete($where);
             return $result;
             
