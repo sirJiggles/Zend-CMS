@@ -1,0 +1,23 @@
+sudo pear uninstall phpunit/PHPUnit
+sudo pear uninstall phpunit/DbUnit
+sudo pear uninstall phpunit/PHP_CodeCoverage
+sudo pear uninstall phpunit/File_Iterator
+sudo pear uninstall phpunit/PHP_Timer
+sudo pear uninstall phpunit/PHPUnit_MockObject
+sudo pear uninstall phpunit/Text_Template
+sudo pear uninstall phpunit/PHPUnit_Selenium
+sudo pear uninstall pear.symfony-project.com/YAML
+sudo pear uninstall phpunit/PHP_TokenStream
+
+sudo pear clear-cache
+
+sudo pear install pear.symfony-project.com/YAML-1.0.2
+sudo pear install phpunit/PHPUnit_Selenium-1.0.1
+sudo pear install phpunit/Text_Template-1.0.0
+sudo pear install phpunit/PHPUnit_MockObject-1.0.3
+sudo pear install phpunit/PHP_Timer-1.0.0
+sudo pear install phpunit/File_Iterator-1.2.3
+sudo pear install phpunit/PHP_TokenStream-1.0.1
+sudo pear install phpunit/PHP_CodeCoverage-1.0.2
+sudo pear install phpunit/DbUnit-1.0.0
+sudo pear install phpunit/PHPUnit-3.5.15
