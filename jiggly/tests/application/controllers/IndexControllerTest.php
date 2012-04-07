@@ -24,8 +24,8 @@ class IndexControllerTest extends ControllerTestCase
     public function testLandOnIndexPage()
     {
         $this->assertTrue(true);
-        $this->dispatch('user');
-        $this->assertController('user');
+        $this->dispatch('/');
+        $this->assertController('index');
         $this->assertAction('index');
         $this->assertResponseCode(200);
     }
