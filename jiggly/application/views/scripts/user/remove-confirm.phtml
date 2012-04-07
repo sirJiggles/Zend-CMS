@@ -1,0 +1,5 @@
+<h2>Remove User Confirm</h2>
+
+<p>Are you sure you wish to remove <?php echo $this->user->first_name.' '.$this->user->last_name; ?> from the system?</p>
+<a data-role="button" href="/user/remove/id/<?php echo $this->user->id; ?>" title="Yes remove user">Yes</a>
+<a data-role="button" href="/user/manage" title="No, do not remove">No</a>
