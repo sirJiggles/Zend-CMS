@@ -7,6 +7,7 @@ CREATE TABLE `users` (
   `role` varchar(20) COLLATE utf8_bin NOT NULL,
   `email_address` varchar(200) COLLATE utf8_bin NOT NULL,
   `active` tinyint(1) NOT NULL,
+  `forgot_password_hash` varchar(100) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   KEY `password` (`password`),

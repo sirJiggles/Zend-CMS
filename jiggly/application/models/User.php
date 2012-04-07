@@ -9,7 +9,7 @@
  * 
  * @author Gareth Fuller <gareth-fuller@hotmail.co.uk>
  * @copyright Copyright (c) Gareth Fuller
- * @package Modles
+ * @package Models
  */
 class Application_Model_User extends Zend_Db_Table{
     
@@ -101,11 +101,12 @@ class Application_Model_User extends Zend_Db_Table{
             if (is_array($formData) && is_numeric($userId)){
                 
                 /* 
-                 * First get all the users and make sure the username they are tring
-                 * to does not already exist
+                 * First get all the users and make sure the username / email they 
+                 * are tring to update does not already exist
                  */
                 $currentUsers = $this->fetchAll();
                 $nameTaken = false;
+                $emailTaken = false;
                 
                 foreach ($currentUsers as $currentUser){
                     if ($currentUser['id'] != $userId){
@@ -114,10 +115,14 @@ class Application_Model_User extends Zend_Db_Table{
                             $nameTaken = true;
                             break;
                         } 
+                        if ($currentUser['email_address'] == $formData['email_address']){
+                            $emailTaken = true;
+                            break;
+                        }
                     }
                 }
                 
-                if (!$nameTaken){
+                if (!$nameTaken && !$emailTaken){
                     // Unset the csrf token and password repeat from the data array
                     unset($formData['csrf_token']);
                     unset($formData['password_repeat']);
@@ -138,7 +143,12 @@ class Application_Model_User extends Zend_Db_Table{
                     
                     return true;
                 }else{
-                    return false;
+                    if ($nameTaken){
+                        return 'Name Taken';
+                    }
+                    if ($emailTaken){
+                        return 'Email Taken';
+                    }
                 }
             }else{
                 throw new Exception('Incorrect variable types passed to updateUser: expecting array and int');
@@ -164,15 +174,21 @@ class Application_Model_User extends Zend_Db_Table{
                 
                 $currentUsers = $this->fetchAll();
                 $nameTaken = false;
+                $emailTaken = false;
                 
                 foreach ($currentUsers as $currentUser){
                     if ($currentUser['username'] == $formData['username']){
                         $nameTaken = true;
                         break;
-                    } 
+                    }
+                    if ($currentUser['email_address'] == $formData['email_address']){
+                        $emailTaken = true;
+                        break;
+                    }
+                    
                 }
                 
-                if (!$nameTaken){
+                if (!$nameTaken && !$emailTaken){
                 
                     // Unset the csrf token and password repeat from the data array
                     unset($formData['csrf_token']);
@@ -189,8 +205,15 @@ class Application_Model_User extends Zend_Db_Table{
                     
                     return true;
                 }else{
-                    return false;
+                    if ($nameTaken){
+                        return 'Name Taken';
+                    }
+                    if ($emailTaken){
+                        return 'Email Taken';
+                    }
                 }
+                
+                
                 
             }else{
                 throw new Exception('Incorrect variable types passed to addUser: expecting array of form data');

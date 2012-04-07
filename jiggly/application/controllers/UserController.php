@@ -177,20 +177,27 @@ class UserController extends Zend_Controller_Action
                 if ($userForm->isValid($_POST)) {
                     $updateAttempt = $this->_userModel->updateUser($userForm->getValues(), $id);
                     
-                    if ($updateAttempt){
+                    // Duplicate entries checking
+                    if (is_string($updateAttempt)){
+                        if ($updateAttempt == 'Name Taken' || $updateAttempt == 'Email Taken'){
+
+                            if ($updateAttempt == 'Name Taken'){
+                                $this->_helper->flashMessenger->addMessage('That username is taken, please try again');
+                            }
+                            if ($updateAttempt == 'Email Taken'){
+                                $this->_helper->flashMessenger->addMessage('That email address is taken, please try again');
+                            }
+                            $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+
+                        }
+                    }else{
                         // Fetch the updated user
                         $user = $this->_userModel->getUserById($id);
                         $this->_helper->flashMessenger->addMessage('User details updated');
                         $this->view->messages = $this->_helper->flashMessenger->getMessages();
                         $this->_redirect('/user/manage');
                         return;
-                    }else{
-                        $this->_helper->flashMessenger->addMessage('That username is alrady taken, please try again');
                     }
-                    
-                    // Send flash messages to the view
-                    $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
-                    $this->_helper->flashMessenger->clearCurrentMessages();
                     
                 }
             }
@@ -244,17 +251,27 @@ class UserController extends Zend_Controller_Action
                 // Run the add user function with the form post values
                 $addAction = $this->_userModel->addUser($userForm->getValues());
                 
-                if ($addAction){
-                    // Set the flash message
+                // Duplicate entries checking
+                if (is_string($addAction)){
+                    if ($addAction == 'Name Taken' || $addAction == 'Email Taken'){
+                        
+                        if ($addAction == 'Name Taken'){
+                            $this->_helper->flashMessenger->addMessage('That username is taken, please try again');
+                        }
+                        if ($addAction == 'Email Taken'){
+                            $this->_helper->flashMessenger->addMessage('That email address is taken, please try again');
+                        }
+                        $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+
+                    }
+                }else{
+                     // Set the flash message
                     $this->_helper->flashMessenger->addMessage('User added to the system');
                     $this->view->messages = $this->_helper->flashMessenger->getMessages();
                     $this->_redirect('/user/manage');
                     return;
-                }else{
-                    $this->_helper->flashMessenger->addMessage('That username is taken, please try again');
-                    $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
-                    
                 }
+                
  
                 return;
             }
@@ -318,7 +335,6 @@ class UserController extends Zend_Controller_Action
                     $this->_helper->flashMessenger->addMessage('An email has been sent to your account');
                     $this->view->messages = $this->_helper->flashMessenger->getMessages();
                     
-                    
                     /* 
                      * Here we generate a new link for the user to click on to activate thier new password as we don't want
                      * the user to have the new password sent to their email address in plain text.
@@ -341,17 +357,18 @@ class UserController extends Zend_Controller_Action
                     // go in the email
                     $bodyHtml = $emailTemplateView->render('forgoten-password.phtml');
                     
-  
-                    // Send the email with the link to activate the new password
-                    $mail = new Zend_Mail();
-                    //$mail->setBodyText('My Nice Test Text');
-                    $mail->setBodyHtml($bodyHtml);
-                    $mail->setFrom('jiggly@cms.com', 'Jiggly CMS');
-                    //$mail->
-                    $mail->addTo($foundUser->email_address, $userName);
-                    $mail->setSubject('Jiggly CMS - Password Reset');
-                    $mail->send();
-                   
+                    // Only send the email if not in test mode
+                    if($_SERVER['SERVER_NAME'] != 'jiggly.dev'){
+                        // Send the email with the link to activate the new password
+                        $mail = new Zend_Mail();
+                        //$mail->setBodyText('My Nice Test Text');
+                        $mail->setBodyHtml($bodyHtml);
+                        $mail->setFrom('jiggly@cms.com', 'Jiggly CMS');
+                        //$mail->
+                        $mail->addTo($foundUser->email_address, $userName);
+                        $mail->setSubject('Jiggly CMS - Password Reset');
+                        $mail->send();
+                    }
                     
                     // Clear the session attempts value (let them try login again with new password)
                     $attemptsSession = new Zend_Session_Namespace('attempts');
@@ -412,26 +429,26 @@ class UserController extends Zend_Controller_Action
             
         // Handle the password reset form post
         }else if ($this->getRequest()->isPost()){
-
+ 
             // Chnage users password
             if ($changePasswordForm->isValid($_POST)) {
 
                 // Get the form values
                 $formValues = $changePasswordForm->getValues();
-
+                
                 // Check the hash value again from the hidden post input
                 $validateHash = $this->_validateHash($formValues['hash']);
 
                 if ($validateHash){
-
+                    
                     // Change users account details as per thier post data
                     $this->_userModel->updateForgotPassword($formValues);
                     
                     // Redirect back to login page and let the user know the passwprd has been reset
-                    
                     $this->_helper->flashMessenger->addMessage('Password changed');
                     $this->view->messages = $this->_helper->flashMessenger->getMessages();
                     $this->_redirect('/user/login');
+
                     return;
 
                 }else{
@@ -456,7 +473,7 @@ class UserController extends Zend_Controller_Action
      * in the forgotten password section
      */
     protected function _invalidPasswordResetValidation(){
-        $this->_helper->flashMessenger->addMessage('To reset your password use the link in the forgot password email');
+        $this->_helper->flashMessenger->addMessage('Please use the link from your email');
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
         $this->_redirect('/user/login');
         return;

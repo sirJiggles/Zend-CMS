@@ -136,6 +136,7 @@ class UserControllerTest extends ControllerTestCase
         $sampleData['first_name'] = '';
         $sampleData['username'] = '';
         $sampleData['password_repeat'] = '';
+        $sampleData['email_address'] = '';
         $this->request->setMethod('POST')
             ->setPost($sampleData);
         
@@ -149,7 +150,8 @@ class UserControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('ul.errors li', 'Username is required');
         $this->assertQueryContentContains('ul.errors li', 'First name is required');
         $this->assertQueryContentContains('ul.errors li', 'Passwords don\'t match');
-        
+        $this->assertQueryContentContains('ul.errors li', 'Email address is required');
+
     }
     
     // Test the error message for when the asswords don't match
@@ -172,14 +174,35 @@ class UserControllerTest extends ControllerTestCase
      */
     public function testUserNameTakenAdd(){
         
+        $fakeDetails = $this->_getUserFormSampleData();
+        $fakeDetails['email_address'] = 'adifferent@email.com';
+       
         $this->request->setMethod('POST')
-             ->setPost($this->_getUserFormSampleData());
+             ->setPost($fakeDetails);
         
         // Post the data to the following location
         $this->dispatch('/user/add');
         $this->assertAction('add');
         
         $this->assertQueryContentContains('.ui-state-highlight p', 'That username is taken, please try again');
+    }
+    
+    /*
+     * Test the email address taken functionality on adding users form
+     */
+    public function testUserEmailAddressTakenAdd(){
+        $fakeDetails = $this->_getUserFormSampleData();
+        $fakeDetails['username'] = 'someusernamethatshouldnotexist';
+        
+        $this->request->setMethod('POST')
+             ->setPost($fakeDetails);
+        
+        // Post the data to the following location
+        $this->dispatch('/user/add');
+        $this->assertAction('add');
+        
+        $this->assertQueryContentContains('.ui-state-highlight p', 'That email address is taken, please try again');
+        
     }
     
     /*
@@ -217,6 +240,7 @@ class UserControllerTest extends ControllerTestCase
     public function testAddSecondUser(){
         $sampleData = $this->_getUserFormSampleData();
         $sampleData['username'] = 'PHPUnitUserTwo';
+        $sampleData['email_address'] = 'phpunittwo@emailaddress.com';
         
         $this->request->setMethod('POST')
              ->setPost($sampleData);
@@ -236,6 +260,7 @@ class UserControllerTest extends ControllerTestCase
         // Change the sample data username to be the same as the second test user
         $sampleData = $this->_getUserFormSampleData();
         $sampleData['username'] = 'PHPUnitUserTwo';
+        $sampleData['email_address'] = 'adifferent@email.com';
         
         $this->request->setMethod('POST')
              ->setPost($sampleData);
@@ -245,9 +270,33 @@ class UserControllerTest extends ControllerTestCase
         
         // Post edit to edit the firs test users account, should throw error!
         $this->dispatch('/user/edit/id/'.$testUser->id);
+ 
         $this->assertAction('edit');
         
-        $this->assertQueryContentContains('.ui-state-highlight p', 'That username is alrady taken, please try again');
+        $this->assertQueryContentContains('.ui-state-highlight p', 'That username is taken, please try again');
+    }
+    
+    /*
+     * Test the email address taken functionality for edit user form
+     */
+    public function testUserEmailAddressTakenEdit(){
+        // Change the sample data emaik address to be the same as the second test user
+        $sampleData = $this->_getUserFormSampleData();
+        $sampleData['username'] = 'someusernamethatshouldnotexist';
+        $sampleData['email_address'] = 'phpunittwo@emailaddress.com';
+        
+        $this->request->setMethod('POST')
+             ->setPost($sampleData);
+        
+        // Get first test user object
+        $testUser = $this->_getTestUserOne();
+        
+        // Post edit to edit the firs test users account, should throw error!
+        $this->dispatch('/user/edit/id/'.$testUser->id);
+ 
+        $this->assertAction('edit');
+        
+        $this->assertQueryContentContains('.ui-state-highlight p', 'That email address is taken, please try again');
     }
     
     // Test incorrect request to edit user action
@@ -334,8 +383,104 @@ class UserControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('#content a', 'Forgotten account details?');
     }
     
+    // Test that we can reach the forgot password action and it contains the correct data
+    public function testForgotPasswordActionAndContent(){
+        // Logout as we should be able to reach this test without being logged in
+        $this->logout();
+        $this->dispatch('/user/forgot-password');
+        $this->assertResponseCode(200);
+        $this->assertQueryCount('form#forgotPassword', 1, 'Unable to locate the forgotten password form');
+        
+    }
     
+    // Test submitting the forgotten password form and not finding user account
+    public function testForgotPasswordSubmitNoAccountFound(){
+        $this->logout();
+        // prpare the fake form details
+        $fakeDetails = array('username' => 'phpUnitTestUser', 'email' => 'someincorrect@email.com');
+        
+        // Prepare our incorrect forgotten password details for the first time
+        $this->request->setMethod('POST')
+                    ->setPost($fakeDetails);
+        
+        // Dispatch the request
+        $this->dispatch('/user/forgot-password');
+        
+        $this->assertQueryContentContains('.ui-state-highlight p', 'Unable to find that email address in the system');
+        
+    }
     
+    // Test correctly submiting the forgot password form
+    public function testForgotPasswordAccountFound(){
+        $this->logout();
+        // prpare the fake form details
+        $fakeDetails = array('username' => 'phpUnitTestUser', 'email' => 'phpunit@email.com');
+        
+        // Prepare our incorrect forgotten password details for the first time
+        $this->request->setMethod('POST')
+                    ->setPost($fakeDetails);
+        
+        // Dispatch the request
+        $this->dispatch('/user/forgot-password/');
+        
+        // Make sure we are redirected to the login screen
+        $this->assertRedirect('/user/login');
+        
+    }
+    
+    // Test the the activate password action exists and is as we expect it to be
+    public function testActivatePasswordAction(){
+        // Should be able to access even if not logged in
+        $this->logout();
+        $this->dispatch('user/activate-password');
+        // As we have not supplied a code we should be taken to the login page
+        $this->assertRedirect('user/login');
+        
+    }
+    
+    // Test activating the password with an incorrect hash
+    public function testActivatePasswordIncorrectHash(){
+        $this->logout();
+        // get the actual hash from the database but change the users id in the req
+        $userDetails = $this->_getTestUserOne();
+        $hash = ($userDetails->id + 1).$userDetails->forgot_password_hash;
+        $this->dispatch('user/activate-password/'.$hash);
+        $this->assertRedirect('user/login');
+        
+    }
+    
+    // Test that when we send a correct hash we are shown the chnage password form
+    public function testActivatePasswordCorrectHash(){
+        $this->logout();
+        // get the actual hash from the database
+        $userDetails = $this->_getTestUserOne();
+        $hash = $userDetails->id.':'.$userDetails->forgot_password_hash;
+        $this->dispatch('user/activate-password/req/'.$hash);
+
+        // Make sure we have the form to update our password
+        $this->assertQueryCount('form#changePassword', 1, 'Unable to locate the chnage password form');
+    }
+    
+    // Now test the whole reseting password action and that it all worked
+    public function testActivatePasswordComplete(){
+        $this->logout();
+        // get the actual hash from the database
+        $userDetails = $this->_getTestUserOne();
+        $hash = $userDetails->id.':'.$userDetails->forgot_password_hash;
+        
+        // Put together some fake form details
+        $fakeDetails = array('password' => 'monkey12', 'password_repeat' => 'monkey12', 'hash' => $hash);
+        $this->request->setMethod('POST')
+                    ->setPost($fakeDetails);
+        
+        $this->dispatch('user/activate-password/');
+        
+        $this->assertRedirect('user/login');
+        
+        // Get the user details and make sure the account is now active
+        $userDetails = $this->_getTestUserOne();
+        $this->assertEquals(1, $userDetails->active);
+    }
     
     /*
      * This is a utils function for this controller that will remove the 
@@ -394,7 +539,9 @@ class UserControllerTest extends ControllerTestCase
             'password_repeat' => 'phpUnitTestPassword',
             'first_name' => 'PHP',
             'last_name' => 'UNIT',
-            'role' => 'editor'
+            'role' => 'editor',
+            'active' => 0,
+            'email_address' => 'phpunit@email.com'
         );
         return $sampleData;
     }

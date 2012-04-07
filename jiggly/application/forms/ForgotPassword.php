@@ -17,6 +17,7 @@ class Application_Form_ForgotPassword extends Zend_Form
     public function init()
     {
         $this->setAttrib('class', 'user');
+        $this->setAttrib('id', 'forgotPassword');
         
         $customDecorators = array(
                             'ViewHelper',

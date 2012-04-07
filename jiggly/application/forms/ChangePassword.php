@@ -17,6 +17,7 @@ class Application_Form_ChangePassword extends Zend_Form
     public function init()
     {
         $this->setAttrib('class', 'user');
+        $this->setAttrib('id', 'changePassword');
         
         $customDecorators = array(
                             'ViewHelper',

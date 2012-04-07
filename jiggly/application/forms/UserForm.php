@@ -70,6 +70,15 @@ class Application_Form_UserForm extends Zend_Form
                 ->setDecorators($customDecorators)
                 ->setLabel('Last Name');
         
+        // Email input field
+        $email = new Zend_Form_Element_Text('email_address');
+        $email->addFilter('StringTrim')
+                ->addFilter(new Zend_Filter_HtmlEntities())
+                ->setRequired(true)
+                ->addErrorMessage('Email address is required')
+                ->setDecorators($customDecorators)
+                ->setLabel('Email Address');
+        
         // Role input field
         $role = new Zend_Form_Element_Select('role');
         $role->setLabel('Role')
@@ -100,9 +109,9 @@ class Application_Form_UserForm extends Zend_Form
                     ->setDecorators($customDecorators)
                     ->addMultiOption('0', 'No');
             
-            $this->addElements(array($firstName, $lastName, $username, $password, $passwdRepeat, $role, $status, $submit));
+            $this->addElements(array($firstName, $lastName, $username, $email, $password, $passwdRepeat, $role, $status, $submit));
         }else{
-            $this->addElements(array($firstName, $lastName, $username, $password, $passwdRepeat, $role, $submit));
+            $this->addElements(array($firstName, $lastName, $username, $email, $password, $passwdRepeat, $role, $submit));
         }
          
       
