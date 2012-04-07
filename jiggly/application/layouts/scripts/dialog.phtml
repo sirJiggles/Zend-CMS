@@ -41,31 +41,26 @@
     <!-- Mobile viewport optimized: j.mp/bplateviewport -->
     <meta name="viewport" content="width=device-width,initial-scale=1">
     
-    
 </head>
 <body>
-    <div data-role="page" data-title="Jiggly CMS">
-        <h1><a href="/" >Jiggly CMS</a></h1>
+    <?php echo $this->render('dialog-header.phtml') ?>
+ 
 
-        <?php echo $this->render('header.phtml') ?>
-
-
-        <div id="content" data-role="content">
-
-            <?php if (isset($this->messages[0]) && ($this->messages[0] != '')): ?>
-
-                <div class="ui-state-highlight ui-corner-all"> 
-                        <p><span class="ui-icon ui-icon-info"></span>
-                        <?php echo $this->messages[0]; ?></p>
-                </div>
-
-                <div class="clear-both"></div>
-            <?php endif ?>
-
-            <?php echo $this->layout()->content; ?>
-        </div>
-
-        <div class="clear-both"></div>
-        <?php echo $this->render('footer.phtml') ?>
+    <div id="content" data-role="content">
+        
+        <?php if (isset($this->messages[0]) && ($this->messages[0] != '')): ?>
+            
+            <div class="ui-state-highlight ui-corner-all"> 
+                    <p><span class="ui-icon ui-icon-info"></span>
+                    <?php echo $this->messages[0]; ?></p>
+            </div>
+   
+            <div class="clear-both"></div>
+        <?php endif ?>
+        
+        <?php echo $this->layout()->content; ?>
     </div>
+    
+    <div class="clear-both"></div>
+    <?php echo $this->render('footer.phtml') ?>
 </body>

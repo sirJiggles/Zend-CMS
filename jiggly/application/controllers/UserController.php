@@ -284,6 +284,8 @@ class UserController extends Zend_Controller_Action
         // Get the user buy the user ID parsed
         $userID = $this->getRequest()->getParam('id');
         $user = $this->_userModel->getUserById($userID);
+        
+        $this->_helper->layout->setLayout('dialog');
 
         if ($user !== null){
             $this->view->user = $user;
