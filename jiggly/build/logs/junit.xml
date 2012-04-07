@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Application Test Suite" tests="29" assertions="86" failures="0" errors="0" time="0.968826">
-    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="29" assertions="86" failures="0" errors="0" time="0.968826">
-      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="33" assertions="5" time="0.051414"/>
-      <testcase name="testLoginPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="43" assertions="4" time="0.036075"/>
-      <testcase name="testLoginCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="54" assertions="2" time="0.012234"/>
-      <testcase name="testInCorrectLogin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="73" assertions="2" time="0.015804"/>
-      <testcase name="testEditorNoAccessAdmin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="89" assertions="3" time="0.005243"/>
-      <testcase name="testAdminHasAccessAdmin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="99" assertions="5" time="0.013413"/>
-      <testcase name="testAddUserCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="109" assertions="3" time="0.188376"/>
-      <testcase name="testRequiredInputsUserForm" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="131" assertions="8" time="0.033390"/>
-      <testcase name="testPasswordsDontMatch" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="158" assertions="3" time="0.026730"/>
-      <testcase name="testUserNameTakenAdd" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="175" assertions="3" time="0.029889"/>
-      <testcase name="testUserEmailAddressTakenAdd" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="193" assertions="3" time="0.029901"/>
-      <testcase name="testEditUser" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="213" assertions="3" time="0.054142"/>
-      <testcase name="testAddSecondUser" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="240" assertions="3" time="0.058412"/>
-      <testcase name="testUserNameTakenEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="258" assertions="3" time="0.037280"/>
-      <testcase name="testUserEmailAddressTakenEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="282" assertions="3" time="0.036303"/>
-      <testcase name="testIncorrectArgsEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="303" assertions="2" time="0.005935"/>
-      <testcase name="testUserNotFoundEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="309" assertions="2" time="0.010568"/>
-      <testcase name="testLogout" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="315" assertions="2" time="0.006188"/>
-      <testcase name="testCantLocateRemoveUserId" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="321" assertions="3" time="0.009658"/>
-      <testcase name="testCantRemoveUserIdIncorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="331" assertions="3" time="0.008138"/>
-      <testcase name="testRemoveUser" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="342" assertions="3" time="0.059299"/>
-      <testcase name="testShownForgotPasswordLink" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="356" assertions="2" time="0.045740"/>
-      <testcase name="testForgotPasswordActionAndContent" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="387" assertions="3" time="0.017494"/>
-      <testcase name="testForgotPasswordSubmitNoAccountFound" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="397" assertions="2" time="0.017280"/>
-      <testcase name="testForgotPasswordAccountFound" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="414" assertions="2" time="0.059782"/>
-      <testcase name="testActivatePasswordAction" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="432" assertions="2" time="0.008658"/>
-      <testcase name="testActivatePasswordIncorrectHash" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="442" assertions="2" time="0.009841"/>
-      <testcase name="testActivatePasswordCorrectHash" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="453" assertions="2" time="0.023343"/>
-      <testcase name="testActivatePasswordComplete" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="465" assertions="3" time="0.058296"/>
+  <testsuite name="Application Test Suite" tests="30" assertions="91" failures="0" errors="0" time="0.878442">
+    <testsuite name="IndexControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/IndexControllerTest.php" tests="1" assertions="5" failures="0" errors="0" time="0.052486">
+      <testcase name="testLandOnIndexPage" class="IndexControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/IndexControllerTest.php" line="24" assertions="5" time="0.052486"/>
+    </testsuite>
+    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" tests="29" assertions="86" failures="0" errors="0" time="0.825956">
+      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="33" assertions="5" time="0.007603"/>
+      <testcase name="testLoginPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="43" assertions="4" time="0.036068"/>
+      <testcase name="testLoginCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="54" assertions="2" time="0.012039"/>
+      <testcase name="testInCorrectLogin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="73" assertions="2" time="0.015602"/>
+      <testcase name="testEditorNoAccessAdmin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="89" assertions="3" time="0.005338"/>
+      <testcase name="testAdminHasAccessAdmin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="99" assertions="5" time="0.014528"/>
+      <testcase name="testAddUserCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="109" assertions="3" time="0.113431"/>
+      <testcase name="testRequiredInputsUserForm" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="131" assertions="8" time="0.033505"/>
+      <testcase name="testPasswordsDontMatch" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="158" assertions="3" time="0.027200"/>
+      <testcase name="testUserNameTakenAdd" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="175" assertions="3" time="0.030348"/>
+      <testcase name="testUserEmailAddressTakenAdd" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="193" assertions="3" time="0.030446"/>
+      <testcase name="testEditUser" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="213" assertions="3" time="0.052692"/>
+      <testcase name="testAddSecondUser" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="240" assertions="3" time="0.049958"/>
+      <testcase name="testUserNameTakenEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="258" assertions="3" time="0.036416"/>
+      <testcase name="testUserEmailAddressTakenEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="282" assertions="3" time="0.036942"/>
+      <testcase name="testIncorrectArgsEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="303" assertions="2" time="0.005988"/>
+      <testcase name="testUserNotFoundEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="309" assertions="2" time="0.010752"/>
+      <testcase name="testLogout" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="315" assertions="2" time="0.006075"/>
+      <testcase name="testCantLocateRemoveUserId" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="321" assertions="3" time="0.009010"/>
+      <testcase name="testCantRemoveUserIdIncorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="331" assertions="3" time="0.007968"/>
+      <testcase name="testRemoveUser" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="342" assertions="3" time="0.060274"/>
+      <testcase name="testShownForgotPasswordLink" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="356" assertions="2" time="0.045641"/>
+      <testcase name="testForgotPasswordActionAndContent" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="387" assertions="3" time="0.017221"/>
+      <testcase name="testForgotPasswordSubmitNoAccountFound" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="397" assertions="2" time="0.017700"/>
+      <testcase name="testForgotPasswordAccountFound" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="414" assertions="2" time="0.051462"/>
+      <testcase name="testActivatePasswordAction" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="432" assertions="2" time="0.008452"/>
+      <testcase name="testActivatePasswordIncorrectHash" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="442" assertions="2" time="0.009715"/>
+      <testcase name="testActivatePasswordCorrectHash" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="453" assertions="2" time="0.024435"/>
+      <testcase name="testActivatePasswordComplete" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/jiggly/tests/application/controllers/UserControllerTest.php" line="465" assertions="3" time="0.049147"/>
     </testsuite>
   </testsuite>
 </testsuites>
