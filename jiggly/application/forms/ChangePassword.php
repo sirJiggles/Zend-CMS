@@ -25,7 +25,8 @@ class Application_Form_ChangePassword extends Zend_Form
                             'Errors',
                             array(array('Input' => 'HtmlTag'), array('tag' => 'dd')),
                             array('Label', array('tag' => 'dt')),
-                            array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'item-wrapper')));
+                            array(array('row' => 'HtmlTag'), 
+                                  array('tag' => 'div', 'class' => 'item-wrapper')));
         
 
         // Password input field
@@ -33,13 +34,13 @@ class Application_Form_ChangePassword extends Zend_Form
         $password->addErrorMessage('Password is required')
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->setDecorators($customDecorators)
-                ->addValidator('Identical', false, array('token' => 'password_repeat'))
+                ->addValidator('Identical', FALSE, array('token' => 'password_repeat'))
                 ->setLabel('Password');
         
         // Password repeat field
         $passwdRepeat = new Zend_Form_Element_Password('password_repeat');
         $passwdRepeat->addErrorMessage('Passwords don\'t match')
-                ->addValidator('Identical', false, array('token' => 'password'))
+                ->addValidator('Identical', FALSE, array('token' => 'password'))
                 ->setDecorators($customDecorators)
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->setLabel('Reapeat Password');

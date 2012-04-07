@@ -15,8 +15,7 @@
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
    
-    public function _initRoutes()
-    {
+    public function _initRoutes(){
  
         //Get instace of front controller.
         $frontController = Zend_Controller_Front::getInstance();
@@ -41,8 +40,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
  
     }//end function _initRoutes
     
-    public function _initAcl()
-    {
+    public function _initAcl(){
         // Create a new insance of the acl config (to load the config settings)
         new Access_Config;
         // Register the ACL plugin

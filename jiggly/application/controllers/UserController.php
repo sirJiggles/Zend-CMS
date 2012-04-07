@@ -73,8 +73,7 @@ class UserController extends Zend_Controller_Action
         
         // If the user has posted the form (and the attempts is les than || == 2
         if ($this->getRequest()->isPost() && $attemptsSession->tries <= 2){
-            
-		
+            	
             // Check if the form data is valid
             if ($form->isValid($_POST)) {
                 
