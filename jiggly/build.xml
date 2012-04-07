@@ -24,8 +24,8 @@
     pdepend,
     phpcpd,
     phpmd,
-    rebuild-staging,
-    deploy-database">  
+    deploy-database,
+    rebuild-staging">  
     </target>
 
     <target name="clean" description="Clean up and create artifact directories">
@@ -127,19 +127,6 @@
  
     <!-- Sets the DSTAMP, TSTAMP and TODAY properties -->
     <tstamp/>
-    
-    <!-- Clean up the staging site and re-build it ... we have the technology -->
-    <target name="rebuild-staging" description="Clean up staging site and rebuild it using git repo">
-        <delete dir="/var/www/vhosts/jigglycms.com/Zend-CMS/*"/>
-  
-        <echo message="cleaned up old staging files" />
-        <copy todir="/var/www/vhosts/jigglycms.com/Zend-CMS">
-            <fileset dir="/var/lib/jenkins/jobs/Jiggly/workspace">
-                <include name="**"/>
-            </fileset>
-        </copy>
-        <echo message="set up staging site again" />
-    </target>
 
     <!-- create our migration task -->
     <target name="deploy-database" description="Database Migrations">  
@@ -161,6 +148,19 @@
         <exec command="${mysql.path} -h${db.host} -u${db.user} -p${db.pass} ${db.name} &lt; ${dbdeploy.deployfile}" checkreturn="true" />
         <echo message="Ran mysql command to run deploy file" />
 
+    </target>
+    
+    <!-- Clean up the staging site and re-build it ... we have the technology -->
+    <target name="rebuild-staging" description="Clean up staging site and rebuild it using git repo">
+        <delete dir="/var/www/vhosts/jigglycms.com/Zend-CMS/*"/>
+  
+        <echo message="cleaned up old staging files" />
+        <copy todir="/var/www/vhosts/jigglycms.com/Zend-CMS">
+            <fileset dir="/var/lib/jenkins/jobs/Jiggly/workspace">
+                <include name="**"/>
+            </fileset>
+        </copy>
+        <echo message="set up staging site again" />
     </target>
 
 </project>
