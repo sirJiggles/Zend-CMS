@@ -352,6 +352,25 @@ class UserControllerTest extends ControllerTestCase
         }
     }
     
+    // Test the remove user confirm action
+    public function testRemoveUserConfirmAction(){
+        $this->dispatch('/user/remove-confirm');
+        $this->assertRedirect('/user/manage');
+    }
+    
+    // Test the remove user confirm action with an actual user id
+    public function testRemoveUserConfirmWithId(){
+        $userOne = $this->_getTestUserOne();
+        $this->dispatch('/user/remove-confirm/id/'.$userOne->id);
+        $this->assertResponseCode(200);
+    }
+    
+    // Test remove user confirm action with incorrect ID
+    public function testRemoveUserConfirmInccorectId(){
+        $this->dispatch('/user/remove-confirm/id/999999999999999');
+        $this->assertRedirect('/user/manage');
+    }
+    
      // Test that after a few incorrect logins we are shown the forgot password link
     public function testShownForgotPasswordLink(){
         $this->logout();

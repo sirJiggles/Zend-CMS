@@ -278,6 +278,24 @@ class UserController extends Zend_Controller_Action
     }
     
     /*
+     * This is the view for confirming of the user wants to remove a user from the system
+     */
+    public function removeConfirmAction(){
+        // Get the user buy the user ID parsed
+        $userID = $this->getRequest()->getParam('id');
+        $user = $this->_userModel->getUserById($userID);
+
+        if ($user !== null){
+            $this->view->user = $user;
+        }else{
+            $this->_helper->flashMessenger->addMessage('Unable to find user');
+            $this->_redirect('/user/manage');
+            return;
+        }
+    }
+    
+    
+    /*
      * This is the view action for removing users from the system
      */
     public function removeAction(){
