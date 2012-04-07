@@ -14,10 +14,12 @@
     <?php 
         echo $this->headTitle();
         $this->headLink()->prependStylesheet("/assets/css/style.css")
-                         ->prependStylesheet('/assets/css/custom-theme/jquery-ui-1.8.18.custom.css'); 
+                         ->prependStylesheet('/assets/css/custom-theme/jquery-ui-1.8.18.custom.css')
+                         ->prependStylesheet('http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css');
         echo $this->headLink();
         $this->headScript()->prependFile("/assets/js/script.js")
                            ->prependFile("/assets/js/libs/jquery-ui-1.8.18.custom.min.js")
+                           ->prependFile("http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js")
                            ->prependFile("/assets/js/libs/jquery-1.6.2.min.js")
                            ->prependFile("/assets/js/libs/modernizr-2.0.6.min.js")
                            ->prependFile("/assets/js/mylibs/Bauhaus_93_400.font.js")
@@ -48,7 +50,7 @@
     <?php echo $this->render('header.phtml') ?>
  
 
-    <div id="content">
+    <div id="content" data-role="content">
         
         <?php if (isset($this->messages[0]) && ($this->messages[0] != '')): ?>
             
