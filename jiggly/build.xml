@@ -12,8 +12,8 @@
     <property name="db.name" value="jiggly" />
     <property name="mysql.path" value="/usr/bin/mysql" />
      <!-- these two filenames will contain the generated SQL to do the deploy and roll it back -->
-    <property name="dbdeploy.deployfile" value="db/deploy/deploy-${DSTAMP}${TSTAMP}.sql" />
-    <property name="dbdeploy.undofile" value="db/deploy/undo-${DSTAMP}${TSTAMP}.sql" />
+    <property name="dbdeploy.deployfile" value="/var/lib/jenkins/jobs/Jiggly/workspace/jiggly/db/deploy/deploy-${DSTAMP}${TSTAMP}.sql" />
+    <property name="dbdeploy.undofile" value="/var/lib/jenkins/jobs/Jiggly/workspace/jiggly/db/deploy/undo-${DSTAMP}${TSTAMP}.sql" />
  
     <target name="build" depends="
     clean,
