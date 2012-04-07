@@ -13,8 +13,8 @@
 
     <?php 
         echo $this->headTitle();
-        $this->headLink()->prependStylesheet("/assets/css/style.css")
-                         ->prependStylesheet('http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css');
+        $this->headLink()->prependStylesheet('http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css')
+                         ->prependStylesheet("/assets/css/style.css");
         echo $this->headLink();
         $this->headScript()->prependFile("/assets/js/script.js")
                            ->prependFile("http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js")

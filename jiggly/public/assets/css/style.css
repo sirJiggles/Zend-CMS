@@ -50,9 +50,7 @@ body, button, input, select, textarea { font-family: sans-serif; color: #222; }
    Links
    ========================================================================== */
 
-a { color: #00e; }
-a:visited { color: #551a8b; }
-a:hover { color: #06e; }
+
 a:focus { outline: thin dotted; }
 
 /* Improve readability when focused and hovered in all browsers: h5bp.com/h */
@@ -255,6 +253,11 @@ ul.errors{
 
 body{
     padding:20px;
+    
+}
+
+.ui-body-c, .ui-dialog.ui-overlay-c{
+    text-shadow:none !important;
 }
 
 /*================ Login page ======================*/
@@ -304,6 +307,10 @@ a.button:hover{
 }
 
 /*================ Styles for the system tables=========*/
+table{
+    width:100%;
+}
+
 table tr.odd{
     background-color:#FADBDB; 
 }
@@ -315,14 +322,15 @@ table th{
 }
 
 table td{
-    padding:10px 10px 0px 10px;
-    
+    padding:5px 5px 0px 5px;
+    white-space: normal;
+    word-break: break-all;
 }
 
-table td a.button{
-    margin-top:-10px;
-    margin-left:-10px;
-    margin-right:-10px;
+table td a{
+    margin-top:-5px !important;
+    margin-left:-5px !important;
+    margin-right:-5px !important;
 }
 
 /*==================== Form styes ====================*/

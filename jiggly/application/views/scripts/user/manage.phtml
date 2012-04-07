@@ -1,6 +1,6 @@
 
 <h2>Manage Users</h2>
-<p><a href="/user/add" data-role="button" data-icon="plus">Add User</a></p>
+<p><a href="/user/add" data-role="button" data-theme="a" data-icon="plus">Add User</a></p>
 
 <!-- This is the table that contains all the users in the system -->
 <table>
@@ -26,8 +26,8 @@
                 <td><?php echo $user->last_name; ?></td>
                 <td><?php echo ($user->active == 1) ? 'yes' : 'no'; ?></td>
                 <td><?php echo $user->role; ?></td>
-                <td><a data-role="button" data-icon="gear" href="/user/edit/id/<?php echo $user->id; ?>" title="Edit <?php echo $user->first_name .' '. $user->last_name; ?>">Edit</a></td>
-                <td><a data-role="button" data-rel="dialog" data-icon="minus" id="<?php echo $user->id; ?>" href="/user/remove-confirm/id/<?php echo $user->id; ?>" title="Remove <?php echo $user->first_name .' '. $user->last_name; ?>">Remove</a></td>
+                <td><a data-role="button" data-theme="a" data-icon="gear" href="/user/edit/id/<?php echo $user->id; ?>" title="Edit <?php echo $user->first_name .' '. $user->last_name; ?>">Edit</a></td>
+                <td><a data-role="button" data-theme="a" data-rel="dialog" data-icon="minus" id="<?php echo $user->id; ?>" href="/user/remove-confirm/id/<?php echo $user->id; ?>" title="Remove <?php echo $user->first_name .' '. $user->last_name; ?>">Remove</a></td>
             </tr>
             <?php $i ++; ?>
         <?php endforeach; ?>
