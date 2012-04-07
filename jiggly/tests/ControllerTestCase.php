@@ -105,7 +105,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
         // create a fake identity
         $identity = new stdClass();
         $identity->role = 'editor';
-        $identity->username = 'gfuller';
+        $identity->username = 'gfuller2';
         $identity->first_name = 'Gareth';
         $identity->last_name = 'Fuller';
         $identity->active = 1;

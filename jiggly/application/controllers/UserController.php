@@ -288,8 +288,8 @@ class UserController extends Zend_Controller_Action
         // If the get param was sent and is in the correct format
         if (isset($userID) && is_numeric($userID)){
             
-            $removeStatus = $this->_userModel->removeUser($id);
-            
+            $removeStatus = $this->_userModel->removeUser($userID);
+
             if ($removeStatus){
                 $this->_helper->flashMessenger->addMessage('User removed from the system');
                
