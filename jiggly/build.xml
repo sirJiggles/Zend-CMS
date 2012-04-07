@@ -24,8 +24,8 @@
     pdepend,
     phpcpd,
     phpmd,
-    rebuild-staging,
-    deploy-database">  
+    deploy-database,
+    rebuild-staging">  
     </target>
 
     <target name="clean" description="Clean up and create artifact directories">
