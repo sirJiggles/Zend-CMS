@@ -264,25 +264,32 @@ body{
 
 
 body.login{
-    text-align: center;
+    /*text-align: center;
     padding:0px;
-    margin:0px;
+    margin:0px;*/
 }
 body.login #content{
-    margin:0 auto;
+    /*margin:0 auto;
     width:496px;
     height:460px;
     background-image: url('/assets/img/jiggly.jpg');
     display:block;
     text-align: left;
     background-repeat: no-repeat;
-    padding:300px 0px 0px 230px;
+    padding:300px 0px 0px 230px;*/
 }
 
 body.login h1{
-    margin-bottom:-30px;
+    
 }
 
+
+#content #center-container{
+    margin:0px auto;
+    text-align:left;
+    width:340px;
+    padding:0px;
+}
 
 /*=============== Headings ==============*/
 
@@ -342,11 +349,11 @@ form{
 }
 
 form.user{
-    width:350px;
+    width:335px;
 }
 
 form.login{
-    width:250px;
+    width:335px;
 }
 
 form div.item-wrapper{
@@ -364,7 +371,7 @@ form dl dd{
     display:block;
     float:right;
     margin:0px;
-    width:200px
+    width:180px
 }
 
 form dl dt{

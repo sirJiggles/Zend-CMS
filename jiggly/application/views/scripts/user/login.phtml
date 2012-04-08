@@ -1,11 +1,11 @@
+<div id="center-container">
+    <?php echo $this->loginForm; ?> 
 
-<?php echo $this->loginForm; ?> 
+    <?php if ($this->forgotPasswordLink): ?>
 
-<?php if ($this->forgotPasswordLink): ?>
+    <a href="/user/forgot-password" title="Forgotten Details?">Forgotten account details?</a>
 
-<a href="/user/forgot-password" title="Forgotten Details?">Forgotten account details?</a>
-
-<? endif; ?>
-
+    <? endif; ?>
+</div>
 
 
