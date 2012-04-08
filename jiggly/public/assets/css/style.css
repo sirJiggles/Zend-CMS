@@ -217,15 +217,25 @@ td { vertical-align: top; }
 }
 
 /* Info popups */
+#flash-mssg-container{
+    margin:0px auto;
+    text-align:left;
+    width:340px;
+    padding:0px;
+}
 
 .ui-state-highlight p{
     margin:0px;
+    font-size:16px;
 }
 
 .ui-state-highlight{
     margin-top: 10px; 
     padding: 10px;
     float:left;
+    background-color:yellowgreen;
+    color:white;
+    width:350px;
 }
 
 .ui-icon{
@@ -260,29 +270,6 @@ body{
     text-shadow:none !important;
 }
 
-/*================ Login page ======================*/
-
-
-body.login{
-    /*text-align: center;
-    padding:0px;
-    margin:0px;*/
-}
-body.login #content{
-    /*margin:0 auto;
-    width:496px;
-    height:460px;
-    background-image: url('/assets/img/jiggly.jpg');
-    display:block;
-    text-align: left;
-    background-repeat: no-repeat;
-    padding:300px 0px 0px 230px;*/
-}
-
-body.login h1{
-    
-}
-
 
 #content #center-container{
     margin:0px auto;
@@ -291,7 +278,29 @@ body.login h1{
     padding:0px;
 }
 
+/*================ Header ===============*/
+header #left-side{
+    float:left;
+    margin-bottom:10px;
+    margin-left:10px;
+}
+
+header #right-side{
+    float:right;
+    margin-right:10px;
+    margin-bottom:10px;
+}
+
+header #right-side p{
+    float:left;
+    margin-top:7px;
+    margin-bottom:0px;
+    margin-right:10px;
+}
 /*=============== Headings ==============*/
+h1{
+    font-size:20px !important;
+}
 
 h1 a{
    color:#fff !important;
@@ -346,13 +355,6 @@ table td a{
 form{
     float:left;
     display:block;
-}
-
-form.user{
-    width:335px;
-}
-
-form.login{
     width:335px;
 }
 

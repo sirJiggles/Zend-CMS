@@ -45,12 +45,12 @@
         <div id="content" data-role="content">
 
             <?php if (isset($this->messages[0]) && ($this->messages[0] != '')): ?>
-
-                <div class="ui-state-highlight ui-corner-all"> 
-                        <p><span class="ui-icon ui-icon-info"></span>
-                        <?php echo $this->messages[0]; ?></p>
+                <div id="flash-mssg-container">
+                    <div class="ui-state-highlight ui-corner-all"> 
+                            <p><span class="ui-icon ui-icon-info"></span>
+                            <?php echo $this->messages[0]; ?></p>
+                    </div>
                 </div>
-
                 <div class="clear-both"></div>
             <?php endif ?>
 

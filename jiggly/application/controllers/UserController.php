@@ -44,10 +44,7 @@ class UserController extends Zend_Controller_Action
      */
     public function loginAction()
     {
-        
-        // Disable the layout for this view
-        
-        
+        $this->view->pageTitle = 'Login';
         // Init the tries, if not set set as 0
         $attemptsSession = new Zend_Session_Namespace('attempts');
         if (empty($attemptsSession->tries)){ 
@@ -132,6 +129,8 @@ class UserController extends Zend_Controller_Action
      */
     public function manageAction(){
         
+        $this->view->pageTitle = 'Manage Users';
+        
         // Get new instance of the users model and fetch all users in the system
         $users = $this->_userModel->getAllUsers();
         
@@ -156,6 +155,8 @@ class UserController extends Zend_Controller_Action
      */
     public function editAction(){
         
+        $this->view->pageTitle = 'Edit User';
+
         // Get the user buy the user ID parsed
         $userID = $this->getRequest()->getParam('id');
         
@@ -230,6 +231,8 @@ class UserController extends Zend_Controller_Action
      */
     public function addAction(){
         
+        $this->view->pageTitle = 'Add User';
+        
         // Get an instance of our user form for adding the users
         $userForm = new Application_Form_UserForm();
         $userForm->setAction('/user/add');
@@ -281,6 +284,9 @@ class UserController extends Zend_Controller_Action
      * This is the view for confirming of the user wants to remove a user from the system
      */
     public function removeConfirmAction(){
+        
+        $this->view->pageTitle = 'Remove User';
+        
         // Get the user buy the user ID parsed
         $userID = $this->getRequest()->getParam('id');
         $user = $this->_userModel->getUserById($userID);
@@ -301,6 +307,7 @@ class UserController extends Zend_Controller_Action
      * This is the view action for removing users from the system
      */
     public function removeAction(){
+        
         // Get the user buy the user ID parsed
         $userID = $this->getRequest()->getParam('id');
         
@@ -332,6 +339,8 @@ class UserController extends Zend_Controller_Action
      * This is the forgotten password action
      */
     public function forgotPasswordAction(){
+        
+        $this->view->pageTitle = 'Forgot Password';
         
         // Get the forgot password form and display it
         $passwordForm = new Application_Form_ForgotPassword();
@@ -417,6 +426,8 @@ class UserController extends Zend_Controller_Action
      * 
      */
     public function activatePasswordAction(){
+        
+        $this->view->pageTitle = 'Activate Password';
         
         // Get the hash from the request param
         $hash = $this->getRequest()->getParam('req');

@@ -84,7 +84,8 @@ class Application_Form_UserForm extends Zend_Form
         $role->setLabel('Role:')
                 ->addMultiOption('admin', 'Admin')
                 ->setDecorators($customDecorators)
-                ->addMultiOption('editor', 'Editor');
+                ->addMultiOption('editor', 'Editor')
+                ->setAttrib('data-native-menu', 'false');
         
        
         
@@ -108,7 +109,8 @@ class Application_Form_UserForm extends Zend_Form
             $status->setLabel('Active:')
                     ->addMultiOption('1', 'Yes')
                     ->setDecorators($customDecorators)
-                    ->addMultiOption('0', 'No');
+                    ->addMultiOption('0', 'No')
+                    ->setAttrib('data-native-menu', 'false');
             
             $this->addElements(array($firstName, $lastName, $username, $email, $password, $passwdRepeat, $role, $status, $submit));
         }else{
