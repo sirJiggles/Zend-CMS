@@ -42,8 +42,8 @@ body, button, input, select, textarea { font-family: sans-serif; color: #222; }
  * Also: hot pink! (or customize the background color to match your design)
  */
 
- ::-moz-selection { background: #e25150; color: #fff; text-shadow: none; }
-::selection { background: #e25150; color: #fff; text-shadow: none; }
+::-moz-selection { background: #C8E2F6; color: #000; text-shadow: none; }
+::selection { background: #C8E2F6; color: #000; text-shadow: none; }
 
 
 /* =============================================================================
@@ -324,14 +324,14 @@ table th{
 }
 
 table td{
-    padding:10px 5px 5px 5px;
+    padding:10px 10px;
     white-space: normal;
     word-break: break-all;
+    
 }
 
 table td a{
-    margin-top:-5px !important;
-   
+    margin:-5px !important;
 }
 
 /*==================== Form styes ====================*/
@@ -346,7 +346,7 @@ form.user{
 }
 
 form.login{
-    width:270px;
+    width:250px;
 }
 
 form div.item-wrapper{
@@ -364,6 +364,7 @@ form dl dd{
     display:block;
     float:right;
     margin:0px;
+    width:200px
 }
 
 form dl dt{
@@ -373,53 +374,38 @@ form dl dt{
 }
 
 form input{
-    height:30px;
-    width:160px;
-    background-color:#FADBDB;
+    height:20px;
+    width:120px;
+    background-color:#4596CE;
     float:left;
     font-size: 16px;
     padding-left:10px;
     border: none;
-    color: #fb416e;
+    color: #fff;
 }
 
 form input:focus{
-    background-color:#fb416e;
+    background-color:#4596CE;
     color:#fff;
 }
 
 form label{
-    font-size:16px;
     float:left;
-    font-weight: bold;
     padding-top:7px;
     margin-right:10px;
-    color: #fb416e;
+    color: #000;
     height:30px;
 }
 
 form select{
-    background-color:#FADBDB;
     border: none;
     float:left;
     font-size: 16px;
     padding-left:10px;
     height:30px;
-    color: #fb416e;
+    color: #4596CE;
+    width:150px;
 }
-
-form select:focus{
-
-}
-
-form select:hover{
-    background-color:#fb416e;
-    color:#fff;
-}
-
-
-
-
 
 /* ==|== non-semantic helper classes ========================================
    Please define your styles before this section.

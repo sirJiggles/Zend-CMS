@@ -33,7 +33,7 @@ class Application_Form_UserForm extends Zend_Form
                 ->setRequired(true)
                 ->addErrorMessage('Username is required')
                 ->setDecorators($customDecorators)
-                ->setLabel('Username');
+                ->setLabel('Username:');
         
         // Password input field
         $password = new Zend_Form_Element_Password('password');
@@ -41,7 +41,7 @@ class Application_Form_UserForm extends Zend_Form
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->setDecorators($customDecorators)
                 ->addValidator('Identical', false, array('token' => 'password_repeat'))
-                ->setLabel('Password');
+                ->setLabel('Password:');
         
         // Password repeat field
         $passwdRepeat = new Zend_Form_Element_Password('password_repeat');
@@ -49,7 +49,7 @@ class Application_Form_UserForm extends Zend_Form
                 ->addValidator('Identical', false, array('token' => 'password'))
                 ->setDecorators($customDecorators)
                 ->addFilter(new Zend_Filter_HtmlEntities())
-                ->setLabel('Reapeat Password');
+                ->setLabel('Reapeat Password:');
         
         
         // First Name input field
@@ -59,7 +59,7 @@ class Application_Form_UserForm extends Zend_Form
                 ->setRequired(true)
                 ->addErrorMessage('First name is required')
                 ->setDecorators($customDecorators)
-                ->setLabel('First Name');
+                ->setLabel('First Name:');
         
         // Lastname input field
         $lastName = new Zend_Form_Element_Text('last_name');
@@ -77,11 +77,11 @@ class Application_Form_UserForm extends Zend_Form
                 ->setRequired(true)
                 ->addErrorMessage('Email address is required')
                 ->setDecorators($customDecorators)
-                ->setLabel('Email Address');
+                ->setLabel('Email Address:');
         
         // Role input field
         $role = new Zend_Form_Element_Select('role');
-        $role->setLabel('Role')
+        $role->setLabel('Role:')
                 ->addMultiOption('admin', 'Admin')
                 ->setDecorators($customDecorators)
                 ->addMultiOption('editor', 'Editor');
@@ -97,14 +97,15 @@ class Application_Form_UserForm extends Zend_Form
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Save');
         $submit->setValue('Save')
-                ->setAttrib('class', 'button');
+                ->setAttrib('data-role', 'button')
+                ->setAttrib('data-theme', 'b');
         
         // Work out if we are in the edit user location, if so display the staus select box
         if(Zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'edit'){
              
             // Status input field
             $status = new Zend_Form_Element_Select('active');
-            $status->setLabel('Active')
+            $status->setLabel('Active:')
                     ->addMultiOption('1', 'Yes')
                     ->setDecorators($customDecorators)
                     ->addMultiOption('0', 'No');
