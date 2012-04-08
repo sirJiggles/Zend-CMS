@@ -1,8 +1,12 @@
 <?php $auth = Zend_Auth::getInstance(); ?>
 <header data-role="header" data-add-back-btn="true">
-    <h1><a href="/" >Jiggly CMS</a><?php if($this->pageTitle) echo ' - '.$this->pageTitle; ?></h1>
+    <h1><?php if($this->pageTitle){echo $this->pageTitle;}else{echo '<a href="/" >Jiggly CMS</a>';}?></h1>
     <?php if ($auth->hasIdentity()): ?>
     <?php $identity = $auth->getIdentity(); ;?>
+    <div id="right-side">
+        <p>Hello again: <?php echo $identity->first_name .' '. $identity->last_name; ?></p>
+        <a data-role="button" data-theme="c" href="/logout" title="Logout">Logout</a>
+    </div>
     <div id="left-side">
         <nav>
             <a data-role="button" title="Home" data-theme="b" href="/">Home</a>
@@ -11,10 +15,7 @@
             <?php endif; ?>
         </nav>
     </div>
-    <div id="right-side">
-        <p>Hello again: <?php echo $identity->first_name .' '. $identity->last_name; ?></p>
-        <a data-role="button" data-theme="c" href="/logout" title="Logout">Logout</a>
-    </div>
+    
     <?php endif; ?>
 
 </header>
