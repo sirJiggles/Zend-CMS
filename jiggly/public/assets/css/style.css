@@ -287,14 +287,15 @@ body.login h1{
 /*=============== Headings ==============*/
 
 h1 a{
-   color:#fb416e;
+   color:#fff !important;
    text-decoration: none;
    outline:none;
+   font-size:20px;
 }
 
 
 h2{
-    color:#FB416E;
+    color:#000;
 }
 
 
@@ -312,25 +313,25 @@ table{
 }
 
 table tr.odd{
-    background-color:#FADBDB; 
+    background-color:#C8E2F6; 
 }
 
 table th{
-    background-color:#fb416e;
+    background-color:#4596CE;
     color:#fff;
     padding:10px;
+    text-align: left;
 }
 
 table td{
-    padding:5px 5px 0px 5px;
+    padding:10px 5px 5px 5px;
     white-space: normal;
     word-break: break-all;
 }
 
 table td a{
     margin-top:-5px !important;
-    margin-left:-5px !important;
-    margin-right:-5px !important;
+   
 }
 
 /*==================== Form styes ====================*/
