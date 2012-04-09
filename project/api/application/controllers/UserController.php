@@ -20,7 +20,7 @@ class UserController extends Api_Default
     public function init(){
         
         // Set up the Deafult controller 
-        //parent::init();
+        parent::init();
         
         // As we connect to the user model many times inthis controller we will create a global instance
         $this->_userModel = new Application_Model_User();
@@ -46,12 +46,9 @@ class UserController extends Api_Default
 
     public function getAction()
     {
-        $this->getResponse()
-            ->setHttpResponseCode(200)
-            ->appendBody('here');
-        exit();
+
         // If they have an admin api key
-        /*if ($this->_isAdmin){
+        if ($this->_isAdmin){
             
             // Try Getting the User By Id
             if ($this->getRequest()->getParam('id')){
@@ -77,7 +74,7 @@ class UserController extends Api_Default
             //->setHttpResponseCode(403)
             ->appendBody("You do not have access to this data");
         }
-        */
+        
         
 
     }

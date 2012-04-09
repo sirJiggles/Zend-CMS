@@ -16,7 +16,7 @@ class RestAuth_Plugin extends Zend_Controller_Plugin_Abstract{
     {
         $apiKey = $request->getParam('key');
         
-        Zend_Debug::dump($request);
+        //Zend_Debug::dump($request);
         
         // Get all the API keys from the database
         $apiModel = new Application_Model_Api();
