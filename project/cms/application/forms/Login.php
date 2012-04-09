@@ -45,12 +45,15 @@ class Application_Form_Login extends Zend_Form
                 ->setDecorators($customDecorators)
                 ->setLabel('Password:');
         
+        $action = new Zend_Form_Element_Hidden('action');
+        $action->setValue('add');
+        
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Login');
         $submit->setValue('Login')
                 ->setAttrib('data-role', 'button');
         
-        $this->addElements(array($username, $password, $submit));
+        $this->addElements(array($username, $password, $submit, $action));
 
         
     }

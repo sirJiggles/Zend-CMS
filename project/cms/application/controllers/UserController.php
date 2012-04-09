@@ -17,7 +17,7 @@ class UserController extends Zend_Controller_Action
 {
     
     protected $_userModel = '';
-
+    protected $_client = '';
     
     /*
      * Init function for the controller 
@@ -26,6 +26,10 @@ class UserController extends Zend_Controller_Action
 
         // As we connect to the user model many times inthis controller we will create a global instance
         $this->_userModel = new Application_Model_User();
+        $apiModel = new Application_Model_Api();
+        $apiKey = $apiModel->getApiKey();
+        $this->_client = new Zend_Rest_Client(Zend_Registry::get('config')->apiurl);
+        $this->_client->key = $apiKey;
     }
 
 
@@ -57,8 +61,10 @@ class UserController extends Zend_Controller_Action
             
             // Get a new instance of the login form an set the prams action and method
             $form = new Application_Form_Login();
+            
             $form->setAction('/login');
             $form->setMethod('post');
+ 
 
             // Send the form to the view
             $this->view->loginForm = $form;
@@ -130,6 +136,14 @@ class UserController extends Zend_Controller_Action
     public function manageAction(){
         
         $this->view->pageTitle = 'Manage Users';
+        //Zend_Debug::dump($this->_client);
+        //$data = $this->_client->restGet('/user');
+        
+        //exit($this->_client->request('GET'));
+        
+        //print $data->getBody();
+        
+        //Zend_Debug::dump($data);
         
         // Get new instance of the users model and fetch all users in the system
         $users = $this->_userModel->getAllUsers();
