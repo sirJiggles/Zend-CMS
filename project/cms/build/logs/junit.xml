@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Application Test Suite" tests="35" assertions="103" failures="0" errors="0" time="1.000490">
+    <testsuite name="IndexControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/IndexControllerTest.php" tests="1" assertions="5" failures="0" errors="0" time="0.050136">
+      <testcase name="testLandOnIndexPage" class="IndexControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/IndexControllerTest.php" line="24" assertions="5" time="0.050136"/>
+    </testsuite>
+    <testsuite name="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" tests="32" assertions="90" failures="0" errors="0" time="0.926213">
+      <testcase name="testLandOnIndexPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="33" assertions="3" time="0.006787"/>
+      <testcase name="testLoginPage" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="41" assertions="4" time="0.035531"/>
+      <testcase name="testLoginCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="52" assertions="2" time="0.011573"/>
+      <testcase name="testInCorrectLogin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="71" assertions="2" time="0.015403"/>
+      <testcase name="testEditorNoAccessAdmin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="87" assertions="3" time="0.005379"/>
+      <testcase name="testAdminHasAccessAdmin" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="97" assertions="5" time="0.013274"/>
+      <testcase name="testAddUserCorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="107" assertions="3" time="0.175834"/>
+      <testcase name="testRequiredInputsUserForm" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="129" assertions="8" time="0.033777"/>
+      <testcase name="testPasswordsDontMatch" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="156" assertions="3" time="0.026975"/>
+      <testcase name="testUserNameTakenAdd" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="173" assertions="3" time="0.029838"/>
+      <testcase name="testUserEmailAddressTakenAdd" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="191" assertions="3" time="0.030033"/>
+      <testcase name="testEditUser" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="211" assertions="3" time="0.045316"/>
+      <testcase name="testAddSecondUser" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="238" assertions="3" time="0.058424"/>
+      <testcase name="testUserNameTakenEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="256" assertions="3" time="0.036475"/>
+      <testcase name="testUserEmailAddressTakenEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="280" assertions="3" time="0.036426"/>
+      <testcase name="testIncorrectArgsEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="301" assertions="2" time="0.006185"/>
+      <testcase name="testUserNotFoundEdit" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="307" assertions="2" time="0.010464"/>
+      <testcase name="testLogout" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="313" assertions="2" time="0.006115"/>
+      <testcase name="testCantLocateRemoveUserId" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="319" assertions="3" time="0.009197"/>
+      <testcase name="testCantRemoveUserIdIncorrect" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="329" assertions="3" time="0.008138"/>
+      <testcase name="testRemoveUser" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="340" assertions="3" time="0.051864"/>
+      <testcase name="testRemoveUserConfirmAction" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="354" assertions="2" time="0.008992"/>
+      <testcase name="testRemoveUserConfirmWithId" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="360" assertions="2" time="0.013256"/>
+      <testcase name="testRemoveUserConfirmInccorectId" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="367" assertions="2" time="0.008827"/>
+      <testcase name="testShownForgotPasswordLink" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="373" assertions="2" time="0.047624"/>
+      <testcase name="testForgotPasswordActionAndContent" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="404" assertions="3" time="0.017690"/>
+      <testcase name="testForgotPasswordSubmitNoAccountFound" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="414" assertions="2" time="0.017583"/>
+      <testcase name="testForgotPasswordAccountFound" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="431" assertions="2" time="0.059124"/>
+      <testcase name="testActivatePasswordAction" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="449" assertions="2" time="0.008740"/>
+      <testcase name="testActivatePasswordIncorrectHash" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="459" assertions="2" time="0.009999"/>
+      <testcase name="testActivatePasswordCorrectHash" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="470" assertions="2" time="0.023523"/>
+      <testcase name="testActivatePasswordComplete" class="UserControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/UserControllerTest.php" line="482" assertions="3" time="0.057847"/>
+    </testsuite>
+    <testsuite name="SettingsControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/SettingsControllerTest.php" tests="2" assertions="8" failures="0" errors="0" time="0.024141">
+      <testcase name="testLandOnIndexPage" class="SettingsControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/SettingsControllerTest.php" line="32" assertions="5" time="0.017113"/>
+      <testcase name="testEditorNoAccess" class="SettingsControllerTest" file="/home/gareth/Dropbox/Zend-CMS/project/cms/tests/application/controllers/SettingsControllerTest.php" line="43" assertions="3" time="0.007028"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

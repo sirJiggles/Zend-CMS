@@ -1,0 +1,11 @@
+<?php $auth = Zend_Auth::getInstance(); ?>
+<?php if ($auth->hasIdentity()): ?>
+<?php $identity = $auth->getIdentity(); ;?>
+<?php endif; ?>
+
+<a data-role="button" data-theme="b" data-icon="plus" title="Add Content" href="/content">Add Content</a>
+
+<?php if ($identity->role == 'admin'): ?>
+    <a data-role="button" data-theme="b" data-icon="gear" title="Manage Users" href="/user/manage">Manage Users</a>
+    <a data-role="button" data-theme="b" data-icon="gear" title="Site Settings" href="/settings">Site Settings</a>
+<?php endif; ?>
