@@ -1,0 +1,6 @@
+200 OK - successfully returning
+201 Created - item has been created
+204 No Content - item has been deleted
+404 Not Found - no resource found at the requested URI
+503 Service Unavailable - the server is experiencing heavy load. Try later.
+403 Forbidden
