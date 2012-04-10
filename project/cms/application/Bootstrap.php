@@ -59,6 +59,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
     }
     
+    /*
+     * Can only use the config vars on items that are not going to be unit 
+     * tested as unit tests cant use registery values
+     */
     protected function _initConfig()
     {
         $config = new Zend_Config($this->getOptions(), true);

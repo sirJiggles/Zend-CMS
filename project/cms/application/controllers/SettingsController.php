@@ -12,7 +12,7 @@
  * @package Controllers
  */
 
-class SettingsController extends Zend_Controller_Action
+class SettingsController extends Cms_Controllers_Default
 {
     
     protected $_settingsModel = '';

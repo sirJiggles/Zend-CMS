@@ -33,8 +33,7 @@ abstract class Api_Default extends Zend_Controller_Action{
     public function checkIfAdmin(){
         
         $apiKey = $this->getRequest()->getParam('key');
-        
-        //Zend_Debug::dump($this->getRequest()->getParam('key'));
+
         $foundUser = null;
         
         foreach ($this->_apiUsers as $user){
@@ -62,32 +61,33 @@ abstract class Api_Default extends Zend_Controller_Action{
         
         // Check if the user of the API wants to return the content
         // in a different way
+        $dataFormat = 'json';
+        
         if ($this->getRequest()->getParam('format')){
-            
             $dataFormat = $this->getRequest()->getParam('format');
-            
-            switch($dataFormat){
-                case 'json':
-                    $data = $this->formatData($data, 'json');
-                    break;
-                case 'array':
-                default:
-                    $data = $this->formatData($data, 'array');
-                    break;
-            }
-        }else{
-            $data = $this->formatData($data, 'array');
+        }
+        
+        switch($dataFormat){
+            case 'array':
+                $data = $this->formatData($data, 'array');
+                break;
+            case 'json':
+            default:
+                $data = $this->formatData($data, 'json');
+                break;
         }
         
         if ($data !== null){
             $this->getResponse()
             ->setHttpResponseCode(200)
-            ->appendBody(print_r($data));
+            ->appendBody($data);
         }else{
             $this->getResponse()
             ->setHttpResponseCode(200)
             ->appendBody('No Content Found');
         }
+                
+
     }
     
     /*
@@ -100,12 +100,12 @@ abstract class Api_Default extends Zend_Controller_Action{
     public function formatData($data, $format){
         if ($data !== null){
             switch($format){
-                case 'json':
-                    $formattedData = json_encode($data->toArray());
-                    break;
                 case 'array':
+                     $formattedData = serialize($data->toArray());
+                    break;
+                case 'json':
                 default:
-                    $formattedData = $data->toArray();
+                    $formattedData = json_encode($data->toArray());
                     break;
             }
             return $formattedData;

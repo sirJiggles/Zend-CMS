@@ -13,23 +13,20 @@
  * @package Controllers
  */
 
-class UserController extends Zend_Controller_Action
+class UserController extends Cms_Controllers_Default
 {
     
     protected $_userModel = '';
-    protected $_client = '';
     
     /*
      * Init function for the controller 
      */
     public function init(){
 
+        parent ::init();
         // As we connect to the user model many times inthis controller we will create a global instance
         $this->_userModel = new Application_Model_User();
-        $apiModel = new Application_Model_Api();
-        $apiKey = $apiModel->getApiKey();
-        $this->_client = new Zend_Rest_Client(Zend_Registry::get('config')->apiurl);
-        $this->_client->key = $apiKey;
+       
     }
 
 
@@ -136,17 +133,9 @@ class UserController extends Zend_Controller_Action
     public function manageAction(){
         
         $this->view->pageTitle = 'Manage Users';
-        //Zend_Debug::dump($this->_client);
-        //$data = $this->_client->restGet('/user');
         
-        //exit($this->_client->request('GET'));
-        
-        //print $data->getBody();
-        
-        //Zend_Debug::dump($data);
-        
-        // Get new instance of the users model and fetch all users in the system
-        $users = $this->_userModel->getAllUsers();
+        // Get the users form the API
+        $users = $this->getFromApi('/user');
         
         /*
          * This should NEVER happen, but if there are no users in the system
@@ -177,8 +166,11 @@ class UserController extends Zend_Controller_Action
         
         // If the get param was sent and is in the correct format
         if (isset($userID) && is_numeric($userID)){
-         
-            $user = $this->_userModel->getUserById($userID);
+            
+           
+            
+            // Get the user from the API
+            $user = $this->getFromApi('/user/'.$userID, 'array');
             
             // Get the user form
             $userForm = new Application_Form_UserForm();
@@ -190,10 +182,11 @@ class UserController extends Zend_Controller_Action
             
                 // Check if the form data is valid
                 if ($userForm->isValid($_POST)) {
-                    $updateAttempt = $this->_userModel->updateUser($userForm->getValues(), $userID);
+
+                    $updateAttempt = $this->postToApi('/user', 'update',  $userForm->getValues(), $userID);
                     
                     // Duplicate entries checking
-                    if (is_string($updateAttempt)){
+                    if ($updateAttempt != 1){
                         if ($updateAttempt == 'Name Taken' || $updateAttempt == 'Email Taken'){
 
                             if ($updateAttempt == 'Name Taken'){
@@ -225,7 +218,7 @@ class UserController extends Zend_Controller_Action
             
             
             // Set the values for the form based on the user in the system 
-            $userForm->populate($user->toArray());
+            $userForm->populate($user);
             
             // Send the form to the view
             $this->view->userForm = $userForm;

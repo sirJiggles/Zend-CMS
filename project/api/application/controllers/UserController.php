@@ -85,33 +85,22 @@ class UserController extends Api_Default
         if ($this->_isAdmin){
             
             // Work out the type of action they want to perform
-            switch($_POST['action']){
-                case 'add':
+            switch($_POST['operation']){
+                case 'update':
                     
+                    // Run the update user commmand 
+                    $data = $this->_userModel->updateUser(unserialize($_POST['data']), $_POST['argOne']);
+                    
+                    $this->getResponse()
+                        ->setHttpResponseCode(200)
+                        ->appendBody($data);
                     break;
                 default:
                     break;
             }
             
-            
-            // Try Getting the User By Id
-            if ($this->getRequest()->getParam('add')){
-                exit('here');
-                //$data = $this->_userModel->getUserById($this->getRequest()->getParam('id'));
-            }
-            
-            // Get user by username
-            if ($this->getRequest()->getParam('name')){
-                $data = $this->_userModel->getUserByUsername($this->getRequest()->getParam('name')); 
-            }
-            
-            // Get user by email address
-            if ($this->getRequest()->getParam('email')){
-                $data = $this->_userModel->getByEmailAddress($this->getRequest()->getParam('email')); 
-            }
-            
-            
-            $this->returnData($data);
+
+            //$this->returnData($data);
             
         }else{
             $this->getResponse()
@@ -123,9 +112,9 @@ class UserController extends Api_Default
     
     public function putAction()
     {
-        /*$this->getResponse()
-            ->setHttpResponseCode(201)
-            ->appendBody("From putAction() updating the requested article");*/
+        $this->getResponse()
+            ->setHttpResponseCode(200)
+            ->appendBody("From putAction() updating the requested article");
 
     }
     

@@ -13,7 +13,7 @@
  * @package Controllers
  */
 
-class IndexController extends Zend_Controller_Action
+class IndexController extends Cms_Controllers_Default
 {
 
     public function init()

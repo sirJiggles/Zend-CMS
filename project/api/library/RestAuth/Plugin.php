@@ -14,9 +14,7 @@ class RestAuth_Plugin extends Zend_Controller_Plugin_Abstract{
     
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        $apiKey = $request->getParam('key');
-        
-        //Zend_Debug::dump($request);
+        $apiKey = $request->getUserParam('key');
         
         // Get all the API keys from the database
         $apiModel = new Application_Model_Api();
@@ -29,6 +27,8 @@ class RestAuth_Plugin extends Zend_Controller_Plugin_Abstract{
                 break;
             }
         }
+        
+        $foundKey  =true;
         
         if(!$foundKey){
             $this->getResponse()

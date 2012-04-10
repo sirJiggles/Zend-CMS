@@ -21,7 +21,7 @@ if (!defined('APPLICATION_PATH')){
 }
 // Define application environment
 defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'testing'));
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development'));
 
 define('TESTS_PATH', realpath(dirname(__FILE__)));
 

@@ -12,7 +12,7 @@
  * @package Controllers
  */
 
-class ErrorController extends Zend_Controller_Action
+class ErrorController extends Cms_Controllers_Default
 {
 
     public function errorAction()
@@ -57,12 +57,12 @@ class ErrorController extends Zend_Controller_Action
 
     public function getLog()
     {
-        $bootstrap = $this->getInvokeArg('bootstrap');
+        /*$bootstrap = $this->getInvokeArg('bootstrap');
         if (!$bootstrap->hasResource('Log')) {
             return false;
         }
         $log = $bootstrap->getResource('Log');
-        return $log;
+        return $log;*/
     }
     
     
