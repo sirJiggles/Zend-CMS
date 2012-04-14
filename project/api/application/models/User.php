@@ -77,8 +77,11 @@ class Application_Model_User extends Zend_Db_Table{
         try {
             $where = $this->getAdapter()->quoteInto('id = ?', $userId);
             $result = $this->delete($where);
-            return $result;
-            
+            if ($result){
+                return true;
+            }else{
+                return 'Unable to find user to delete';
+            }
         } catch (Exception $e) {
             echo 'Unable to removeUser in User model: '.$e->getMessage();
         }
@@ -240,8 +243,13 @@ class Application_Model_User extends Zend_Db_Table{
                                     ->where('email_address = ?', $emailAddress);
                 
                 $row = $this->fetchRow($selectStatememt);
-
-                return $row;
+                
+                if ($row instanceof Zend_Db_Table_Row){
+                    return $row;
+                }else{
+                    return false;
+                }
+                
             }else{
                 throw new Exception('Unable to fetch user by email address given in User::getByEmailAddress, argument must be string');
             }

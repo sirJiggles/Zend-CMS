@@ -13,12 +13,12 @@
  */
 
 // Get an instance the user model file
-require_once '../application/models/User.php';
+require_once '../../api/application/models/User.php';
 
 class UserControllerTest extends ControllerTestCase
 {
     
-    // The variable to hold out model instance
+    // We need the model from the api for util functions like get test users
     protected  $_userModel;
     
     public function setUp(){

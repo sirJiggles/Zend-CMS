@@ -16,16 +16,12 @@
 class UserController extends Cms_Controllers_Default
 {
     
-    protected $_userModel = '';
-    
     /*
      * Init function for the controller 
      */
     public function init(){
 
         parent ::init();
-        // As we connect to the user model many times inthis controller we will create a global instance
-        $this->_userModel = new Application_Model_User();
        
     }
 
@@ -196,18 +192,17 @@ class UserController extends Cms_Controllers_Default
                                 $this->_helper->flashMessenger->addMessage('That email address is taken, please try again');
                             }
                             $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+                            $this->_helper->flashMessenger->clearCurrentMessages();
 
                         }
                     }else{
-                        // Fetch the updated user
-                        $user = $this->_userModel->getUserById($userID);
                         $this->_helper->flashMessenger->addMessage('User details updated');
                         $this->view->messages = $this->_helper->flashMessenger->getMessages();
                         $this->_redirect('/user/manage');
                         return;
                     }
                     
-                }
+                }       
             }
             
             // Redirect back to manage users if the user (by the id) was not found
@@ -258,11 +253,11 @@ class UserController extends Cms_Controllers_Default
             // Check if the form data is valid
             if ($userForm->isValid($_POST)) { 
              
-                // Run the add user function with the form post values
-                $addAction = $this->_userModel->addUser($userForm->getValues());
-                
+                // Run the add user function at the api
+                $addAction = $this->postToApi('/user', 'add', $userForm->getValues());
+ 
                 // Duplicate entries checking
-                if (is_string($addAction)){
+                if ($addAction != 1){
                     if ($addAction == 'Name Taken' || $addAction == 'Email Taken'){
                         
                         if ($addAction == 'Name Taken'){
@@ -297,11 +292,17 @@ class UserController extends Cms_Controllers_Default
         
         // Get the user buy the user ID parsed
         $userID = $this->getRequest()->getParam('id');
-        $user = $this->_userModel->getUserById($userID);
+        
+        if (!$userID ){
+            $this->_helper->flashMessenger->addMessage('Unable to find user');
+            $this->_redirect('/user/manage');
+            return;
+        }
+        $user = $this->getFromApi('/user/'.$userID);
         
         $this->_helper->layout->setLayout('dialog');
 
-        if ($user !== null){
+        if ($user){
             $this->view->user = $user;
         }else{
             $this->_helper->flashMessenger->addMessage('Unable to find user');
@@ -322,9 +323,10 @@ class UserController extends Cms_Controllers_Default
         // If the get param was sent and is in the correct format
         if (isset($userID) && is_numeric($userID)){
             
-            $removeStatus = $this->_userModel->removeUser($userID);
+            // Make post request to remove user from the API
+            $removeAction = $this->postToApi('/user', 'remove', $userID);
 
-            if ($removeStatus){
+            if ($removeAction == 1){
                 $this->_helper->flashMessenger->addMessage('User removed from the system');
                
             }else{
@@ -363,9 +365,9 @@ class UserController extends Cms_Controllers_Default
             // Check if the form data is valid
             if ($passwordForm->isValid($_POST)) {
                 
-                // Get the user by the email address
-                $foundUser = $this->_userModel->getByEmailAddress($passwordForm->getValue('email'));
-
+                // Get the user by the email address from the api
+                $foundUser = $this->getFromApi('/user/email/'.$passwordForm->getValue('email'));
+                
                 if (isset($foundUser)){
                     // Set the flash message
                     $this->_helper->flashMessenger->addMessage('An email has been sent to your account');
@@ -479,12 +481,14 @@ class UserController extends Cms_Controllers_Default
 
                 if ($validateHash){
                     
-                    // Change users account details as per thier post data
-                    $this->_userModel->updateForgotPassword($formValues);
+                    // Change users account details as per thier post data in the api
+                    $this->postToApi('/user', 'updateForgotPassword', $formValues);
                     
                     // Redirect back to login page and let the user know the passwprd has been reset
                     $this->_helper->flashMessenger->addMessage('Password changed');
                     $this->view->messages = $this->_helper->flashMessenger->getMessages();
+                    $attemptsSession = new Zend_Session_Namespace('attempts');
+                    $attemptsSession->tries = 0;
                     $this->_redirect('/user/login');
 
                     return;
@@ -586,8 +590,8 @@ class UserController extends Cms_Controllers_Default
                
                 $randomHash = mt_rand();
                 
-                $this->_userModel->updateForgotPasswordHash($userId, $randomHash);
-                
+                // Update the users password hash using the API
+                $this->postToApi('/user', 'updatePasswordHash', $userId, $randomHash);
                 
                 // Construct the new password link
                 $newPasswordLink = 'http://' . $_SERVER['SERVER_NAME'].'/user/activate-password/req/'.$userId.':'.$randomHash;
@@ -622,9 +626,9 @@ class UserController extends Cms_Controllers_Default
             $parts = explode(":", $hash);
             $userId = $parts[0];
             $hashPure = $parts[1];
-  
-            // Validate the hash in the model
-            $result = $this->_userModel->validateHash($userId, $hashPure);
+
+            // Validate hash from the api
+            $result = $this->postToApi('/user', 'validateHash', $userId, $hashPure);
             
             // Return the result
             return $result;

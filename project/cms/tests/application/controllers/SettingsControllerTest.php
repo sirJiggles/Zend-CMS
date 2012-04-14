@@ -17,15 +17,11 @@
 class SettingsControllerTest extends ControllerTestCase
 {
     
-    // The variable to hold out model instance
-    //protected  $_userModel;
-    
+
     public function setUp(){
        // Set the parent up
        parent::setUp();
-       // Get an instance of the user controller
-       //$this->_userModel = new Application_Model_User();
-       
+
     }
     
     // Test that the index page exists

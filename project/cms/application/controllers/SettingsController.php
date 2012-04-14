@@ -15,17 +15,11 @@
 class SettingsController extends Cms_Controllers_Default
 {
     
-    protected $_settingsModel = '';
-
-    
     /*
      * Init function for the controller 
      */
     public function init(){
-
-        // As we connect to the settings model many times inthis controller we 
-        // will create a global instance
-        $this->_settingsModel = new Application_Model_Settings();
+        parent::init();
     }
 
 
@@ -45,27 +39,27 @@ class SettingsController extends Cms_Controllers_Default
 
             // Check if the form data is valid
             if ($form->isValid($_POST)) {
-                $updateAttempt = $this->_settingsModel->updateSettings($form->getValues());
-
+                $updateAttempt = $this->postToApi('/settings', 'update', $form->getValues());
                 if ($updateAttempt){
                     $this->_helper->flashMessenger->addMessage('Site settings updated');
                 }else{
                     $this->_helper->flashMessenger->addMessage('Unable to update settings');
                 }
-                $this->view->messages = $this->_helper->flashMessenger->getMessages();
+                $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+                $this->_helper->flashMessenger->clearCurrentMessages();
 
             }
         }
         
-        $currentSettings = $this->_settingsModel->getSettings();
+        $currentSettings = $this->getFromApi('/settings', 'array');
         
-        if (!$currentSettings instanceof Zend_Db_Table_Row){
+        if (!is_array($currentSettings)){
            $this->_helper->flashMessenger->addMessage('Unable to get current settings');
            $this->view->messages = $this->_helper->flashMessenger->getMessages();
            return;
         }
         
-        $form->populate($currentSettings->toArray());
+        $form->populate($currentSettings);
         // Send the form to the view
         $this->view->form = $form;
         

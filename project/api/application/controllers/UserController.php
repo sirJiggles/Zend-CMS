@@ -50,6 +50,8 @@ class UserController extends Api_Default
         // If they have an admin api key
         if ($this->_isAdmin){
             
+            $data = 'Operation not found';
+            
             // Try Getting the User By Id
             if ($this->getRequest()->getParam('id')){
                 $data = $this->_userModel->getUserById($this->getRequest()->getParam('id'));
@@ -87,20 +89,31 @@ class UserController extends Api_Default
             // Work out the type of action they want to perform
             switch($_POST['operation']){
                 case 'update':
-                    
-                    // Run the update user commmand 
                     $data = $this->_userModel->updateUser(unserialize($_POST['data']), $_POST['argOne']);
-                    
-                    $this->getResponse()
-                        ->setHttpResponseCode(200)
-                        ->appendBody($data);
+                    break;
+                case 'add':
+                    $data = $this->_userModel->addUser(unserialize($_POST['data']));
+                    break;
+                case 'remove':
+                    $data = $this->_userModel->removeUser(unserialize($_POST['data']));
+                    break;
+                case 'validateHash':
+                    $data = $this->_userModel->validateHash(unserialize($_POST['data']), $_POST['argOne']);
+                    break;
+                case 'updateForgotPassword':
+                    $data = $this->_userModel->updateForgotPassword(unserialize($_POST['data']));
+                    break;
+                case 'updatePasswordHash':
+                    $data = $this->_userModel->updateForgotPasswordHash(unserialize($_POST['data']), $_POST['argOne']);
                     break;
                 default:
+                    $data = 'Operation not found';
                     break;
             }
             
-
-            //$this->returnData($data);
+            $this->getResponse()
+                ->setHttpResponseCode(200)
+                ->appendBody($data);
             
         }else{
             $this->getResponse()
@@ -112,17 +125,11 @@ class UserController extends Api_Default
     
     public function putAction()
     {
-        $this->getResponse()
-            ->setHttpResponseCode(200)
-            ->appendBody("From putAction() updating the requested article");
-
+      
     }
     
     public function deleteAction()
     {
-        $this->getResponse()
-            ->setHttpResponseCode(200)
-            ->appendBody("From deleteAction() deleting the requested article");
 
     }
     

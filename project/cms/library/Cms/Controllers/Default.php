@@ -83,7 +83,7 @@ class Cms_Controllers_Default extends Zend_Controller_Action
         if (!isset($operation) || !is_string($operation)){
             return false;
         }
-        if (!isset($data) || !is_array($data)){
+        if (!isset($data)){
             return false;
         }
         
