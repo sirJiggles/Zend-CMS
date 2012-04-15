@@ -54,8 +54,6 @@ class UserController extends Cms_Controllers_Default
             
             // Get a new instance of the login form an set the prams action and method
             $form = new Application_Form_Login();
-            
-            $form->setAction('/login');
             $form->setMethod('post');
  
 
@@ -170,7 +168,7 @@ class UserController extends Cms_Controllers_Default
             
             // Get the user form
             $userForm = new Application_Form_UserForm();
-            $userForm->setAction('/user/edit/id/'.$userID);
+            $userForm->setAction('/cms/user/edit/id/'.$userID);
             $userForm->setMethod('post');
             
             // Update the user based on the form post
@@ -238,7 +236,6 @@ class UserController extends Cms_Controllers_Default
         
         // Get an instance of our user form for adding the users
         $userForm = new Application_Form_UserForm();
-        $userForm->setAction('/user/add');
         $userForm->setMethod('post');
         
         // Set password as required for new users
@@ -354,7 +351,6 @@ class UserController extends Cms_Controllers_Default
         
         // Get the forgot password form and display it
         $passwordForm = new Application_Form_ForgotPassword();
-        $passwordForm->setAction('/user/forgot-password');
         $passwordForm->setMethod('post');
         
         // Send it on up to the view
@@ -445,7 +441,6 @@ class UserController extends Cms_Controllers_Default
         
         // Get a new change password form
         $changePasswordForm = new Application_Form_ChangePassword();
-        $changePasswordForm->setAction('/user/activate-password');
         $changePasswordForm->setMethod('post');
 
         // If the get param was sent and is in the correct format

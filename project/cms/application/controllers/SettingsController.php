@@ -32,7 +32,6 @@ class SettingsController extends Cms_Controllers_Default
         $this->view->pageTitle = 'Site Settings';
         
         $form = new Application_Form_Settings();
-        $form->setAction('/settings');
         $form->setMethod('post');
 
         if ($this->getRequest()->isPost()){
