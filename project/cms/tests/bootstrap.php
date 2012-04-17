@@ -28,10 +28,12 @@ define('TESTS_PATH', realpath(dirname(__FILE__)));
 
 switch ('APPLICATION_ENV'){
     case 'production':
+        exit('we are in production');
         $_SERVER['SERVER_NAME'] = 'jigglycms.com';
         break;
     case 'development':
     default:
+        exit('not production');
         $_SERVER['SERVER_NAME'] = 'jiggly.dev';
         break;
 }
