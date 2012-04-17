@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="Jiggly" default="build" basedir=".">
+<project name="Jiggly" default="build" basedir="./project/cms">
     
     <!-- Define our source variable -->
     <property name="source" value="./application" />
