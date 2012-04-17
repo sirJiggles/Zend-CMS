@@ -20,4 +20,7 @@ sudo pear install phpunit/File_Iterator-1.2.3
 sudo pear install phpunit/PHP_TokenStream-1.0.1
 sudo pear install phpunit/PHP_CodeCoverage-1.0.2
 sudo pear install phpunit/DbUnit-1.0.0
-sudo pear install phpunit/PHPUnit-3.5.15
+sudo pear install phpunit/PHPUnit-3.5.15 
+
+pecl install xdebug
+add "extension=xdebug.so" to php.ini   
