@@ -22,7 +22,7 @@ if (!defined('APPLICATION_PATH')){
 
 // Custom variables 
 define('TESTS_PATH', realpath(dirname(__FILE__)));
-$_SERVER['SERVER_NAME'] = 'jigglycms.com';
+$_SERVER['SERVER_NAME'] = 'jiggly.dev';
 define('APPLICATION_ENV', 'production');
 
 
