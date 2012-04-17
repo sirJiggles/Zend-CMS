@@ -19,24 +19,12 @@ error_reporting( E_ALL | E_STRICT );
 if (!defined('APPLICATION_PATH')){
     define('APPLICATION_PATH', realpath(dirname(__FILE__)) . '/../application');
 }
-// Define application environment
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development'));
 
+// Custom variables 
 define('TESTS_PATH', realpath(dirname(__FILE__)));
+$_SERVER['SERVER_NAME'] = 'jigglycms.com';
+define('APPLICATION_ENV', 'production');
 
-
-switch ('APPLICATION_ENV'){
-    case 'production':
-        exit('we are in production');
-        $_SERVER['SERVER_NAME'] = 'jigglycms.com';
-        break;
-    case 'development':
-    default:
-        exit('not production');
-        $_SERVER['SERVER_NAME'] = 'jiggly.dev';
-        break;
-}
 
 // Ensure library/ is on include_path (we will just add all possible zf ones for now as deving on multiple machines)
 set_include_path(implode(PATH_SEPARATOR, array(
