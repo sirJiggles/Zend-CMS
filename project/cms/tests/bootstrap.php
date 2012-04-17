@@ -25,11 +25,20 @@ defined('APPLICATION_ENV')
 
 define('TESTS_PATH', realpath(dirname(__FILE__)));
 
-$_SERVER['SERVER_NAME'] = 'jiggly.dev';
+
+switch ('APPLICATION_ENV'){
+    case 'production':
+        $_SERVER['SERVER_NAME'] = 'jigglycms.com';
+        break;
+    case 'development':
+    default:
+        $_SERVER['SERVER_NAME'] = 'jiggly.dev';
+        break;
+}
 
 // Ensure library/ is on include_path (we will just add all possible zf ones for now as deving on multiple machines)
 set_include_path(implode(PATH_SEPARATOR, array(
-    realpath('/var/www/library/Zend/1.11.11'),
+    realpath('/library/Zend/1.11.11'),
     realpath('/Subversion/libary/Zend/1.11.11'),
     realpath('/home/gareth/Dropbox/library/Zend/1.11.11'),
     get_include_path(),
