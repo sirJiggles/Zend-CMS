@@ -51,7 +51,7 @@ class Application_Form_Login extends Zend_Form
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Login');
         $submit->setValue('Login')
-                ->setAttrib('data-role', 'button');
+                ->setAttrib('data-theme', 'b');
         
         $this->addElements(array($username, $password, $submit, $action));
 
