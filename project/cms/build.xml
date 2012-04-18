@@ -82,7 +82,7 @@
     </target>
 
     <target name="phpcs" description="Generate checkstyle.xml using PHP_CodeSniffer">
-        <exec executable="phpcs" output="/dev/null" escape="true">
+        <exec executable="phpcs" escape="true">
             <arg line="--report=checkstyle
               --standard=Generic
               ${source} > ${project.basedir}/build/logs/checkstyle.xml" />
