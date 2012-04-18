@@ -461,9 +461,11 @@ class UserController extends Cms_Controllers_Default
             }else{
                 $this->_invalidPasswordResetValidation();
             }
-            
+
+        }
+        
         // Handle the password reset form post
-        }else if ($this->getRequest()->isPost()){
+        if ($this->getRequest()->isPost()){
  
             // Chnage users password
             if ($changePasswordForm->isValid($_POST)) {
