@@ -84,9 +84,8 @@
     <target name="phpcs" description="Generate checkstyle.xml using PHP_CodeSniffer">
         <exec executable="phpcs" output="/dev/null" escape="true">
             <arg line="--report=checkstyle
-              --report-file=${project.basedir}/build/logs/checkstyle.xml
               --standard=Generic
-              ${source}" />
+              ${source} > ${project.basedir}/build/logs/checkstyle.xml" />
         </exec>
         <echo message="Generated checkstyle report xml file" />  
     </target>
