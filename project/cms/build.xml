@@ -67,7 +67,7 @@
         <echo message="Created Project mass detection xml" />
     </target>
 
-    <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
+    <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD (Dry Plugin)">
         <exec executable="phpcpd" escape="true">
             <arg line="--log-pmd ${project.basedir}/build/logs/pmd-cpd.xml ${source}" />
         </exec>
