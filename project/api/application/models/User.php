@@ -295,6 +295,7 @@ class Application_Model_User extends Zend_Db_Table{
      */
     public function validateHash($userId, $hash){
         try {
+            
             if (is_numeric($userId) && is_numeric($hash)){
 
                 $selectStatememt = $this->select()
@@ -311,7 +312,7 @@ class Application_Model_User extends Zend_Db_Table{
                 }
                 
             }else{
-                throw new Exception('Unable to validate password hash in  User::validateHash, both arguments must be of type int');
+                throw new Exception('Unable to validate password hash in  User::validateHash, both arguments must be of type int'.$userId);
             }
             
         } catch (Exception $e) {

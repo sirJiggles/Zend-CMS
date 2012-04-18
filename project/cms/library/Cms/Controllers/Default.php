@@ -91,7 +91,7 @@ class Cms_Controllers_Default extends Zend_Controller_Action
             
             $arguments = array('key' => $this->_apiKey,
                                 'operation' => $operation,
-                                'data' => serialize($data));
+                                'data' => base64_encode(serialize($data)));
 
             // Add some arguments if they are needed
             if ($argOne !== null){ 

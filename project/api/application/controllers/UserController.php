@@ -89,22 +89,24 @@ class UserController extends Api_Default
             // Work out the type of action they want to perform
             switch($_POST['operation']){
                 case 'update':
-                    $data = $this->_userModel->updateUser(unserialize($_POST['data']), $_POST['argOne']);
+                    $data = $this->_userModel->updateUser(unserialize(base64_decode($_POST['data'])), $_POST['argOne']);
                     break;
                 case 'add':
-                    $data = $this->_userModel->addUser(unserialize($_POST['data']));
+                    $data = $this->_userModel->addUser(unserialize(base64_decode($_POST['data'])));
                     break;
                 case 'remove':
-                    $data = $this->_userModel->removeUser(unserialize($_POST['data']));
+                    $data = $this->_userModel->removeUser(unserialize(base64_decode($_POST['data'])));
                     break;
                 case 'validateHash':
-                    $data = $this->_userModel->validateHash(unserialize($_POST['data']), $_POST['argOne']);
+                    $data = $this->_userModel->validateHash(unserialize(base64_decode($_POST['data'])), $_POST['argOne']);
+                    
+                    //$data = $_POST['data'];
                     break;
                 case 'updateForgotPassword':
-                    $data = $this->_userModel->updateForgotPassword(unserialize($_POST['data']));
+                    $data = $this->_userModel->updateForgotPassword(unserialize(base64_decode($_POST['data'])));
                     break;
                 case 'updatePasswordHash':
-                    $data = $this->_userModel->updateForgotPasswordHash(unserialize($_POST['data']), $_POST['argOne']);
+                    $data = $this->_userModel->updateForgotPasswordHash(unserialize(base64_decode($_POST['data'])), $_POST['argOne']);
                     break;
                 default:
                     $data = 'Operation not found';

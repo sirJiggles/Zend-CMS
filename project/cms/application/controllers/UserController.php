@@ -435,6 +435,8 @@ class UserController extends Cms_Controllers_Default
         
         $this->view->pageTitle = 'Activate Password';
         
+        $oneDirection = false;
+        
         // Get the hash from the request param
         $hash = $this->getRequest()->getParam('req');
         
@@ -461,9 +463,12 @@ class UserController extends Cms_Controllers_Default
             }else{
                 $this->_invalidPasswordResetValidation();
             }
+            
+            $oneDirection = true;
 
         }
         
+       
         // Handle the password reset form post
         if ($this->getRequest()->isPost()){
  
@@ -499,9 +504,13 @@ class UserController extends Cms_Controllers_Default
             
             // Send the view to the form
             $this->view->form = $changePasswordForm;
+            
+            $oneDirection = true;
 
-        }else{
+        }
         
+        // Handle people navigating to this page by mistake
+        if (!$oneDirection){
             $this->_invalidPasswordResetValidation();
         }
         
@@ -623,7 +632,7 @@ class UserController extends Cms_Controllers_Default
             $parts = explode(":", $hash);
             $userId = $parts[0];
             $hashPure = $parts[1];
-
+            
             // Validate hash from the api
             $result = $this->postToApi('/user', 'validateHash', $userId, $hashPure);
             
