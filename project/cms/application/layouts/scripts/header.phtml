@@ -5,15 +5,15 @@
     <?php $identity = $auth->getIdentity(); ;?>
     <div id="right-side">
         <p>Hello again: <?php echo $identity->first_name .' '. $identity->last_name; ?></p>
-        <a data-role="button" data-theme="c" href="/cms/logout" title="Logout">Logout</a>
+        <a data-role="button" data-theme="d" href="/cms/logout" title="Logout">Logout</a>
     </div>
     <div id="left-side">
         <nav>
-            <a data-role="button" data-icon="home" title="Home" data-theme="b" href="/cms">Home</a>
-            <a data-role="button" data-theme="b" data-icon="plus" title="Add Content" href="/cms/content">Add Content</a>
+            <a data-role="button" data-icon="home" title="Home" data-theme="a" href="/cms">Home</a>
+            <a data-role="button" data-theme="a" data-icon="plus" title="Add Content" href="/cms/content">Add Content</a>
             <?php if ($identity->role == 'admin'): ?>
-                <a data-role="button" data-theme="b" data-icon="gear" title="Manage Users" href="/cms/user/manage">Manage Users</a>
-                <a data-role="button" data-theme="b" data-icon="gear" title="Site Settings" href="/cms/settings">Site Settings</a>
+                <a data-role="button" data-theme="a" data-icon="gear" title="Manage Users" href="/cms/user/manage">Manage Users</a>
+                <a data-role="button" data-theme="a" data-icon="gear" title="Site Settings" href="/cms/settings">Site Settings</a>
             <?php endif; ?>
         </nav>
     </div>

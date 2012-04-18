@@ -12,7 +12,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <?php 
-        $this->headLink()->prependStylesheet('http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css')
+        $this->headLink()->prependStylesheet('/cms/assets/css/mobile/jiggly.min.css')
+                         ->prependStylesheet('http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css')
                          ->prependStylesheet("/cms/assets/css/style.css");
         echo $this->headLink();
         $this->headScript()->prependFile("/cms/assets/js/script.js")

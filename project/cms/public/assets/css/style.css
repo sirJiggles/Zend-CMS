@@ -42,8 +42,8 @@ body, button, input, select, textarea { font-family: sans-serif; color: #222; }
  * Also: hot pink! (or customize the background color to match your design)
  */
 
-::-moz-selection { background: #C8E2F6; color: #000; text-shadow: none; }
-::selection { background: #C8E2F6; color: #000; text-shadow: none; }
+::-moz-selection { background: #c21987; color: #fff; text-shadow: none; }
+::selection { background: #c21987; color: #fff; text-shadow: none; }
 
 
 /* =============================================================================
@@ -314,7 +314,7 @@ h1 a{
 
 
 h2{
-    color:#000;
+    color:#c21987;
 }
 
 
@@ -332,11 +332,11 @@ table{
 }
 
 table tr.odd{
-    background-color:#C8E2F6; 
+    background-color:#fddef1; 
 }
 
 table th{
-    background-color:#4596CE;
+    background-color:#f990d2;
     color:#fff;
     padding:10px;
     text-align: left;
@@ -388,7 +388,7 @@ form dl dt{
 form input{
     height:20px;
     width:120px;
-    background-color:#4596CE;
+    background-color:#f990d2;
     float:left;
     font-size: 16px;
     padding-left:10px;
@@ -397,7 +397,7 @@ form input{
 }
 
 form input:focus{
-    background-color:#4596CE;
+    background-color:#f990d2;
     color:#fff;
 }
 
@@ -415,7 +415,7 @@ form select{
     font-size: 16px;
     padding-left:10px;
     height:30px;
-    color: #4596CE;
+    color: #f990d2;
     width:150px;
 }
 

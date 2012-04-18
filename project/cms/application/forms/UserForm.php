@@ -85,7 +85,8 @@ class Application_Form_UserForm extends Zend_Form
                 ->addMultiOption('admin', 'Admin')
                 ->setDecorators($customDecorators)
                 ->addMultiOption('editor', 'Editor')
-                ->setAttrib('data-native-menu', 'false');
+                ->setAttrib('data-native-menu', 'false')
+                ->setAttrib('data-theme', 'a');
         
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Save');
@@ -102,7 +103,8 @@ class Application_Form_UserForm extends Zend_Form
                     ->addMultiOption('1', 'Yes')
                     ->setDecorators($customDecorators)
                     ->addMultiOption('0', 'No')
-                    ->setAttrib('data-native-menu', 'false');
+                    ->setAttrib('data-native-menu', 'false')
+                    ->setAttrib('data-theme', 'a');
             
             $this->addElements(array($firstName, $lastName, $username, $email, $password, $passwdRepeat, $role, $status, $submit));
         }else{
