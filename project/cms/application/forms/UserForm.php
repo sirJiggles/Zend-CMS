@@ -91,8 +91,7 @@ class Application_Form_UserForm extends Zend_Form
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Save');
         $submit->setValue('Save')
-                ->setAttrib('data-role', 'button')
-                ->setAttrib('data-theme', 'b');
+                ->setAttrib('data-theme', 'a');
         
         // Work out if we are in the edit user location, if so display the staus select box
         if(Zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'edit'){

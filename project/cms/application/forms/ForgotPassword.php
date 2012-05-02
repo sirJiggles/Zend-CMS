@@ -40,8 +40,7 @@ class Application_Form_ForgotPassword extends Zend_Form
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Request');
         $submit->setValue('Request new password')
-                ->setAttrib('data-role', 'button')
-                ->setAttrib('data-theme', 'b');
+                ->setAttrib('data-theme', 'a');
         
         $this->addElements(array($email, $submit));
 

@@ -42,8 +42,8 @@ body, button, input, select, textarea { font-family: sans-serif; color: #222; }
  * Also: hot pink! (or customize the background color to match your design)
  */
 
-::-moz-selection { background: #c21987; color: #fff; text-shadow: none; }
-::selection { background: #c21987; color: #fff; text-shadow: none; }
+::-moz-selection { background: #fff; color: #000; text-shadow: none; }
+::selection { background: #fff; color: #000; text-shadow: none; }
 
 
 /* =============================================================================
@@ -233,7 +233,7 @@ td { vertical-align: top; }
     margin-top: 10px; 
     padding: 10px;
     float:left;
-    background-color:yellowgreen;
+    background-color:#22B98F;
     color:white;
     width:350px;
 }
@@ -274,8 +274,12 @@ body{
 #content #center-container{
     margin:0px auto;
     text-align:left;
-    width:340px;
+    width:325px;
     padding:0px;
+}
+
+#content #center-container.login{
+    width:285px;
 }
 
 /*================ Header ===============*/
@@ -306,7 +310,6 @@ h1{
 }
 
 h1 a{
-   color:#fff !important;
    text-decoration: none;
    outline:none;
    font-size:20px;
@@ -314,17 +317,9 @@ h1 a{
 
 
 h2{
-    color:#c21987;
+    color:#a5eeda;
 }
 
-
-/*================ Stles for system buttons==============*/
-a.button{
-    color:#fff;
-}
-a.button:hover{
-    color:#fff;
-}
 
 /*================ Styles for the system tables=========*/
 table{
@@ -332,11 +327,15 @@ table{
 }
 
 table tr.odd{
-    background-color:#fddef1; 
+    background-color:#fff; 
+}
+
+table tr{
+    background-color:#d0f6ec;
 }
 
 table th{
-    background-color:#f990d2;
+    background-color:#22b98f;
     color:#fff;
     padding:10px;
     text-align: left;
@@ -346,6 +345,7 @@ table td{
     padding:10px 10px;
     white-space: normal;
     word-break: break-all;
+    color:#000;
     
 }
 
@@ -358,7 +358,11 @@ table td a{
 form{
     float:left;
     display:block;
-    width:335px;
+    width:320px;
+}
+
+form.login{
+    width:265px;
 }
 
 form div.item-wrapper{
@@ -376,7 +380,7 @@ form dl dd{
     display:block;
     float:right;
     margin:0px;
-    width:180px
+    width:170px
 }
 
 form dl dt{
@@ -388,24 +392,24 @@ form dl dt{
 form input{
     height:20px;
     width:120px;
-    background-color:#f990d2;
+    background-color:#fff!important;
     float:left;
     font-size: 16px;
     padding-left:10px;
     border: none;
-    color: #fff;
+    color:#000 !important;
 }
 
 form input:focus{
-    background-color:#f990d2;
-    color:#fff;
+    background-color:#fff;
+    color:#000;
 }
 
 form label{
     float:left;
     padding-top:7px;
     margin-right:10px;
-    color: #000;
+    color: #eee;
     height:30px;
 }
 

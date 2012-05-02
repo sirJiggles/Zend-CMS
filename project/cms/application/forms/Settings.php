@@ -38,8 +38,7 @@ class Application_Form_Settings extends Zend_Form
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Save');
         $submit->setValue('Save')
-                ->setAttrib('data-role', 'button')
-                ->setAttrib('data-theme', 'b');
+                ->setAttrib('data-theme', 'a');
 
         $this->addElements(array($theme, $submit));
   

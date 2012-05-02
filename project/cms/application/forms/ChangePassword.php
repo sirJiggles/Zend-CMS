@@ -54,8 +54,7 @@ class Application_Form_ChangePassword extends Zend_Form
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Request');
         $submit->setValue('Request new password')
-                ->setAttrib('data-role', 'button')
-                ->setAttrib('data-theme', 'b');
+                ->setAttrib('data-theme', 'a');
         
         $this->addElements(array($password, $passwdRepeat, $hash, $submit));
 
