@@ -22,7 +22,7 @@ class Access_Config extends Zend_Acl {
         $roles = array('admin', 'editor');
 
         // List of the controllers we are going to allocate
-        $controllers = array('user', 'index', 'error', 'settings');
+        $controllers = array('user', 'index', 'error', 'settings', 'api');
         
         // Loop through the rolse and controllers and add them to the system
         foreach ($roles as $role) {
@@ -41,6 +41,12 @@ class Access_Config extends Zend_Acl {
         $this->deny('editor', 'user', 'edit');
         $this->deny('editor', 'user', 'remove');
         $this->deny('editor', 'user', 'remove-confirm');
+        $this->deny('editor', 'user', 'add');
+        $this->deny('editor', 'api', 'manage');
+        $this->deny('editor', 'api', 'edit');
+        $this->deny('editor', 'api', 'remove');
+        $this->deny('editor', 'api', 'remove-confirm');
+        $this->deny('editor', 'api', 'add');
         $this->deny('editor', 'settings', 'index');
         
         //$this->deny('editor', 'admin'); // ... except the admin controller.

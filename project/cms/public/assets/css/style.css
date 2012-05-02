@@ -220,7 +220,7 @@ td { vertical-align: top; }
 #flash-mssg-container{
     margin:0px auto;
     text-align:left;
-    width:340px;
+    width:200px;
     padding:0px;
 }
 
@@ -235,7 +235,7 @@ td { vertical-align: top; }
     float:left;
     background-color:#22B98F;
     color:white;
-    width:350px;
+    width:200px;
 }
 
 .ui-icon{

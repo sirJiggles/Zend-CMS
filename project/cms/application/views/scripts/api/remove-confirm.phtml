@@ -1,0 +1,5 @@
+<h2>Remove API User Confirm</h2>
+
+<p>Are you sure you wish to remove <?php echo $this->user->ref; ?> from the system?</p>
+<a data-role="button" data-theme="a" data-icon="check" href="/cms/api/remove/id/<?php echo $this->user->id; ?>" title="Yes remove user">Yes</a>
+<a data-role="button" data-theme="a" href="/cms/api/manage" data-icon="delete" title="No, do not remove">No</a>

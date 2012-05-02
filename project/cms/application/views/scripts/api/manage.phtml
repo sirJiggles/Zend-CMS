@@ -1,0 +1,36 @@
+
+<h2>API Users</h2>
+<p><a href="/cms/api/add" data-role="button" data-theme="a" data-icon="plus">Add API User</a></p>
+
+<?php if ($this->users): ?>
+<!-- This is the table that contains all the api users in the system -->
+<table>
+    
+    <thead>
+        <th>Ref</th>
+        <th>Key</th>
+        <th>Access</th>
+        <th style="text-align:center;">Edit</th>
+        <th style="text-align:center;">Remove</th>
+    </thead>
+    
+    <tbody>
+        <!--display all of the users and the links to edit the buggers-->
+        <?php $i = 0; ?>
+        <?php foreach($this->users as $user): ?>
+            <tr <?php echo ($i %2 ) ? 'class="odd"' : ''; ?> >
+                
+                <td><?php echo $user->ref; ?></td>
+                <td><?php echo $user->key; ?></td>
+                <td><?php echo ($user->type == 1) ? 'Admin' : 'Public'; ?></td>
+                <td style="width:10%;"><a data-role="button" data-theme="a" data-icon="gear" href="/cms/api/edit/id/<?php echo $user->id; ?>" title="Edit <?php echo $user->ref; ?>">Edit</a></td>
+                <td style="width:10%;"><a data-role="button" data-theme="a" data-rel="dialog" data-icon="minus" id="<?php echo $user->id; ?>" href="/cms/api/remove-confirm/id/<?php echo $user->id; ?>" title="Remove <?php echo $user->ref; ?>">Remove</a></td>
+            </tr>
+            <?php $i ++; ?>
+        <?php endforeach; ?>
+    </tbody>
+    
+    
+    
+</table>
+<?php endif; ?>
