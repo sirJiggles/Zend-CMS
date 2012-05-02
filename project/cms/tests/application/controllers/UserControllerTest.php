@@ -122,9 +122,6 @@ class UserControllerTest extends ControllerTestCase
         $this->dispatch('/user/add');
         $this->assertAction('add');
         
-        $this->assertQueryContentContains('#debug-one', 'the post is set');
-        $this->assertQueryContentContains('#debug-two', 'the form is valid');
-        exit('here');
         // Assert that we are redirected to the user manage screen, thus added
         $this->assertRedirectTo('/user/manage');
         
