@@ -246,10 +246,8 @@ class UserController extends Cms_Controllers_Default
         
         // Add the user based on the form post
         if ($this->getRequest()->isPost()){
-
             // Check if the form data is valid
             if ($userForm->isValid($_POST)) { 
-             
                 // Run the add user function at the api
                 $addAction = $this->postToApi('/user', 'add', $userForm->getValues());
  

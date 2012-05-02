@@ -35,6 +35,7 @@ class UserControllerTest extends ControllerTestCase
         $this->assertTrue(true);
         $this->dispatch('/user');
         $this->assertRedirect('/user/manage');
+        
     }
     
     // Check there is the correct form on the login page
@@ -121,8 +122,13 @@ class UserControllerTest extends ControllerTestCase
         $this->dispatch('/user/add');
         $this->assertAction('add');
         
+        $this->assertQueryContentContains('#debug-one', 'the post is set');
+        $this->assertQueryContentContains('#debug-two', 'the form is valid');
+        exit('here');
         // Assert that we are redirected to the user manage screen, thus added
         $this->assertRedirectTo('/user/manage');
+        
+        
     }
     
     // Test required inpts for the add / edit user form

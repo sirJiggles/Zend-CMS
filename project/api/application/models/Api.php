@@ -15,6 +15,20 @@ class Application_Model_Api extends Zend_Db_Table{
     
     protected $_name = 'api';
     
+    // We need this to make our test cases work as it includes this model
+    // and there is a model in the cms with the same name
+    public function getApiKey(){
+        try {
+            
+            $select = $this->select()->where('id = 1');
+            $row = $this->fetchRow($select);
+            return $row->key;
+            
+        }catch (Exception $e) {
+            echo 'Unable to get settings in Settings model: '.$e->getMessage();
+        }
+    }
+    
     /*
      * Get all of the api keys form the database
      */
@@ -91,28 +105,6 @@ class Application_Model_Api extends Zend_Db_Table{
         }
     }
     
-    /*
-     * This is the function to get api users by the key
-     * 
-     * @param string $key
-     * @return object Zend_Db_Table_Row 
-     */
-    public function getUserByKey($key){
-        try {
-            $selectStatememt = $this->select()
-                                    ->where('key = ?', $key);
-            $row = $this->fetchRow($selectStatememt);
-            
-            if ($row->id != 1){
-                return $row;
-            }else{
-                return false;
-            }
-            
-        } catch (Exception $e) {
-            echo 'Unable to getUserByKey in API model: '.$e->getMessage();
-        }
-    }
     
     /*
      * This is the function to remove api users from the system

@@ -66,11 +66,6 @@ class ApiController extends Api_Default
             if ($this->getRequest()->getParam('ref')){
                 $data = $this->_apiModel->getUserByRef($this->getRequest()->getParam('ref')); 
             }
-            
-            // Get api user by key
-            if ($this->getRequest()->getParam('apikey')){
-                $data = $this->_apiModel->getUserByKey($this->getRequest()->getParam('apikey')); 
-            }
 
             $this->returnData($data);
             
