@@ -105,7 +105,7 @@ class ApiControllerTest extends ControllerTestCase
     public function testRefTakenAdd(){
         
         $fakeDetails = $this->_getUserFormSampleData();
-        $fakeDetails['ref'] = 'apitestref';
+        $fakeDetails['key'] = 'thisshouldnotbegone';
        
         $this->request->setMethod('POST')
              ->setPost($fakeDetails);
@@ -122,7 +122,7 @@ class ApiControllerTest extends ControllerTestCase
      */
     public function testKeyTakenAdd(){
         $fakeDetails = $this->_getUserFormSampleData();
-        $fakeDetails['key'] = 'apiTestKey2jn';
+        $fakeDetails['key'] = 'thisshouldnotbegone';
         
         $this->request->setMethod('POST')
              ->setPost($fakeDetails);
