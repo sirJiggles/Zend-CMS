@@ -18,22 +18,11 @@ class Application_Form_ChangePassword extends Zend_Form
     {
         $this->setAttrib('class', 'user');
         $this->setAttrib('id', 'changePassword');
-        
-        $customDecorators = array(
-                            'ViewHelper',
-                            'Description',
-                            'Errors',
-                            array(array('Input' => 'HtmlTag'), array('tag' => 'dd')),
-                            array('Label', array('tag' => 'dt')),
-                            array(array('row' => 'HtmlTag'), 
-                                  array('tag' => 'div', 'class' => 'item-wrapper')));
-        
 
         // Password input field
         $password = new Zend_Form_Element_Password('password');
         $password->addErrorMessage('Password is required')
                 ->addFilter(new Zend_Filter_HtmlEntities())
-                ->setDecorators($customDecorators)
                 ->addValidator('Identical', FALSE, array('token' => 'password_repeat'))
                 ->setLabel('Password');
         
@@ -41,7 +30,6 @@ class Application_Form_ChangePassword extends Zend_Form
         $passwdRepeat = new Zend_Form_Element_Password('password_repeat');
         $passwdRepeat->addErrorMessage('Passwords don\'t match')
                 ->addValidator('Identical', FALSE, array('token' => 'password'))
-                ->setDecorators($customDecorators)
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->setLabel('Reapeat Password');
         
@@ -54,7 +42,8 @@ class Application_Form_ChangePassword extends Zend_Form
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Request');
         $submit->setValue('Request new password')
-                ->setAttrib('data-theme', 'a');
+                ->setAttrib('data-theme', 'e')
+                ->setAttrib('class', 'submit');
         
         $this->addElements(array($password, $passwdRepeat, $hash, $submit));
 

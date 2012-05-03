@@ -15,13 +15,6 @@ class Application_Form_ApiForm extends Zend_Form
     
     public function init()
     {
-        $customDecorators = array(
-                                'ViewHelper',
-                                'Description',
-                                'Errors',
-                                array(array('Input' => 'HtmlTag'), array('tag' => 'dd')),
-                                array('Label', array('tag' => 'dt')),
-                                array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'item-wrapper')));
        
         $this->setAttrib('class', 'user');
         $this->setAttrib('id', 'apiForm');
@@ -32,7 +25,6 @@ class Application_Form_ApiForm extends Zend_Form
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->setRequired(true)
                 ->addErrorMessage('Ref is required')
-                ->setDecorators($customDecorators)
                 ->setLabel('Ref:');
         
         // Key input field
@@ -41,14 +33,12 @@ class Application_Form_ApiForm extends Zend_Form
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->setRequired(true)
                 ->addErrorMessage('Key is required')
-                ->setDecorators($customDecorators)
                 ->setLabel('Key:');
         
         // Type input field
         $type = new Zend_Form_Element_Select('type');
         $type->setLabel('Type of access:')
                 ->addMultiOption('2', 'Public')
-                ->setDecorators($customDecorators)
                 ->addMultiOption('1', 'Admin')
                 ->setAttrib('data-native-menu', 'false')
                 ->setAttrib('data-theme', 'a');
@@ -57,7 +47,8 @@ class Application_Form_ApiForm extends Zend_Form
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Save');
         $submit->setValue('Save')
-                ->setAttrib('data-theme', 'a');
+                ->setAttrib('data-theme', 'e')
+                ->setAttrib('class', 'submit');
         
         
         $this->addElements(array($ref, $key, $type, $submit));

@@ -18,15 +18,6 @@ class Application_Form_ForgotPassword extends Zend_Form
     {
         $this->setAttrib('class', 'user');
         $this->setAttrib('id', 'forgotPassword');
-        
-        $customDecorators = array(
-                            'ViewHelper',
-                            'Description',
-                            'Errors',
-                            array(array('Input' => 'HtmlTag'), array('tag' => 'dd')),
-                            array('Label', array('tag' => 'dt')),
-                            array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'item-wrapper')));
-        
 
         // Email input field
         $email = new Zend_Form_Element_Text('email');
@@ -34,13 +25,13 @@ class Application_Form_ForgotPassword extends Zend_Form
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->addValidator(new Zend_Validate_EmailAddress())
                 ->addErrorMessage('Email Address is required')
-                ->setDecorators($customDecorators)
                 ->setLabel('Email address:');
         
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Request');
         $submit->setValue('Request new password')
-                ->setAttrib('data-theme', 'a');
+                ->setAttrib('data-theme', 'e')
+                ->setAttrib('class', 'submit');
         
         $this->addElements(array($email, $submit));
 

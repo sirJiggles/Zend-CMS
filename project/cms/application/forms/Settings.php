@@ -15,14 +15,7 @@ class Application_Form_Settings extends Zend_Form
     
     public function init()
     {
-        $customDecorators = array(
-                                'ViewHelper',
-                                'Description',
-                                'Errors',
-                                array(array('Input' => 'HtmlTag'), array('tag' => 'dd')),
-                                array('Label', array('tag' => 'dt')),
-                                array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'item-wrapper')));
-       
+      
         $this->setAttrib('class', 'user');
         $this->setAttrib('id', 'settingsForm');
         
@@ -32,13 +25,13 @@ class Application_Form_Settings extends Zend_Form
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->setRequired(true)
                 ->addErrorMessage('A theme is required')
-                ->setDecorators($customDecorators)
                 ->setLabel('Theme Folder Name:');
 
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Save');
         $submit->setValue('Save')
-                ->setAttrib('data-theme', 'a');
+                ->setAttrib('data-theme', 'e')
+                ->setAttrib('class', 'submit');
 
         $this->addElements(array($theme, $submit));
   

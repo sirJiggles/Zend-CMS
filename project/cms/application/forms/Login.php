@@ -19,22 +19,12 @@ class Application_Form_Login extends Zend_Form
         $this->setAttrib('class', 'login');
         $this->setAttrib('id', 'loginForm');
         
-        $customDecorators = array(
-                            'ViewHelper',
-                            'Description',
-                            'Errors',
-                            array(array('Input' => 'HtmlTag'), array('tag' => 'dd')),
-                            array('Label', array('tag' => 'dt')),
-                            array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'item-wrapper')));
-        
-        
         // Username input field
         $username = new Zend_Form_Element_Text('username');
         $username->addFilter('StringTrim')
                 ->setRequired(true)
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->addErrorMessage('Username is required')
-                ->setDecorators($customDecorators)
                 ->setLabel('Username:');
         
         // Password input field
@@ -42,7 +32,6 @@ class Application_Form_Login extends Zend_Form
         $password->setRequired(true)
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->addErrorMessage('Password is required')
-                ->setDecorators($customDecorators)
                 ->setLabel('Password:');
         
         $action = new Zend_Form_Element_Hidden('action');
@@ -51,7 +40,8 @@ class Application_Form_Login extends Zend_Form
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Login');
         $submit->setValue('Login')
-                ->setAttrib('data-theme', 'a');
+                ->setAttrib('data-theme', 'e')
+                ->setAttrib('class', 'submit');
         
         $this->addElements(array($username, $password, $submit, $action));
 

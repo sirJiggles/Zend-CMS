@@ -33,6 +33,12 @@ class SettingsController extends Cms_Controllers_Default
         
         $form = new Application_Form_Settings();
         $form->setMethod('post');
+        $form->setElementDecorators($this->_formDecorators);
+            
+        // Set the active values
+        if ($this->_isMobile){
+            $form->getElement('theme_path')->setAttrib('placeholder', 'Theme path');
+        }
 
         if ($this->getRequest()->isPost()){
 

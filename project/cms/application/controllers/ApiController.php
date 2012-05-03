@@ -79,8 +79,11 @@ class ApiController extends Cms_Controllers_Default
         }
         $user = $this->getFromApi('/api/'.$userID);
        
-        
-        $this->_helper->layout->setLayout('dialog');
+        if ($this->_isMobile){
+            $this->_helper->layout->setLayout('dialog-mobile');
+        }else{
+            $this->_helper->layout->setLayout('dialog');
+        }
 
         if ($user){
             $this->view->user = $user;
@@ -141,6 +144,13 @@ class ApiController extends Cms_Controllers_Default
         // Get an instance of our api form for adding the users
         $apiForm = new Application_Form_ApiForm();
         $apiForm->setMethod('post');
+        $apiForm->setElementDecorators($this->_formDecorators);
+            
+        // Set the active values
+        if ($this->_isMobile){
+            $apiForm->getElement('key')->setAttrib('placeholder', 'Api Key');
+            $apiForm->getElement('ref')->setAttrib('placeholder', 'Api Ref');
+        }
         
         $this->view->apiForm = $apiForm;
         
@@ -206,6 +216,13 @@ class ApiController extends Cms_Controllers_Default
             $apiForm = new Application_Form_ApiForm();
             $apiForm->setAction('/cms/api/edit/id/'.$userID);
             $apiForm->setMethod('post');
+            $apiForm->setElementDecorators($this->_formDecorators);
+            
+            // Set the active values
+            if ($this->_isMobile){
+                $apiForm->getElement('key')->setAttrib('placeholder', 'Api Key');
+                $apiForm->getElement('ref')->setAttrib('placeholder', 'Api Ref');
+            }
             
             // Update the user based on the form post
             if ($this->getRequest()->isPost()){
