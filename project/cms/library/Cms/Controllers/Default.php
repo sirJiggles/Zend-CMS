@@ -41,46 +41,11 @@ class Cms_Controllers_Default extends Zend_Controller_Action
         // Create the Zend Rest Client 
         $this->_client = new Zend_Rest_Client($apiUrl);
         
-        $this->_isMobile = false;
-        
-        // Here we set the global "is mobile" flag its just based on mobile browsers
-        $mobileBrowsers = array(
-            'Android\sWebkit\sBrowser',
-            'BlackBerry',
-            'Blazer',
-            'Bolt',
-            'Browser\sfor\sS60',
-            'Doris',
-            'Dorothy',
-            'Fennec',
-            'Go\sBrowser',
-            'IE\sMobile',
-            'Iris',
-            'Maemo\sBrowser',
-            'MIB',
-            'Minimo',
-            'NetFront',
-            'Opera\sMini',
-            'Opera\sMobile',
-            'SEMC-Browser',
-            'Skyfire',
-            'TeaShark',
-            'Teleca-Obigo',
-            'uZard\sWeb', 
-        );
-        
-        $userAgentString = $_SERVER['HTTP_USER_AGENT'];
-        
-        foreach($mobileBrowsers as $browser){
-            //Run a regular expression to try match the name of the browser
-            preg_match('/'.$browser.'/i', $userAgentString, $match);
-            if (isset($match[0][0]) && $match[0][0] != ''){
-                $this->_isMobile = true;
-                break;
-            }
+        // Check if mobile
+        if (preg_match('/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|iemobile|iphone|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|philips|phone|sagem|sharp|sie-|smartphone|sony|symbian|t-mobile|telus|up\.browser|up\.link|vodafone|wap|webos|wireless|xda|xoom|zte)/i', $_SERVER['HTTP_USER_AGENT'])){
+            $this->_isMobile = true;
         }
         
-
     }
     
     
