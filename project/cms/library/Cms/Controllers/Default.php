@@ -17,7 +17,7 @@ class Cms_Controllers_Default extends Zend_Controller_Action
     protected $_client = '';
     protected $_apiKey = '';
     
-    public $_isMobile = false;
+    protected $_isMobile = '';
     
     public function init(){
         
@@ -41,6 +41,7 @@ class Cms_Controllers_Default extends Zend_Controller_Action
         // Create the Zend Rest Client 
         $this->_client = new Zend_Rest_Client($apiUrl);
         
+        $this->_isMobile = false;
         
         // Here we set the global "is mobile" flag its just based on mobile browsers
         $mobileBrowsers = array(
@@ -69,8 +70,6 @@ class Cms_Controllers_Default extends Zend_Controller_Action
         );
         
         $userAgentString = $_SERVER['HTTP_USER_AGENT'];
-        
-        $userAgentString = 'Maemo Browser';
         
         foreach($mobileBrowsers as $browser){
             //Run a regular expression to try match the name of the browser

@@ -18,7 +18,8 @@ class IndexController extends Cms_Controllers_Default
 
     public function init()
     {
-        /* Initialize action controller here */
+        parent::init();
+        
     }
     
     
@@ -30,7 +31,7 @@ class IndexController extends Cms_Controllers_Default
         // Show any flash messages
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
         
-        
+        $this->view->isMobile = $this->_isMobile;
     }
 
 
