@@ -17,6 +17,8 @@ class Cms_Controllers_Default extends Zend_Controller_Action
     protected $_client = '';
     protected $_apiKey = '';
     
+    public $_isMobile = false;
+    
     public function init(){
         
         // Get the system API key from the API model 
@@ -38,6 +40,48 @@ class Cms_Controllers_Default extends Zend_Controller_Action
         
         // Create the Zend Rest Client 
         $this->_client = new Zend_Rest_Client($apiUrl);
+        
+        
+        // Here we set the global "is mobile" flag its just based on mobile browsers
+        $mobileBrowsers = array(
+            'Android\sWebkit\sBrowser',
+            'BlackBerry',
+            'Blazer',
+            'Bolt',
+            'Browser\sfor\sS60',
+            'Doris',
+            'Dorothy',
+            'Fennec',
+            'Go\sBrowser',
+            'IE\sMobile',
+            'Iris',
+            'Maemo\sBrowser',
+            'MIB',
+            'Minimo',
+            'NetFront',
+            'Opera\sMini',
+            'Opera\sMobile',
+            'SEMC-Browser',
+            'Skyfire',
+            'TeaShark',
+            'Teleca-Obigo',
+            'uZard\sWeb', 
+        );
+        
+        $userAgentString = $_SERVER['HTTP_USER_AGENT'];
+        
+        $userAgentString = 'Maemo Browser';
+        
+        foreach($mobileBrowsers as $browser){
+            //Run a regular expression to try match the name of the browser
+            preg_match('/'.$browser.'/i', $userAgentString, $match);
+            if (isset($match[0][0]) && $match[0][0] != ''){
+                $this->_isMobile = true;
+                break;
+            }
+        }
+        
+
     }
     
     

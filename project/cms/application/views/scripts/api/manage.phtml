@@ -9,7 +9,6 @@
     <thead>
         <th>Ref</th>
         <th>Key</th>
-        <th>Access</th>
         <th style="text-align:center;">Edit</th>
         <th style="text-align:center;">Remove</th>
     </thead>
@@ -22,9 +21,8 @@
                 
                 <td><?php echo $user->ref; ?></td>
                 <td><?php echo $user->key; ?></td>
-                <td><?php echo ($user->type == 1) ? 'Admin' : 'Public'; ?></td>
-                <td style="width:10%;"><a data-role="button" data-theme="a" data-icon="gear" href="/cms/api/edit/id/<?php echo $user->id; ?>" title="Edit <?php echo $user->ref; ?>">Edit</a></td>
-                <td style="width:10%;"><a data-role="button" data-theme="a" data-rel="dialog" data-icon="minus" id="<?php echo $user->id; ?>" href="/cms/api/remove-confirm/id/<?php echo $user->id; ?>" title="Remove <?php echo $user->ref; ?>">Remove</a></td>
+                <td class="center"><a data-role="button" data-iconpos="notext" data-theme="a" data-icon="gear" href="/cms/api/edit/id/<?php echo $user->id; ?>" title="Edit <?php echo $user->ref; ?>"></a></td>
+                <td class="center"><a data-role="button" data-iconpos="notext" data-theme="a" data-rel="dialog" data-icon="delete" id="<?php echo $user->id; ?>" href="/cms/api/remove-confirm/id/<?php echo $user->id; ?>" title="Remove <?php echo $user->ref; ?>"></a></td>
             </tr>
             <?php $i ++; ?>
         <?php endforeach; ?>

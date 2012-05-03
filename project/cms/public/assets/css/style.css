@@ -224,6 +224,8 @@ td { vertical-align: top; }
     padding:0px;
 }
 
+/*============== OVERRIDING JQUERYMOBILE============*/
+
 .ui-state-highlight p{
     margin:0px;
     font-size:16px;
@@ -261,6 +263,14 @@ ul.errors{
     margin-bottom:10px;
 }
 
+.ui-btn-icon-notext {
+    width: 40px !important;
+    height: 30px !important;
+}
+
+.ui-btn-icon-notext .ui-btn-inner {
+    padding: 5px 5px 2px 11px !important;
+}
 body{
     padding:20px;
     
@@ -286,6 +296,7 @@ body{
 header #left-side{
     float:left;
     margin-left:10px;
+    margin-top:10px;
 }
 
 header #left-side a {
@@ -349,6 +360,10 @@ table td{
     
 }
 
+table td.center{
+    padding-left:1.4em;
+}
+
 table td a{
     margin:-5px !important;
 }
@@ -390,7 +405,6 @@ form dl dt{
 }
 
 form input{
-    height:20px;
     width:120px;
     background-color:#fff!important;
     float:left;
