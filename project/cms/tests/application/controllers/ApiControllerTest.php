@@ -59,15 +59,12 @@ class ApiControllerTest extends ControllerTestCase
     
     // Test that we can add a api user to the system as admin correctly
     public function testAddUserCorrect(){
-        
         /* 
          * First we we will remove the test API account from the system
          */
-        $this->_removeTestApiUsers();
-        
         // Spoof the new user details
         $this->request->setMethod('POST')
-             ->setPost($this->_getUserFormSampleData());
+             ->setPost($this->_getUserOneFormData());
         
         // Make sure we are in the right place and have the right things on screen
         $this->dispatch('/api/add');
@@ -77,10 +74,27 @@ class ApiControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/api/manage');
     }
     
+    /*
+     * We need to add a second api user to the system for testing some edit
+     * functionality
+     */
+    public function testAddSecondUser(){
+        $sampleData = $this->_getUserTwoFormData();
+
+        $this->request->setMethod('POST')
+             ->setPost($sampleData);
+        // Make sure we are in the right place and have the right things on screen
+        $this->dispatch('/api/add');
+        $this->assertAction('add');
+        // Assert that we are redirected to the user manage screen, thus added
+        $this->assertRedirectTo('/api/manage'); 
+        
+    }
+
+    
     // Test required inpts for the add / edit user form
     public function testRequiredInputsApiForm(){
-        
-        $sampleData = $this->_getUserFormSampleData();
+        $sampleData = $this->_getUserOneFormData();
         $sampleData['ref'] = '';
         $sampleData['key'] = '';
         
@@ -97,15 +111,15 @@ class ApiControllerTest extends ControllerTestCase
 
     }
     
-    
     /*
      * By the time we get to this test we should have added our test user so now
      * we just need to try and add it again with the same ref and test the error message
      */
     public function testRefTakenAdd(){
         
-        $fakeDetails = $this->_getUserFormSampleData();
-        $fakeDetails['key'] = 'thisshouldnotbegone';
+        $fakeDetails = $this->_getUserOneFormData();
+        $fakeDetails['ref'] = 'apiUserTwo';
+        $fakeDetails['key'] = 'Some random key';
        
         $this->request->setMethod('POST')
              ->setPost($fakeDetails);
@@ -117,18 +131,20 @@ class ApiControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('.ui-state-highlight p', 'That ref is taken, please try again');
     }
     
-    /*
+     /*
      * As above we are now going to test the key taken functionality
      */
     public function testKeyTakenAdd(){
-        $fakeDetails = $this->_getUserFormSampleData();
-        $fakeDetails['key'] = 'thisshouldnotbegone';
         
+        $fakeDetails = $this->_getUserOneFormData();
+        $fakeDetails['key'] = 'userTwoKey';
+        $fakeDetails['ref'] = 'Some random ref';
+       
         $this->request->setMethod('POST')
              ->setPost($fakeDetails);
         
         // Post the data to the following location
-        $this->dispatch('/user/add');
+        $this->dispatch('/api/add');
         $this->assertAction('add');
         
         $this->assertQueryContentContains('.ui-state-highlight p', 'That key is taken, please try again');
@@ -141,16 +157,40 @@ class ApiControllerTest extends ControllerTestCase
      * the api user.
      */
     public function testEditUser(){
-        $sampleData = $this->_getUserFormSampleData();
-        $sampleData['ref'] = 'apitestrefrename';
-        $sampleData['key'] = 'apiTestKey2jnChange';
+        
+        // We have to get the user from the model as we need the id in the uri
+        $testUser = $this->_getTestUserOne();
+        
+        
+        $sampleData = $this->_getUserOneFormData();
+        $sampleData['key'] = 'changeUserOne';
         $sampleData['type'] = 2;
         
         $this->request->setMethod('POST')
              ->setPost($sampleData);
         
+        // Post the data to the following location
+        $this->dispatch('/api/edit/id/'.$testUser->id);
+        $this->assertAction('edit');
+        
+        // Test that taken to manage page (where flash message is displayed)
+        $this->assertRedirectTo('/api/manage');
+        
+        
+        
+    }
+    
+    public function testResetUserOne(){
+        
         // We have to get the user from the model as we need the id in the uri
         $testUser = $this->_getTestUserOne();
+        
+        
+        // Now reset user one details (as we will need them again later)
+        $sampleData = $this->_getUserOneFormData();
+        
+        $this->request->setMethod('POST')
+             ->setPost($sampleData);
         
         // Post the data to the following location
         $this->dispatch('/api/edit/id/'.$testUser->id);
@@ -160,23 +200,6 @@ class ApiControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/api/manage');
     }
     
-    /*
-     * We need to add a second api user to the system for testing some edit
-     * functionality
-     */
-    public function testAddSecondUser(){
-        $sampleData = $this->_getUserFormSampleData();
-        $sampleData['ref'] = 'apitestreftwo';
-        $sampleData['key'] = 'apiTestKey2pn';
-        
-        $this->request->setMethod('POST')
-             ->setPost($sampleData);
-        // Make sure we are in the right place and have the right things on screen
-        $this->dispatch('/api/add');
-        $this->assertAction('add');
-        // Assert that we are redirected to the user manage screen, thus added
-        $this->assertRedirectTo('/api/manage'); 
-    }
     
     /*
     * By the time we get to this test we should have added our test user so now
@@ -184,16 +207,15 @@ class ApiControllerTest extends ControllerTestCase
     */
     public function testRefTakenEdit(){
         
+        // Get second test user object
+        $testUser = $this->_getTestUserTwo();
+        
         // Change the sample data username to be the same as the second test user
-        $sampleData = $this->_getUserFormSampleData();
-        $sampleData['ref'] = 'apitestreftwo';
-        $sampleData['key'] = 'anowforsomethingnew';
+        $sampleData = $this->_getUserTwoFormData();
+        $sampleData['ref'] = 'apiUserOne';
         
         $this->request->setMethod('POST')
              ->setPost($sampleData);
-        
-        // Get first test user object
-        $testUser = $this->_getTestUserOne();
         
         // Post edit to edit the firs test users account, should throw error!
         $this->dispatch('/api/edit/id/'.$testUser->id);
@@ -207,16 +229,16 @@ class ApiControllerTest extends ControllerTestCase
      * Test the email address taken functionality for edit user form
      */
     public function testKeyTakenEdit(){
+        // Get second test user object
+        $testUser = $this->_getTestUserTwo();
+        
         // Change the sample data emaik address to be the same as the second test user
-        $sampleData = $this->_getUserFormSampleData();
-        $sampleData['ref'] = 'andnowforsomethingnew';
-        $sampleData['key'] = 'apiTestKey2pn';
+        $sampleData = $this->_getUserTwoFormData();
+        $sampleData['key'] = 'userOneKey';
         
         $this->request->setMethod('POST')
              ->setPost($sampleData);
         
-        // Get first test user object
-        $testUser = $this->_getTestUserOne();
         
         // Post edit to edit the firs test users account, should throw error!
         $this->dispatch('/api/edit/id/'.$testUser->id);
@@ -245,7 +267,7 @@ class ApiControllerTest extends ControllerTestCase
         
         // Make sure user has not been removed
         $userObject = $this->_getTestUserTwo();
-        $this->assertEquals('apitestreftwo', $userObject->ref, 'User two has been removed for some reason!');
+        $this->assertEquals('apiUserTwo', $userObject->ref, 'User two has been removed for some reason!');
     }
     
     // Test unable to find user to remove by git params
@@ -255,7 +277,7 @@ class ApiControllerTest extends ControllerTestCase
         
         // Make sure user has not been removed
         $userObject = $this->_getTestUserTwo();
-        $this->assertEquals('apitestreftwo', $userObject->ref, 'User two has been removed for some reason!');
+        $this->assertEquals('apiUserTwo', $userObject->ref, 'User two has been removed for some reason!');
     }
     
     
@@ -284,10 +306,13 @@ class ApiControllerTest extends ControllerTestCase
         $userOne = $this->_getTestUserOne();
         $this->dispatch('/api/remove-confirm/id/'.$userOne->id);
         $this->assertResponseCode(200);
+        
+        // Now really remove it
+        $this->_removeTestApiUserOne();
     }
     
     // Test remove user confirm action with incorrect ID
-    public function testRemoveUserConfirmInccorectId(){
+    public function testRemoveUserConfirmIncorrectId(){
         $this->dispatch('/api/remove-confirm/id/999999999999999');
         $this->assertRedirect('/api/manage');
     }
@@ -299,16 +324,11 @@ class ApiControllerTest extends ControllerTestCase
      * and the test user still existed, future test will fail even if correct
      * as you cannot add duplicate users to the system
      */
-    protected function _removeTestApiUsers(){
+    
+    protected function _removeTestApiUserOne(){
         // Remove first test user
-        $userObject = $this->_apiModel->getUserByRef("apitestref");
-        if ($userObject != null){
-            $this->_apiModel->removeUser($userObject->id);
-        }
-        
-        // Remove second test user
-        $userObject = $this->_apiModel->getUserByRef('apitestreftwo');
-        if ($userObject != null){
+        $userObject = $this->_apiModel->getUserByRef("apiUserOne");
+        if (!is_string($userObject)){
             $this->_apiModel->removeUser($userObject->id);
         }
     }
@@ -319,9 +339,11 @@ class ApiControllerTest extends ControllerTestCase
      * @return Zend_Db_Table_Row $userObject
      */
     protected function _getTestUserOne(){
-        $userObject = $this->_apiModel->getUserByRef("apitestref");
-        if ($userObject != null){
+        $userObject = $this->_apiModel->getUserByRef("apiUserOne");
+        if (!is_string($userObject)){
             return $userObject;
+        }else{
+            return null;
         }
     }
     
@@ -331,9 +353,11 @@ class ApiControllerTest extends ControllerTestCase
      * @return Zend_Db_Table_Row $userObject
      */
     protected function _getTestUserTwo(){
-        $userObject = $this->_apiModel->getUserByRef("apitestreftwo");
-        if ($userObject != null){
+        $userObject = $this->_apiModel->getUserByRef("apiUserTwo");
+        if (!is_string($userObject)){
             return $userObject;
+        }else{
+            return null;
         }
     }
     
@@ -343,10 +367,25 @@ class ApiControllerTest extends ControllerTestCase
      * 
      * @return array @sampleData
      */
-    protected function _getUserFormSampleData(){
+    protected function _getUserOneFormData(){
         $sampleData = array(
-            'ref' => 'apitestref',
-            'key' => 'apiTestKey2jn',
+            'ref' => 'apiUserOne',
+            'key' => 'userOneKey',
+            'type' => 1
+        );
+        return $sampleData;
+    }
+    
+    /*
+     * As we use an array of user data to test the edit and add user form 
+     * we can call it from here rather than use it multiple times
+     * 
+     * @return array @sampleData
+     */
+    protected function _getUserTwoFormData(){
+        $sampleData = array(
+            'ref' => 'apiUserTwo',
+            'key' => 'userTwoKey',
             'type' => 1
         );
         return $sampleData;

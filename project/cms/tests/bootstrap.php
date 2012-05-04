@@ -22,7 +22,14 @@ if (!defined('APPLICATION_PATH')){
 
 // Custom variables 
 define('TESTS_PATH', realpath(dirname(__FILE__)));
+
+// Spoof the server name for session data
 $_SERVER['SERVER_NAME'] = 'jiggly.dev';
+
+// Spoof the user agent for the mobile detection
+$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.19 (KHTML, like Gecko) Ubuntu/11.10 Chromium/18.0.1025.142 Chrome/18.0.1025.142 Safari/535.19';
+
+// Set the testing environment URL
 define('APPLICATION_ENV', 'production');
 
 
