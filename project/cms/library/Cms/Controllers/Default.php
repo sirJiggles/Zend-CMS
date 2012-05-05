@@ -25,7 +25,6 @@ class Cms_Controllers_Default extends Zend_Controller_Action
         // Get the system API key from the API model 
         $apiModel = new Application_Model_Api();
         $this->_apiKey = $apiModel->getApiKey();
-        unset($apiModel);
         
         // Have to define the API Urls here as registery values cause phpunit to fail
         switch(APPLICATION_ENV){

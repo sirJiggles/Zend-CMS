@@ -41,6 +41,7 @@ class UserController extends Cms_Controllers_Default
      */
     public function loginAction()
     {
+        
         $this->view->pageTitle = 'Login';
         // Init the tries, if not set set as 0
         $attemptsSession = new Zend_Session_Namespace('attempts');

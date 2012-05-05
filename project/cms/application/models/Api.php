@@ -30,4 +30,8 @@ class Application_Model_Api extends Zend_Db_Table{
         }
     }
     
+    function __destruct(){
+        
+    }
+    
 }

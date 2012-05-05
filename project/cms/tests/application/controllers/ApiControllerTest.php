@@ -26,7 +26,6 @@ class ApiControllerTest extends ControllerTestCase
        parent::setUp();
        // Get an instance of the user controller
        $this->_apiModel = new Application_Model_Api();
-       
     }
     
     // Test that the index page exists
@@ -327,9 +326,9 @@ class ApiControllerTest extends ControllerTestCase
     
     protected function _removeTestApiUserOne(){
         // Remove first test user
-        $userObject = $this->_apiModel->getUserByRef("apiUserOne");
+        $userObject = Application_Model_Api::getUserByRef("apiUserOne");
         if (!is_string($userObject)){
-            $this->_apiModel->removeUser($userObject->id);
+            Application_Model_Api::removeUser($userObject->id);
         }
     }
     
@@ -339,7 +338,7 @@ class ApiControllerTest extends ControllerTestCase
      * @return Zend_Db_Table_Row $userObject
      */
     protected function _getTestUserOne(){
-        $userObject = $this->_apiModel->getUserByRef("apiUserOne");
+        $userObject = Application_Model_Api::getUserByRef("apiUserOne");
         if (!is_string($userObject)){
             return $userObject;
         }else{
@@ -353,7 +352,7 @@ class ApiControllerTest extends ControllerTestCase
      * @return Zend_Db_Table_Row $userObject
      */
     protected function _getTestUserTwo(){
-        $userObject = $this->_apiModel->getUserByRef("apiUserTwo");
+        $userObject = Application_Model_Api::getUserByRef("apiUserTwo");
         if (!is_string($userObject)){
             return $userObject;
         }else{

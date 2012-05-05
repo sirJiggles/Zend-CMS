@@ -23,8 +23,7 @@ if (!defined('APPLICATION_PATH')){
 // Custom variables 
 define('TESTS_PATH', realpath(dirname(__FILE__)));
 
-// Spoof the server name for session data
-//$_SERVER['SERVER_NAME'] = 'jigglycms.com';
+// Spoof the server name so we dont send out emails
 $_SERVER['SERVER_NAME'] = 'jiggly.dev';
 
 // Spoof the user agent for the mobile detection
