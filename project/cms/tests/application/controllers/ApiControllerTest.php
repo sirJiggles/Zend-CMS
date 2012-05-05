@@ -326,9 +326,9 @@ class ApiControllerTest extends ControllerTestCase
     
     protected function _removeTestApiUserOne(){
         // Remove first test user
-        $userObject = Application_Model_Api::getUserByRef("apiUserOne");
+        $userObject = $this->_apiModel->getUserByRef("apiUserOne");
         if (!is_string($userObject)){
-            Application_Model_Api::removeUser($userObject->id);
+            $this->_apiModel->removeUser($userObject->id);
         }
     }
     
@@ -338,7 +338,7 @@ class ApiControllerTest extends ControllerTestCase
      * @return Zend_Db_Table_Row $userObject
      */
     protected function _getTestUserOne(){
-        $userObject = Application_Model_Api::getUserByRef("apiUserOne");
+        $userObject = $this->_apiModel->getUserByRef("apiUserOne");
         if (!is_string($userObject)){
             return $userObject;
         }else{
@@ -352,7 +352,7 @@ class ApiControllerTest extends ControllerTestCase
      * @return Zend_Db_Table_Row $userObject
      */
     protected function _getTestUserTwo(){
-        $userObject = Application_Model_Api::getUserByRef("apiUserTwo");
+        $userObject = $this->_apiModel->getUserByRef("apiUserTwo");
         if (!is_string($userObject)){
             return $userObject;
         }else{

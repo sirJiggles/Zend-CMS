@@ -47,7 +47,7 @@ class Cms_Controllers_Default extends Zend_Controller_Action
             $this->_isMobile = true;
         }
         
-        $this->_isMobile = true;
+        //$this->_isMobile = true;
         
         // Define our form decorators based on the is_Mobile flag
         if (!$this->_isMobile){
