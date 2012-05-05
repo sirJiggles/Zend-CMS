@@ -8,6 +8,9 @@ if ($auth->hasIdentity()){
 ?>
 <header data-role="header" data-add-back-btn="true" id="header">
     
+    <div id="no-markup">
+    <a href="/cms" id="mobile-logo">Jiggly CMS</a>
+    </div>
     <?php 
     if (isset($identity)){
         
@@ -74,11 +77,10 @@ if ($auth->hasIdentity()){
             }
         
         }
- 
+        
         echo $navForm;
     } 
     ?>
-    
     
   
 </header>
