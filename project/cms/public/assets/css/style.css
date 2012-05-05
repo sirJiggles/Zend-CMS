@@ -293,28 +293,17 @@ body{
 }
 
 /*================ Header ===============*/
-header #left-side{
+#header #nav-wrapper{
     float:left;
     margin-left:10px;
     margin-top:10px;
 }
 
-header #left-side a {
+
+#header #nav-wrapper a {
     margin-bottom:10px;
 }
 
-header #right-side{
-    float:right;
-    margin-right:10px;
-    margin-bottom:10px;
-}
-
-header #right-side p{
-    float:left;
-    margin-top:7px;
-    margin-bottom:0px;
-    margin-right:10px;
-}
 /*=============== Headings ==============*/
 h1{
     font-size:20px !important;

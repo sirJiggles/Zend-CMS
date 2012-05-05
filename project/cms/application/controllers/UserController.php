@@ -76,7 +76,7 @@ class UserController extends Cms_Controllers_Default
         
         // If the user has posted the form (and the attempts is les than || == 2
         if ($this->getRequest()->isPost() && $attemptsSession->tries <= 2){
-            	
+            
             // Check if the form data is valid
             if ($form->isValid($_POST)) {
                 
@@ -201,7 +201,7 @@ class UserController extends Cms_Controllers_Default
             
             // Update the user based on the form post
             if ($this->getRequest()->isPost()){
-            
+                
                 // Check if the form data is valid
                 if ($userForm->isValid($_POST)) {
 
@@ -288,6 +288,7 @@ class UserController extends Cms_Controllers_Default
         
         // Add the user based on the form post
         if ($this->getRequest()->isPost()){
+           
             // Check if the form data is valid
             if ($userForm->isValid($_POST)) { 
                 // Run the add user function at the api

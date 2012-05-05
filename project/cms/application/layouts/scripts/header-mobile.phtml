@@ -1,34 +1,84 @@
-<?php $auth = Zend_Auth::getInstance(); ?>
-<?php if ($auth->hasIdentity()): ?>
-<?php $identity = $auth->getIdentity(); ;?>
-<?php endif; ?>
-<header data-role="header" data-add-back-btn="true">
-    <?php /*<h1><?php if($this->pageTitle){echo $this->pageTitle;}else{echo '<a href="/cms" >Jiggly CMS</a>';}?></h1>
-    <?php if ($auth->hasIdentity()): ?>
-    <?php $identity = $auth->getIdentity(); ;?>
-    <div id="right-side">
-        <p>Hello again: <?php echo $identity->first_name .' '. $identity->last_name; ?></p>
-        <a data-role="button" data-theme="a" href="/cms/logout" title="Logout">Logout</a>
-    </div> */?>
-    <?php if (isset($identity)): ?>
-    <div id="left-side">
-        <nav>
-            <a data-role="button" data-icon="home" title="Home" data-theme="a" href="/cms">Home</a>
-            <a data-role="button" data-theme="a" data-icon="plus" title="Add Content" href="/cms/content">Add Content</a>
-            
-            
-            <?php if ($identity->role == 'admin'): ?>
-                <a data-role="button" data-theme="a" data-icon="gear" title="Manage Users" href="/cms/user/manage">Manage Users</a>
-                <a data-role="button" data-theme="a" data-icon="gear" title="Site Settings" href="/cms/settings">Site Settings</a>
-                <a data-role="button" data-theme="a" data-icon="gear" title="API Users" href="/cms/api/manage">API Users</a>
-            <?php endif; ?>
-                
-            <a data-role="button" data-theme="a" href="/cms/logout" title="Logout">Logout</a>
-           
-        </nav>
-    </div>
-    <?php endif; ?>
-    
-    
+<?php
+$auth = Zend_Auth::getInstance();
 
+if ($auth->hasIdentity()){
+    $identity = $auth->getIdentity();
+} 
+
+?>
+<header data-role="header" data-add-back-btn="true" id="header">
+    
+    <?php 
+    if (isset($identity)){
+        
+        $navForm = new Application_Form_MobileNavForm();
+        
+        if ($identity->role == 'admin'){
+            $navForm->getElement('nav')->addMultiOption('user', 'Users');
+            $navForm->getElement('nav')->addMultiOption('settings', 'Settings');
+            $navForm->getElement('nav')->addMultiOption('api', 'Api Users');
+        }
+        
+        // Need an instance of the controller to get acces to this
+        $controller = Zend_Controller_Front::getInstance();
+        
+        $navForm->getElement('nav')->addMultiOption('logout', 'Logout');
+        $navForm->getElement('nav')->setValue($controller->getRequest()->getControllerName());
+  
+
+        // Set decorators for form elements
+        $decorators = array(
+                'ViewHelper',
+                'Description',
+                'Errors',
+                array(array('Input' => 'HtmlTag'), array('tag' => 'dd')));
+        
+        $navForm->setElementDecorators($decorators);
+        
+
+        // Handle the form post
+        if ($controller->getRequest()->isPost()){
+            if ($navForm->isValid($_POST)) {
+                
+                $formValues = $navForm->getValues();
+                $redirect = '';
+                
+                switch ($formValues['nav']){
+                    case 'index':
+                        $redirect = '/cms/';
+                        break;
+                    case 'content':
+                        $redirect = '/cms/content';
+                        break;
+                    case 'user':
+                        $redirect = '/cms/user';
+                        break;
+                    case 'settings':
+                        $redirect = '/cms/settings';
+                        break;
+                    case 'api':
+                        $redirect = '/cms/api';
+                        break;
+                    case 'logout':
+                        $redirect = '/cms/user/logout';
+                        break;
+                    default:
+                        $redirect = '/cms/home';
+                        break;
+                }
+                
+                // Do the redirect to the correct page
+                header('Location: '.$redirect);
+                return;
+                
+            }
+        
+        }
+ 
+        echo $navForm;
+    } 
+    ?>
+    
+    
+  
 </header>

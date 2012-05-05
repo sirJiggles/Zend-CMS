@@ -43,12 +43,15 @@ class Cms_Controllers_Default extends Zend_Controller_Action
         $this->_client = new Zend_Rest_Client($apiUrl);
         
         // Check if mobile
-        if (preg_match('/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|iemobile|iphone|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|philips|phone|sagem|sharp|sie-|smartphone|sony|symbian|t-mobile|telus|up\.browser|up\.link|vodafone|wap|webos|wireless|xda|xoom|zte)/i', $_SERVER['HTTP_USER_AGENT'])){
+        if (preg_match('/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|iemobile|iphone|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|philips|phone|sagem|sharp|sie-|smartphone|sony|symbian|t-mobile|telus|up\.browser|up\.link|vodafone|wap|webos|wireless|xda|xoom|zte)/i', $_SERVER['HTTP_USER_AGENT'])){
             $this->_isMobile = true;
         }
         
+        $this->_isMobile = true;
+        
         // Define our form decorators based on the is_Mobile flag
         if (!$this->_isMobile){
+            $this->view->setScriptPath(APPLICATION_PATH.'/views/desktop/scripts');
             $this->_formDecorators = array(
                 'ViewHelper',
                 'Description',
@@ -57,16 +60,16 @@ class Cms_Controllers_Default extends Zend_Controller_Action
                 array('Label', array('tag' => 'dt')),
                 array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'item-wrapper')));
         }else{
+            
+            $this->_helper->_layout->setLayout('mobile-layout');
+            $this->view->setScriptPath(APPLICATION_PATH.'/views/mobile/scripts');
+            
             $this->_formDecorators = array(
                 'ViewHelper',
                 'Description',
                 'Errors',
                 array(array('Input' => 'HtmlTag'), array('tag' => 'dd')),
                 array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'item-wrapper')));
-        }
-        
-        if ($this->_isMobile){
-            $this->_helper->_layout->setLayout('mobile-layout');
         }
         
     }

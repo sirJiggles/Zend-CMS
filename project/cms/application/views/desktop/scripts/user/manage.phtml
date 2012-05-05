@@ -1,0 +1,38 @@
+
+<h2>Manage Users</h2>
+<p><a href="/cms/user/add" data-role="button" data-theme="a" data-icon="plus">Add User</a></p>
+
+<!-- This is the table that contains all the users in the system -->
+<table >
+    <thead>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email Address</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th style="text-align:center;">Edit</th>
+        <th style="text-align:center;">Remove</th>
+    </thead>
+    
+    <tbody>
+        <!--display all of the users and the links to edit the buggers-->
+        <?php $i = 0; ?>
+        <?php foreach($this->users as $user): ?>
+            <tr <?php echo ($i %2 ) ? 'class="odd"' : ''; ?> >
+                
+                <td><?php echo $user->first_name; ?></td>
+                <td><?php echo $user->last_name; ?></td>
+                <td><?php echo $user->email_address; ?></td>
+                <td><?php echo ucfirst($user->role); ?></td>
+                <td><?php echo ($user->active == 1) ? 'Active' : 'Inactive'; ?></td>
+                
+                <td class="center"><a data-role="button" data-theme="a" data-icon="gear" href="/cms/user/edit/id/<?php echo $user->id; ?>" title="Edit <?php echo $user->first_name .' '. $user->last_name; ?>">Edit</a></td>
+                <td class="center"><a data-role="button" data-theme="a" data-rel="dialog" data-icon="delete" id="<?php echo $user->id; ?>" href="/cms/user/remove-confirm/id/<?php echo $user->id; ?>" title="Remove <?php echo $user->first_name .' '. $user->last_name; ?>">Remove</a></td>
+            </tr>
+            <?php $i ++; ?>
+        <?php endforeach; ?>
+    </tbody>
+    
+    
+    
+</table>
