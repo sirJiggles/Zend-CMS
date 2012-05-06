@@ -31,7 +31,7 @@ $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.19 
 
 // Set the testing environment URL
 define('APPLICATION_ENV', 'production');
-//define('APPLICATION_ENV', 'development');
+///define('APPLICATION_ENV', 'development');
 
 
 // Ensure library/ is on include_path (we will just add all possible zf ones for now as deving on multiple machines)
