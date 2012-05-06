@@ -1,0 +1,6 @@
+<h2>Remove Content Type</h2>
+
+<p>Are you sure you wish to remove <?php echo $this->contentType->name; ?> from the system?</p>
+<p>!!!! Note, removing this content type will remove all content using the content type !!!!</p>
+<a data-role="button" data-theme="a" data-icon="check" href="/cms/datatypes/remove/id/<?php echo $this->contentType->id; ?>" title="Yes remove content type">Yes</a>
+<a data-role="button" data-theme="a" href="/cms/datatypes/" data-icon="delete" title="No, do not remove">No</a>

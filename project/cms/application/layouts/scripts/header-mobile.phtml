@@ -18,7 +18,6 @@ if ($auth->hasIdentity()){
         
         if ($identity->role == 'admin' || $identity->role == 'superadmin'){
             $navForm->getElement('nav')->addMultiOption('user', 'Users');
-            $navForm->getElement('nav')->addMultiOption('settings', 'Settings');
             $navForm->getElement('nav')->addMultiOption('api', 'Api Users');
         }
         
@@ -62,9 +61,6 @@ if ($auth->hasIdentity()){
                         break;
                     case 'user':
                         $redirect = '/cms/user';
-                        break;
-                    case 'settings':
-                        $redirect = '/cms/settings';
                         break;
                     case 'api':
                         $redirect = '/cms/api';

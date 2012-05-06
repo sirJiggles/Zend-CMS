@@ -10,12 +10,11 @@ if ($auth->hasIdentity()){
     <?php if (isset($identity)): ?>
     <nav id="nav-wrapper">
         <a data-role="button" data-icon="home" title="Home" data-theme="a" href="/cms">Home</a>
-        <a data-role="button" data-theme="a" data-icon="plus" title="Add Content" href="/cms/content">Add Content</a>
+        <a data-role="button" data-theme="a" title="Add Content" href="/cms/content">Content</a>
 
 
         <?php if ($identity->role == 'admin' || $identity->role == 'superadmin'): ?>
             <a data-role="button" data-theme="a" data-icon="gear" title="Manage Users" href="/cms/user/manage">Manage Users</a>
-            <a data-role="button" data-theme="a" data-icon="gear" title="Site Settings" href="/cms/settings">Site Settings</a>
             <a data-role="button" data-theme="a" data-icon="gear" title="API Users" href="/cms/api/manage">API Users</a>
         <?php endif; ?>
             

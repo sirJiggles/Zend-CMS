@@ -9,9 +9,8 @@ $(document).ready(function () {
         setInterval(fadeFlashMsg,5000);
         
     }
-
     $.mobile.ajaxEnabled = false;
-    
+
     // Main navigation form submit
     $('select[name="nav"]').change(function(){
         $('#main-nav-form').submit();
