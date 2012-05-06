@@ -33,8 +33,7 @@ class DataTypesControllerTest extends ControllerTestCase
     {
         // We need to be superadmin to get to this page
         $this->loginSuperAdmin();
-        
-        $this->assertTrue(true);
+
         $this->dispatch('/datatypes');
         $this->assertNotRedirect();
         $this->assertController('datatypes');

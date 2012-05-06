@@ -76,7 +76,7 @@ class DatatypesController extends Cms_Controllers_Default
 
                         $this->_helper->flashMessenger->addMessage('That name is taken, please try again');
                         $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
-
+                        $this->_redirect('/datatypes');
                     }
                 }else{
                      // Set the flash message
@@ -137,7 +137,7 @@ class DatatypesController extends Cms_Controllers_Default
 
                             $this->_helper->flashMessenger->addMessage('That name is taken, please try again');
                             $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
-                            $this->_helper->flashMessenger->clearCurrentMessages();
+                            $this->_redirect('/datatypes');
 
                         }
                     }else{
@@ -199,7 +199,7 @@ class DatatypesController extends Cms_Controllers_Default
         if ($contentType){
             $this->view->contentType = $contentType;
         }else{
-            $this->_helper->flashMessenger->addMessage('Unable to content type');
+            $this->_helper->flashMessenger->addMessage('Unable to find content type');
             $this->_redirect('/datatypes');
             return;
         }

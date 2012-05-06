@@ -1,0 +1,6 @@
+<h2>Remove Content Type Field</h2>
+
+<p>Are you sure you wish to remove <?php echo $this->contentTypeField->name; ?> from the system?</p>
+<p>!!!! Note, removing this content type will remove all content using the content type field !!!!</p>
+<a data-role="button" data-theme="a" data-icon="check" href="/cms/datatypefields/remove/id/<?php echo $this->contentTypeField->id; ?>/content-type/<?php echo $this->dataType['id']; ?>" title="Yes remove content type field">Yes</a>
+<a data-role="button" data-theme="a" href="/cms/datatypefields/index/id/<?php echo $this->dataType['id']; ?>" data-icon="delete" title="No, do not remove">No</a>
