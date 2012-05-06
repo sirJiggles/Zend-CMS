@@ -48,7 +48,6 @@ class Access_Config extends Zend_Acl {
         $this->deny('editor', 'api', 'remove');
         $this->deny('editor', 'api', 'remove-confirm');
         $this->deny('editor', 'api', 'add');
-        $this->deny('editor', 'settings', 'index');
         $this->deny('editor', 'datatypes', 'index');
         $this->deny('editor', 'datatypes', 'add');
         $this->deny('editor', 'datatypes', 'edit');
