@@ -19,10 +19,10 @@ class Access_Config extends Zend_Acl {
     public function __construct() {
        
         // List of the roles in the system
-        $roles = array('admin', 'editor');
+        $roles = array('admin', 'editor', 'superadmin');
 
         // List of the controllers we are going to allocate
-        $controllers = array('user', 'index', 'error', 'settings', 'api');
+        $controllers = array('user', 'index', 'error', 'settings', 'api', 'content', 'datatypes');
         
         // Loop through the rolse and controllers and add them to the system
         foreach ($roles as $role) {
@@ -33,10 +33,11 @@ class Access_Config extends Zend_Acl {
         }
 
         // Here comes credential definiton for admin user.
-        $this->allow('admin'); // Has access to everything.
-
+        $this->allow('admin'); // Has access to most things.
+        $this->allow('superadmin'); // Has access to absolutely everything
+        $this->allow('editor'); // Give them all for now ....
+        
         // Here comes credential definition for editor user.
-        $this->allow('editor'); // Has access to everything...
         $this->deny('editor', 'user', 'manage');
         $this->deny('editor', 'user', 'edit');
         $this->deny('editor', 'user', 'remove');
@@ -48,13 +49,19 @@ class Access_Config extends Zend_Acl {
         $this->deny('editor', 'api', 'remove-confirm');
         $this->deny('editor', 'api', 'add');
         $this->deny('editor', 'settings', 'index');
+        $this->deny('editor', 'datatypes', 'index');
+        $this->deny('editor', 'datatypes', 'add');
+        $this->deny('editor', 'datatypes', 'edit');
+        $this->deny('editor', 'datatypes', 'remove');
+        $this->deny('editor', 'datatypes', 'remove-confirm');
         
-        //$this->deny('editor', 'admin'); // ... except the admin controller.
-         
-        //Some examples for later on
-
-        //$this->allow('editor', null, 'list'); 
-        // Has access to all controller list actions.
+        // Here comes the credencial definition for the admin user
+        $this->deny('admin', 'datatypes', 'index');
+        $this->deny('admin', 'datatypes', 'add');
+        $this->deny('admin', 'datatypes', 'edit');
+        $this->deny('admin', 'datatypes', 'remove');
+        $this->deny('admin', 'datatypes', 'remove-confirm');
+        
         
         // Add acl to registery (so we can access from the authPlugin class)
         $registry = Zend_Registry::getInstance();

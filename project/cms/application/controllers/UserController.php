@@ -135,11 +135,23 @@ class UserController extends Cms_Controllers_Default
      */
     public function manageAction(){
         
-        
+
         $this->view->pageTitle = 'Manage Users';
         
         // Get the users form the API
         $users = $this->getFromApi('/user');
+        
+        // Check if they are not superadmins, if not don't show them superadmin accounts
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        if ($identity->role != 'superadmin'){
+            $usersNew = array();
+            foreach ($users as $user){
+                if ($user->role != 'superadmin'){
+                    $usersNew[] = $user;
+                }
+            }
+            $users = $usersNew;
+        }
         
         /*
          * This should NEVER happen, but if there are no users in the system
@@ -169,19 +181,34 @@ class UserController extends Cms_Controllers_Default
         // Get the user buy the user ID parsed
         $userID = $this->getRequest()->getParam('id');
         
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        
         // If the get param was sent and is in the correct format
         if (isset($userID) && is_numeric($userID)){
-            
-           
-            
+
             // Get the user from the API
             $user = $this->getFromApi('/user/'.$userID, 'array');
+            
+            /* 
+             * Check if the user they are trying to edit is a superadmin
+             * if so and the logged in user is only admin redirect them
+             */
+            if($user['role'] == 'superadmin'){
+                if ($identity->role != 'superadmin'){
+                    $this->_redirect('/user/manage');
+                    return;
+                }
+            }
             
             // Get the user form
             $userForm = new Application_Form_UserForm();
             $userForm->setAction('/cms/user/edit/id/'.$userID);
             $userForm->setMethod('post');
             $userForm->setElementDecorators($this->_formDecorators);
+            
+            if ($identity->role == 'superadmin'){
+                $userForm->getElement('role')->addMultiOption('superadmin', 'Superadmin');
+            }
             
             // Set the active values
             if ($this->_isMobile){
@@ -270,6 +297,11 @@ class UserController extends Cms_Controllers_Default
         $userForm->getElement('password')->setRequired(true);
         $userForm->getElement('password_repeat')->setRequired(true);
         $userForm->setElementDecorators($this->_formDecorators);
+        
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        if ($identity->role == 'superadmin'){
+            $userForm->getElement('role')->addMultiOption('superadmin', 'Superadmin');
+        }
         
         // Set the active values
         if ($this->_isMobile){

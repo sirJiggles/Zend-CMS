@@ -118,6 +118,30 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
         $this->assertTrue($auth->hasIdentity());
     }
     
+    /*
+     * This function is the same as the two above we just login as a superadmin
+     * user
+     */
+    public function loginSuperAdmin()
+    {
+        $this->logout();
+        
+        // create a fake identity
+        $identity = new stdClass();
+        $identity->role = 'superadmin';
+        $identity->username = 'gfuller3';
+        $identity->first_name = 'Gareth';
+        $identity->last_name = 'Fuller';
+        $identity->active = 1;
+        
+        // Push our fake identity into the auth storage
+        Zend_Auth::getInstance()->getStorage()->write($identity);
+        
+        // Run a test to make sure we have aithentification
+        $auth = Zend_Auth::getInstance();
+        $this->assertTrue($auth->hasIdentity());
+    }
+    
     public function logout(){
          // Remove any previous fake accounts
         Zend_Auth::getInstance()->getStorage()->clear();

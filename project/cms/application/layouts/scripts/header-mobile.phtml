@@ -16,10 +16,14 @@ if ($auth->hasIdentity()){
         
         $navForm = new Application_Form_MobileNavForm();
         
-        if ($identity->role == 'admin'){
+        if ($identity->role == 'admin' || $identity->role == 'superadmin'){
             $navForm->getElement('nav')->addMultiOption('user', 'Users');
             $navForm->getElement('nav')->addMultiOption('settings', 'Settings');
             $navForm->getElement('nav')->addMultiOption('api', 'Api Users');
+        }
+        
+        if ($identity->role == 'superadmin'){
+            $navForm->getElement('nav')->addMultiOption('datatypes', 'Content Types');
         }
         
         // Need an instance of the controller to get acces to this
@@ -52,6 +56,9 @@ if ($auth->hasIdentity()){
                         break;
                     case 'content':
                         $redirect = '/cms/content';
+                        break;
+                    case 'datatypes':
+                        $redirect = '/cms/datatypes';
                         break;
                     case 'user':
                         $redirect = '/cms/user';

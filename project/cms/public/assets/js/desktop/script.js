@@ -2,6 +2,8 @@
  * Author: Gareth Fuller
  * 
  */
+var contentTypeFormInputIdent = 0;
+
 $(document).ready(function () {
 
     if ($('#flash-mssg-container').length > 0){
@@ -11,6 +13,7 @@ $(document).ready(function () {
     }
 
     $.mobile.ajaxEnabled = false;
+   
    
 })
 

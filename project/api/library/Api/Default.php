@@ -15,7 +15,6 @@ abstract class Api_Default extends Zend_Controller_Action{
     
     protected $_apiUsers = '';
     public $_isAdmin = false;
-   
     
     public function init(){
         // Get instance of the API model
