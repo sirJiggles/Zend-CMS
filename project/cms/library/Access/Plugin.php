@@ -49,6 +49,7 @@ class Access_Plugin extends Zend_Controller_Plugin_Abstract
             $isAllowed = $acl->isAllowed($identity->role,
                                          $currentController,
                                          $currentAction);
+           
             if (!$isAllowed) {
                 $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
                 $redirector->gotoUrl('/error/not-the-droids');

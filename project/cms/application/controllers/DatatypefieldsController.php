@@ -38,7 +38,7 @@ class DatatypefieldsController extends Cms_Controllers_Default
             
             // Get the data type from the API
             $contentType = $this->getFromApi('/datatypes/'.$id, 'array');
-            
+          
             // Send the content type to the view
             $this->view->dataType = $contentType;
             
@@ -61,6 +61,7 @@ class DatatypefieldsController extends Cms_Controllers_Default
             $this->_helper->flashMessenger->addMessage('No Content Type ID Passed');
             $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
             $this->_redirect('/datatypes');
+            return;
         }
         
     }
@@ -121,7 +122,7 @@ class DatatypefieldsController extends Cms_Controllers_Default
                     }
                 }else{
                      // Set the flash message
-                    $this->_helper->flashMessenger->addMessage('Content type field added to the system');
+                    $this->_helper->flashMessenger->addMessage(ucfirst($contentType['name']).' field added to the system');
                     $this->view->messages = $this->_helper->flashMessenger->getMessages();
                     $this->_redirect('/datatypefields/index/id/'.$contentTypeIdent);
                     return;
@@ -197,7 +198,7 @@ class DatatypefieldsController extends Cms_Controllers_Default
 
                         }
                     }else{
-                        $this->_helper->flashMessenger->addMessage('Content Type Field details updated');
+                        $this->_helper->flashMessenger->addMessage(ucfirst($contentType['name']).' field details updated');
                         $this->view->messages = $this->_helper->flashMessenger->getMessages();
                         $this->_redirect('/datatypefields/index/id/'.$contentTypeIdent);
                         return;
@@ -252,7 +253,7 @@ class DatatypefieldsController extends Cms_Controllers_Default
         $id = $this->getRequest()->getParam('id');
         
         if (!$id ){
-            $this->_helper->flashMessenger->addMessage('Unable to find content type field');
+            $this->_helper->flashMessenger->addMessage('Unable to find '.ucfirst($contentType['name']).' field');
             $this->_redirect('/datatypes');
             return;
         }
@@ -268,7 +269,7 @@ class DatatypefieldsController extends Cms_Controllers_Default
         if ($contentTypeField){
             $this->view->contentTypeField = $contentTypeField;
         }else{
-            $this->_helper->flashMessenger->addMessage('Unable to find content type field');
+            $this->_helper->flashMessenger->addMessage('Unable to find '.ucfirst($contentType['name']).' field');
             $this->_redirect('/datatypes');
             return;
         }
@@ -303,10 +304,10 @@ class DatatypefieldsController extends Cms_Controllers_Default
             $removeAction = $this->postToApi('/datatypefields', 'remove', $id);
 
             if ($removeAction == 1){
-                $this->_helper->flashMessenger->addMessage('Content type field removed from the system');
+                $this->_helper->flashMessenger->addMessage(ucfirst($contentType['name']).' field removed from the system');
                
             }else{
-                $this->_helper->flashMessenger->addMessage('Could not find the content type field to remove');
+                $this->_helper->flashMessenger->addMessage('Could not find the '.ucfirst($contentType['name']).' field to remove');
             }
             
             $this->view->messages = $this->_helper->flashMessenger->getMessages();

@@ -64,7 +64,7 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
             return $row;
             
         } catch (Exception $e) {
-            echo 'Unable to getContentTypeByName in DataTypes model: '.$e->getMessage();
+            echo 'Unable to getContentFieldByName in DataTypeFileds model: '.$e->getMessage();
         }
         
     }

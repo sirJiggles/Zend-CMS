@@ -21,19 +21,18 @@ class DataTypesControllerTest extends ControllerTestCase
     protected  $_dataTypesModel;
     
     public function setUp(){
-       // Set the parent up
+       // Set the parent up (disable the admin login)
        parent::setUp();
        // Get an instance of the user controller
        $this->_dataTypesModel = new Application_Model_DataTypes();
+       
+       $this->loginSuperAdmin();
 
     }
     
     // Test that the index page exists
     public function testLandOnIndexPage()
     {
-        // We need to be superadmin to get to this page
-        $this->loginSuperAdmin();
-
         $this->dispatch('/datatypes');
         $this->assertNotRedirect();
         $this->assertController('datatypes');
@@ -84,8 +83,6 @@ class DataTypesControllerTest extends ControllerTestCase
     // Test required inputs
     public function testRequiredInputs(){
         
-        $this->loginSuperAdmin();
-        
         $this->request->setMethod('POST')
             ->setPost(array('name' => ''));
         
@@ -105,7 +102,6 @@ class DataTypesControllerTest extends ControllerTestCase
      */
     public function testNameTakenAdd(){
         
-        $this->loginSuperAdmin();
         
         $this->request->setMethod('POST')
              ->setPost(array('name' => 'TestContentTypeOne'));
@@ -114,7 +110,12 @@ class DataTypesControllerTest extends ControllerTestCase
         $this->dispatch('/datatypes/add');
         $this->assertAction('add');
         
-        $this->assertQueryContentContains('.ui-state-highlight p', 'That name is taken, please try again');
+        $this->assertRedirectTo('/datatypes');
+        
+        // Then lets make sure its not been renamed
+        $contentTypeApi = $this->_dataTypesModel->getContentTypeByName('TestContentTypeOne');
+        $this->assertNotNull($contentTypeApi, 'The item by the original name could not be found name check failing!');
+        
     }
     
     /*
@@ -122,8 +123,6 @@ class DataTypesControllerTest extends ControllerTestCase
      */
     public function testEditUser(){
        
-        $this->loginSuperAdmin();
-        
         $this->request->setMethod('POST')
              ->setPost(array('name' => 'RenameTestContentType'));
         
@@ -141,14 +140,12 @@ class DataTypesControllerTest extends ControllerTestCase
     
     // Test incorrect request to edit content type action
     public function testIncorrectArgsEdit(){
-        $this->loginSuperAdmin();
         $this->dispatch('/datatypes/edit/id/sdasd');
         $this->assertRedirectTo('/datatypes');
     }
     
     // Test content type not found given correct args (hopefully no one will have this id)
     public function testContentTypeNotFoundEdit(){
-        $this->loginSuperAdmin();
         $this->dispatch('/datatypes/edit/id/9999999999999999999999');
         $this->assertRedirectTo('/datatypes');
     }
@@ -156,7 +153,6 @@ class DataTypesControllerTest extends ControllerTestCase
     
     // Test unable to find content type to remove by git params
     public function testCantLocateRemoveUserId(){
-        $this->loginSuperAdmin();
         $this->dispatch('/datatypes/remove/id/9999999999999999999999');
         $this->assertRedirectTo('/datatypes');
         
@@ -168,7 +164,6 @@ class DataTypesControllerTest extends ControllerTestCase
     
     // Here we test that we can remove the test content type
     public function testRemoveContentType(){
-        $this->loginSuperAdmin();
         $contentTypeApi = $this->_dataTypesModel->getContentTypeByName('RenameTestContentType');
         if ($contentTypeApi != null){
             $this->dispatch('/datatypes/remove/id/'.$contentTypeApi->id);

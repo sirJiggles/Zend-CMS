@@ -20,51 +20,27 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
     // We need the model from the api for util functions like get test content types
     protected  $_dataTypeFieldsModel;
     
-    // For most of the tests we need a content type id so we will define it here
-    protected $_contentTypeId = '';
-    
-    // We will need a secon content type to do all the tests so its defined here
-    protected $_secondContentTypeId = '';
-    
     public function setUp(){
-       // Set the parent up
+       // Set the parent up (disable the admin login)
        parent::setUp();
-       // Get an instance of the user controller
+       // Get an instance of the data type fields model
        $this->_dataTypeFieldsModel = new Application_Model_DataTypeFields();
-       
-       // Get the first content type in the system so we can run our tests
-       $contentTypes = $this->_dataTypeFieldsModel->getAllDataTypeFields();
-       
-       // Sanity checking
-       if ($contentTypes == null){
-           exit('we cannot test the content type fields as we have no content types defined!');
-       }
-       
-       // Need two content types at least to do all the correct testing
-       if (!isset($contentTypes[1])){
-           exit('The system needs at least two content types to be tested!');
-       }
 
-       $this->_contentTypeId = $contentTypes[0]->id;
-       $this->_secondContentTypeId = $contentTypes[1]->id;
-
+       $this->loginSuperAdmin();
     }
     
     // This est should redirect the user to datatypes
     public function testNoParamsIndexPage()
     {
-        // We need to be superadmin to get to this page
-        $this->loginSuperAdmin();
-        
         $this->dispatch('/datatypefields');
-        $this->assertRedirect('/datatypes');
-        
+        $this->assertRedirect('/datatypes');        
     }
     
     // Test the index page
     public function testIndexPage(){
-        $this->loginSuperAdmin();
-        $this->dispatch('/datatypefields/index/id/'.$this->_contentTypeId);
+       
+        $this->dispatch('/datatypefields/index/id/1');
+
         $this->assertNotRedirect();
         $this->assertController('datatypefields');
         $this->assertAction('index');
@@ -77,7 +53,7 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
         $this->loginEditor();
         
         // Now we will attempt to access the content types section
-        $this->dispatch('/datatypefields/index/id/'.$this->_contentTypeId);
+        $this->dispatch('/datatypefields/index/id/1');
         $this->assertRedirectTo('/error/not-the-droids');
     }
     
@@ -85,9 +61,8 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
     public function testAdminNoAccess(){
         // Lets first login as an editor
         $this->loginAdmin();
-        
         // Now we will attempt to access the content types section
-        $this->dispatch('/datatypefields/index/id/'.$this->_contentTypeId);
+        $this->dispatch('/datatypefields/index/id/1');
         $this->assertRedirectTo('/error/not-the-droids');
     }
     
@@ -95,33 +70,34 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
     // Test that we can add a content type field to the system
     public function testAddCorrect(){
         
-        $this->loginSuperAdmin();
-        
         // Spoof the new details
         $this->request->setMethod('POST')
              ->setPost(array('name' => 'TestContentTypeField',
                              'format' => 'text',
-                             'content_type' => $this->_contentTypeId));
-        
+                             'content_type' => '1'));
+
         // Make sure we are in the right place and have the right things on screen
-        $this->dispatch('/datatypefields/add/content-type/'.$this->contentTypeId);
+        $this->dispatch('/datatypefields/add/content-type/1');
+        
         $this->assertAction('add');
         
         // Assert that we are redirected to the data type fields manage screen, thus added
-        $this->assertRedirectTo('/datatypefields/index/id/'.$this->_contentTypeId);
+        $this->assertRedirectTo('/datatypefields/index/id/1');
+        
+        
         
     }
     
+    
+    
     // Test required inputs for content type fields
     public function testRequiredInputs(){
-        
-        $this->loginSuperAdmin();
         
         $this->request->setMethod('POST')
             ->setPost(array('name' => ''));
         
         // Post the data to the following location
-        $this->dispatch('/datatypefields/add/content-type/'.$this->_contentTypeId);
+        $this->dispatch('/datatypefields/add/content-type/1');
         $this->assertAction('add');
         
         // Test error message
@@ -136,18 +112,22 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
      */
     public function testNameTakenAdd(){
         
-        $this->loginSuperAdmin();
-        
         $this->request->setMethod('POST')
              ->setPost(array('name' => 'TestContentTypeField',
                              'format' => 'text',
-                             'content_type' => $this->_contentTypeId));
+                             'content_type' => '1'));
+
+        // Make sure we are in the right place and have the right things on screen
+        $this->dispatch('/datatypefields/add/content-type/1');
         
-        // Post the data to the following location
-        $this->dispatch('/datatypefields/add/content-type/'.$this->_contentTypeId);
         $this->assertAction('add');
         
-        $this->assertQueryContentContains('.ui-state-highlight p', 'That name is taken, please try again');
+        $this->assertRedirectTo('/datatypefields/index/id/1');
+        
+        // Then lets make sure its not been renamed
+        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeField', 1);
+        $this->assertNotNull($contentFieldObj, 'The item by the original name could not be found name check failing!');
+ 
     }
     
     /*
@@ -156,20 +136,18 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
      */
     public function testAddSecondCorrect(){
         
-        $this->loginSuperAdmin();
-        
         // Spoof the new details
         $this->request->setMethod('POST')
              ->setPost(array('name' => 'TestContentTypeFieldTwo',
                              'format' => 'text',
-                             'content_type' => $this->_secondContentTypeId));
+                             'content_type' => '2'));
         
         // Make sure we are in the right place and have the right things on screen
-        $this->dispatch('/datatypefields/add/content-type/'.$this->_secondContentTypeId);
+        $this->dispatch('/datatypefields/add/content-type/2');
         $this->assertAction('add');
         
         // Assert that we are redirected to the data type fields manage screen, thus added
-        $this->assertRedirectTo('/datatypefields/index/id/'.$this->_secondContentTypeId);
+        $this->assertRedirectTo('/datatypefields/index/id/2');
         
     }
     
@@ -177,24 +155,23 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
      * Test that we can edit the first content field in the first content type
      */
     public function testEditFirstContentTypeField(){
-        $this->loginSuperAdmin();
-        
         // First we need to know the ID of the content type field we want to edit
-        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeField', $this->__contentTypeId);
+        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeField', 1);
         $contentFieldId = $contentFieldObj->id;
                 
         // Spoof the new details
         $this->request->setMethod('POST')
              ->setPost(array('name' => 'TestContentTypeFieldRename',
                              'format' => 'text',
-                             'content_type' => $this->_contentTypeId));
+                             'content_type' => '1'));
         
         // Make sure we are in the right place and have the right things on screen
-        $this->dispatch('/datatypefields/edit/id/'.$contentFieldId.'/content-type/'.$this->_contentTypeId);
+        $this->dispatch('/datatypefields/edit/id/'.$contentFieldId.'/content-type/1');
+        
         $this->assertAction('edit');
         
         // Assert that we are redirected to the data type fields manage screen, thus edited
-        $this->assertRedirectTo('/datatypefields/index/id'.$this->_contentTypeId);
+        $this->assertRedirectTo('/datatypefields/index/id/1');
     }
     
     /*
@@ -203,24 +180,23 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
      * name if in a different content type
      */
     public function testCanNameFieldSameAsFieldInOtherType(){
-        $this->loginSuperAdmin();
-        
+
         // First we need to know the ID of the content type field we want to edit
-        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldRename', $this->__contentTypeId);
+        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldRename', 1);
         $contentFieldId = $contentFieldObj->id;
         
         // Spoof the new details
         $this->request->setMethod('POST')
              ->setPost(array('name' => 'TestContentTypeFieldTwo',
                              'format' => 'text',
-                             'content_type' => $this->_contentTypeId));
+                             'content_type' => '1'));
         
         // Make sure we are in the right place and have the right things on screen
-        $this->dispatch('/datatypefields/edit/id/'.$contentFieldId.'/content-type/'.$this->_contentTypeId);
+        $this->dispatch('/datatypefields/edit/id/'.$contentFieldId.'/content-type/1');
         $this->assertAction('edit');
         
         // Assert that we are redirected to the data type fields manage screen, thus edited
-        $this->assertRedirectTo('/datatypefields/index/id'.$this->_contentTypeId);
+        $this->assertRedirectTo('/datatypefields/index/id/1');
     }
     
     /*
@@ -232,21 +208,22 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
         $this->request->setMethod('POST')
              ->setPost(array('name' => 'TestContentTypeFieldTwo',
                              'format' => 'text',
-                             'content_type' => $this->_contentTypeId));
+                             'content_type' => '1'));
         
         // Make sure we are in the right place and have the right things on screen
-        $this->dispatch('/datatypefields/add/content-type/'.$this->contentTypeId);
+        $this->dispatch('/datatypefields/add/content-type/1');
         $this->assertAction('add');
         
         // Assert that we are redirected to the data type fields manage screen
-        $this->assertRedirectTo('/datatypefields/index/id/'.$this->_contentTypeId);
+        $this->assertRedirectTo('/datatypefields/index/id/1');
         
         /*
          * Get the items from this content type to make sure there are not
          * now teo with the same name
          */
-        $contentFields = $this->_dataTypeFieldsModel->getDataFieldsForDataType($this->_contentTypeId);
+        $contentFields = $this->_dataTypeFieldsModel->getDataFieldsForDataType(1);
         $duplicateFound = false;
+        $namesFound = array();
         foreach($contentFields as $field){
             if (in_array($field->name, $namesFound)){
                 $duplicateFound = true;
@@ -261,16 +238,14 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
 
     // Test incorrect request to edit content type action
     public function testIncorrectArgsEdit(){
-        $this->loginSuperAdmin();
-        $this->dispatch('/datatypefields/edit/id/sdasd/content-type/'.$this->_contentTypeId);
-        $this->assertRedirectTo('/datatypefields/index/id/'.$this->_contentTypeId);
+        $this->dispatch('/datatypefields/edit/id/sdasd/content-type/1');
+        $this->assertRedirectTo('/datatypes');
     }
     
     // Test the field is not found on edit action
     public function testContentFieldNotFound(){
-        $this->loginSuperAdmin();
-        $this->dispatch('/datatypefields/edit/id/9999999999999999999999/content-type/'.$this->_contentTypeId);
-        $this->assertRedirectTo('/datatypefields/index/id/'.$this->_contentTypeId);
+        $this->dispatch('/datatypefields/edit/id/9999999999999999999999/content-type/1');
+        $this->assertRedirectTo('/datatypes');
     }
     
     /*
@@ -278,8 +253,7 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
      * id but don't pass the content-type id you are redirected
      */
     public function testEditCorrectParamButNoContentType(){
-        $this->loginSuperAdmin();
-        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', $this->_contentTypeId);
+        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', 1);
         $contentFieldId = $contentFieldObj->id;
         
         $this->dispatch('/datatypefields/edit/id/'.$contentFieldId);
@@ -291,7 +265,6 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
      * redirected to the main manage page
      */
     public function testAddCorrectButNoContentType(){
-        $this->loginSuperAdmin();
         $this->dispatch('/datatypefields/add');
         $this->assertRedirectTo('/datatypes');
     }
@@ -299,19 +272,17 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
     
     // Test unable to locate the field for removing the content type field
     public function testCantLocateRemoveUserId(){
-        $this->loginSuperAdmin();
         
-        $this->dispatch('/datatypefields/remove/id/9999999999999999999999/content-type/'.$this->_contentTypeId);
-        $this->assertRedirectTo('/datatypes');
+        $this->dispatch('/datatypefields/remove/id/9999999999999999999999/content-type/1');
+        $this->assertRedirectTo('/datatypefields/index/id/1');
     }
     
     // Test correct remove user id but no content-type passed
     public function testCorrectRemoveidNoContentType(){
-        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', $this->_contentTypeId);
+        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', 1);
         $contentFieldId = $contentFieldObj->id;
-        $this->loginSuperAdmin();
         $this->dispatch('/datatypefields/remove/id/'.$contentFieldId);
-        $this->assertRedirectTo('datatypes');
+        $this->assertRedirectTo('/datatypes');
     }
     
     
@@ -319,15 +290,14 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
      * Here we check that we can actually remove the first content type
      */
     public function testRemoveContentTypeFieldOne(){
-        $this->loginSuperAdmin();
-        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', $this->_contentTypeId);
+        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', 1);
         $contentFieldId = $contentFieldObj->id;
 
-        $this->dispatch('/datatypefields/remove/id/'.$contentFieldId.'/content-type/'.$this->_contentTypeId);
-        $this->assertRedirectTo('/datatypefields/index/id/'.$this->_contentTypeId);
+        $this->dispatch('/datatypefields/remove/id/'.$contentFieldId.'/content-type/1');
+        $this->assertRedirectTo('/datatypefields/index/id/1');
 
         // Test the content type field has been removed from the db
-        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', $this->_contentTypeId);
+        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', 1);
         $this->assertEquals(null, $contentFieldObj, 'Content Type Field has not been removed!');
         
     }
@@ -336,7 +306,7 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
      * Now we clean up all the other test content type fields as we dont need them anymore
      */
     public function testCleanup(){
-        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', $this->_secondContentTypeId);
+        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', 2);
         $this->_dataTypeFieldsModel->removeContentTypeField($contentFieldObj->id);
     }
     

@@ -34,7 +34,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
         // Set up the parent
         parent::setUp(); 
         
-        //Create a fake login
+        //Create a fake login (only for if admin set)
         $this->loginAdmin();
     }
     
@@ -61,6 +61,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
     public function tearDown()
     {
         Zend_Controller_Front::getInstance()->resetInstance();
+        
+        Zend_Auth::getInstance()->getStorage()->clear();
+        
         $this->resetRequest();
         $this->resetResponse();
 
@@ -129,9 +132,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
         // create a fake identity
         $identity = new stdClass();
         $identity->role = 'superadmin';
-        $identity->username = 'gfuller3';
-        $identity->first_name = 'Gareth';
-        $identity->last_name = 'Fuller';
+        $identity->username = 'gfuller6';
+        $identity->first_name = 'Something';
+        $identity->last_name = 'New';
         $identity->active = 1;
         
         // Push our fake identity into the auth storage
