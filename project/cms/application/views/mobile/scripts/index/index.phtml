@@ -5,7 +5,7 @@
 
 <a data-role="button" data-theme="a" data-icon="plus" title="Add Content" href="/cms/content">Add Content</a>
 
-<?php if ($identity->role == 'admin'): ?>
+<?php if ($identity->role == 'admin' || $identity->role == 'superadmin'): ?>
     <a data-role="button" data-theme="a" data-icon="gear" title="Manage Users" href="/cms/user/manage">Manage Users</a>
     <a data-role="button" data-theme="a" data-icon="gear" title="Site Settings" href="/cms/settings">Site Settings</a>
 <?php endif; ?>

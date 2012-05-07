@@ -30,29 +30,47 @@ class ContentController extends Cms_Controllers_Default
     {
         $this->view->pageTitle = 'Add Content';
         
-        /*
-         * Get a list of all the types of content based on the view helpers in 
-         * the helpers directory
-         */
-        $contentTypes = array();
-        if ($handle = opendir(APPLICATION_PATH.'/views/helpers/')) {
-            while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != "..") {
-
-                    // Clean the names of the view helpers to create URL's to them
-                    $urlString = '';
-                    $urlString = str_replace('.php', '', $entry);
-                    $urlString = strtolower(str_replace(' ', '-', $urlString));
-                    $contentTypes[] = $urlString;
-
-                }
-            }
-            closedir($handle);
+        
+        // Get all of the content types from the API then send the array of types
+        // to the view
+        
+        $contentTypes = $this->getFromApi('/datatypes');
+        
+        if ($contentTypes != null){
+            $this->view->contentTypes = $contentTypes;
         }
         
-        // Send the possible content types to the view
-        $this->view->contentTypes = $contentTypes;
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
         
     }
+    
+    /*
+     * This is where content actually gets added into the cms ... 
+     */
+    public function addAction(){
+        
+        // First we need to make sure they sent a alid if for the content type
+        $id = $this->getRequest()->getParam('id');
+        
+        // Handle if the id not passed correctly
+        if (!isset($id) || !is_numeric($id)){
+            $this->_helper->flashMessenger->addMessage('Unable to process add content without a content type');
+            $this->_redirect('/content');
+            return;
+        }
+ 
+        // Get content type data from the API
+        $contentType = $this->getFromApi('/datatypes/'.$id, 'array');
 
+        // handle cant load from API 
+        if ($contentType == null){
+            $this->_helper->flashMessenger->addMessage('Unable to load content type from API');
+            $this->_redirect('/content');
+            return;
+        }
+        
+        
+
+        
+    }
 }

@@ -18,7 +18,7 @@
                 <td><?php echo $dataType->name; ?></td>
                 <td class="center"><a data-role="button" data-theme="a" data-icon="gear" data-iconpos="notext" href="/cms/datatypes/edit/id/<?php echo $dataType->id; ?>" title="Rename <?php echo $dataType->name; ?>"></a></td>
                 <td class="center"><a data-role="button" data-theme="a" data-icon="gear" data-iconpos="notext" href="/cms/datatypefields/index/id/<?php echo $dataType->id; ?>" title="Edit Fields"></a></td>
-                <td class="center"><a data-role="button" data-theme="a" data-rel="dialog" data-iconpos="notext" data-icon="delete" id="<?php echo $dataType->name; ?>" href="/cms/datatypes/remove-confirm/id/<?php echo $dataType->id; ?>" title="Remove <?php echo $dataType->name; ?>"></a></td>
+                <td class="center"><a data-role="button" data-theme="a" data-rel="dialog" data-icon="delete" data-iconpos="notext" id="<?php echo $dataType->name; ?>" href="/cms/datatypes/remove-confirm/id/<?php echo $dataType->id; ?>" title="Remove <?php echo $dataType->name; ?>"></a></td>
             </tr>
             <?php $i ++; ?>
         <?php endforeach; ?>
