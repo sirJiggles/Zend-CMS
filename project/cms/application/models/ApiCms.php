@@ -11,7 +11,7 @@
  * @copyright Copyright (c) Gareth Fuller
  * @package Models
  */
-class Application_Model_Api extends Zend_Db_Table{
+class Application_Model_ApiCms extends Zend_Db_Table{
     
     protected $_name = 'api';
     
