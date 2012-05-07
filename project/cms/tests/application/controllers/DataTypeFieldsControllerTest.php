@@ -285,7 +285,33 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/datatypes');
     }
     
+     // Test the remove datatype field confirm action no content type
+    public function testRemoveConfirmActionNoContentType(){
+        $this->dispatch('/datatypefields/remove-confirm');
+        $this->assertRedirectTo('/datatypes');
+    }
     
+    // Test the action with no id param
+    public function testRemoveConfirmActionNoId(){
+        $this->dispatch('/datatypefields/remove-confirm/content-type/1');
+        $this->assertRedirectTo('/datatypes');
+    }
+    
+    // Test remove datatype field confirm action with incorrect ID
+    public function testRemoveConfirmInccorectId(){
+        $this->dispatch('/datatypefields/remove-confirm/content-type/1/id/999999999999999');
+        $this->assertRedirectTo('/datatypes');
+    }
+    
+    // Test the remove confirm action with a correct id
+    public function testRemoveConfirmWithId(){
+        $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', 1);
+        $this->dispatch('/datatypefields/remove-confirm/id/'.$contentFieldObj->id.'/content-type/1');
+        $this->assertResponseCode(200);
+        $this->assertNotRedirect();
+    }
+    
+
     /*
      * Here we check that we can actually remove the first content type
      */
@@ -309,6 +335,7 @@ class DataTypeFieldsControllerTest extends ControllerTestCase
         $contentFieldObj = $this->_dataTypeFieldsModel->getContentFieldByName('TestContentTypeFieldTwo', 2);
         $this->_dataTypeFieldsModel->removeContentTypeField($contentFieldObj->id);
     }
+    
     
 
 }

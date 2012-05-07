@@ -161,6 +161,25 @@ class DataTypesControllerTest extends ControllerTestCase
         $this->assertEquals('RenameTestContentType', $contentTypeApi->name, 'Content Type has been removed for some reason!');
     }
     
+    // Test the remove datatype confirm action
+    public function testRemoveConfirmAction(){
+        $this->dispatch('/datatypes/remove-confirm');
+        $this->assertRedirectTo('/datatypes');
+    }
+    
+    // Test the remove datatype confirm action with an actual type id
+    public function testRemoveConfirmWithId(){
+        $contentTypeApi = $this->_dataTypesModel->getContentTypeByName('RenameTestContentType');
+        $this->dispatch('/datatypes/remove-confirm/id/'.$contentTypeApi->id);
+        $this->assertResponseCode(200);
+    }
+    
+    // Test remove datatype confirm action with incorrect ID
+    public function testRemoveConfirmInccorectId(){
+        $this->dispatch('/datatypes/remove-confirm/id/999999999999999');
+        $this->assertRedirectTo('/datatypes');
+    }
+    
     
     // Here we test that we can remove the test content type
     public function testRemoveContentType(){
