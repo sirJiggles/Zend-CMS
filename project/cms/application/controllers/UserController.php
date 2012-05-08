@@ -259,7 +259,7 @@ class UserController extends Cms_Controllers_Default
             }
             
             // Redirect back to manage users if the user (by the id) was not found
-            if ($user == null){
+            if ($user === null){
                 $this->_redirect('/user/manage');
                 return;
             }

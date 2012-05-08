@@ -28,10 +28,40 @@ class IndexController extends Cms_Controllers_Default
      */
     public function indexAction()
     {
-        // Show any flash messages
+       
+        // First get all the types of data that we can have in the system
+        $contentTypes = $this->getFromApi('/datatypes');
+        
+        if ($contentTypes === null){
+            $this->_helper->flashMessenger->addMessage('Could not get content types from the database');
+            $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+            return;
+            
+        }
+        
+        // array to hold all of the final content
+        $finalContent = array();
+        
+        // For each content type that we have get all content
+        foreach ($contentTypes as $contentType){
+            $contentTypeData = $this->getFromApi('/content/type/'.$contentType->id);
+            
+            // must have data for this conyent type
+            if ($contentTypeData !== null){
+                $finalContent[] = $contentTypeData;
+            }
+        }
+        
+        var_dump($finalContent);
+        exit();
+        
+        //var_dump($contentTypes);
+        
+        
+        $this->view->content = $finalContent;
+         // Show any flash messages
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
         
-        $this->view->isMobile = $this->_isMobile;
     }
 
 

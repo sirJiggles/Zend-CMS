@@ -284,7 +284,7 @@ body{
 #content #center-container{
     margin:0px auto;
     text-align:left;
-    width:325px;
+    width:375px;
     padding:0px;
 }
 
@@ -362,7 +362,6 @@ table td a{
 form{
     float:left;
     display:block;
-    width:320px;
 }
 
 form.login{
@@ -373,6 +372,7 @@ form div.item-wrapper{
     float:left;
     display:block;
     width:100%;
+    margin-bottom: 15px;
 }
 
 form dl{
@@ -382,19 +382,19 @@ form dl{
 
 form dl dd{
     display:block;
-    float:right;
     margin:0px;
-    width:170px
+    width:200px;
+    float:left;
 }
 
 form dl dt{
     display:block;
     float:left;
     margin:0px;
+    width:170px;
 }
 
 form input{
-    width:120px;
     background-color:#fff!important;
     float:left;
     font-size: 16px;
@@ -405,6 +405,15 @@ form input{
 
 form input.submit{
     background:none !important;
+}
+
+form textarea{
+    background-color:#fff!important;
+    float:left;
+    font-size: 16px;
+    padding-left:10px;
+    border: none;
+    color:#000 !important;
 }
 
 form input:focus{

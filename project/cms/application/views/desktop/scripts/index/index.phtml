@@ -1,13 +1,21 @@
-<?php $auth = Zend_Auth::getInstance(); ?>
-<?php if ($auth->hasIdentity()): ?>
-<?php $identity = $auth->getIdentity(); ;?>
+<?php
+// Show all the ocntent in the system first
+?>
+
+<h2>Willkommen!, marvel at the current content!</h2>
+<?php if (isset($this->content)) : ?>
+<ul>
+<?php foreach($this->content as $type => $contentItem){ ?>
+    <li><?php echo ucfirst($type); ?></li>
+    <li><ul>
+            <?php
+            $contentData = unserialize($contentItem[0]->content);
+            foreach ($contentData as $key => $val){
+            ?>
+            <li><?php echo ucfirst($key) .': '.$val[0]; ?></li>
+            <?php }; ?>
+        </ul></li>
+
+<?php }; ?>
+<ul>
 <?php endif; ?>
-
-<a data-role="button" data-theme="a" data-icon="plus" title="Add Content" href="/cms/content">Add Content</a>
-
-<?php if ($identity->role == 'admin' || $identity->role == 'superadmin'): ?>
-    <a data-role="button" data-theme="a" data-icon="gear" title="Manage Users" href="/cms/user/manage">Manage Users</a>
-<?php endif; ?>
-
-    
-

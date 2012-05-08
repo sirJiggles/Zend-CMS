@@ -151,7 +151,7 @@ class DatatypesController extends Cms_Controllers_Default
             }
             
             // Redirect back to manage content types if the content type (by the id) was not found
-            if ($contentType == null){
+            if ($contentType === null){
                 $this->_redirect('/datatypes');
                 return;
             }

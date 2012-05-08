@@ -46,7 +46,7 @@ class DatatypefieldsController extends Cms_Controllers_Default
             $dataTypeFields = $this->getFromApi('/datatypefields/datatype/'.$id);
 
             // If we could not find the fields for that content type!
-            if ($dataTypeFields == null){
+            if ($dataTypeFields === null){
                 
                 $this->_helper->flashMessenger->addMessage('There are currently no fields for this content type');
                 $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
@@ -208,7 +208,7 @@ class DatatypefieldsController extends Cms_Controllers_Default
             }
             
             // Redirect back to manage content types if the content type (by the id) was not found
-            if ($contentTypeField == null){
+            if ($contentTypeField === null){
                 $this->_redirect('/datatypes');
                 return;
             }
