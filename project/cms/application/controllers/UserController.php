@@ -181,102 +181,98 @@ class UserController extends Cms_Controllers_Default
         // Get the user buy the user ID parsed
         $userID = $this->getRequest()->getParam('id');
         
-        $identity = Zend_Auth::getInstance()->getIdentity();
-        
-        // If the get param was sent and is in the correct format
-        if (isset($userID) && is_numeric($userID)){
-
-            // Get the user from the API
-            $user = $this->getFromApi('/user/'.$userID, 'array');
-            
-            /* 
-             * Check if the user they are trying to edit is a superadmin
-             * if so and the logged in user is only admin redirect them
-             */
-            if($user['role'] == 'superadmin'){
-                if ($identity->role != 'superadmin'){
-                    $this->_redirect('/user/manage');
-                    return;
-                }
-            }
-            
-            // Get the user form
-            $userForm = new Application_Form_UserForm();
-            $userForm->setAction('/cms/user/edit/id/'.$userID);
-            $userForm->setMethod('post');
-            $userForm->setElementDecorators($this->_formDecorators);
-            
-            if ($identity->role == 'superadmin'){
-                $userForm->getElement('role')->addMultiOption('superadmin', 'Superadmin');
-            }
-            
-            // Set the active values
-            if ($this->_isMobile){
-                $userForm->getElement('active')->addMultiOption('1', 'Active');
-                $userForm->getElement('active')->addMultiOption('0', 'Inactive');
-                
-                $userForm->getElement('username')->setAttrib('placeholder', 'Username');
-                $userForm->getElement('password')->setAttrib('placeholder', 'Password');
-                $userForm->getElement('password_repeat')->setAttrib('placeholder', 'Repeat password');
-                $userForm->getElement('first_name')->setAttrib('placeholder', 'First name');
-                $userForm->getElement('last_name')->setAttrib('placeholder', 'Last name');
-                $userForm->getElement('email_address')->setAttrib('placeholder', 'Email address');
-            }else{
-                $userForm->getElement('active')->addMultiOption('1', 'Yes');
-                $userForm->getElement('active')->addMultiOption('0', 'No');
-            }
-            
-            // Update the user based on the form post
-            if ($this->getRequest()->isPost()){
-                
-                // Check if the form data is valid
-                if ($userForm->isValid($_POST)) {
-
-                    $updateAttempt = $this->postToApi('/user', 'update',  $userForm->getValues(), $userID);
-                    
-                    // Duplicate entries checking
-                    if ($updateAttempt != 1){
-                        if ($updateAttempt == 'Name Taken' || $updateAttempt == 'Email Taken'){
-
-                            if ($updateAttempt == 'Name Taken'){
-                                $this->_helper->flashMessenger->addMessage('That username is taken, please try again');
-                            }
-                            if ($updateAttempt == 'Email Taken'){
-                                $this->_helper->flashMessenger->addMessage('That email address is taken, please try again');
-                            }
-                            $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
-                            $this->_helper->flashMessenger->clearCurrentMessages();
-
-                        }
-                    }else{
-                        $this->_helper->flashMessenger->addMessage('User details updated');
-                        $this->view->messages = $this->_helper->flashMessenger->getMessages();
-                        $this->_redirect('/user/manage');
-                        return;
-                    }
-                    
-                }       
-            }
-            
-            // Redirect back to manage users if the user (by the id) was not found
-            if ($user === null){
-                $this->_redirect('/user/manage');
-                return;
-            }
-            
-            
-            // Set the values for the form based on the user in the system 
-            $userForm->populate($user);
-            
-            // Send the form to the view
-            $this->view->userForm = $userForm;
-
-            $this->view->user = $user;
-        }else{
-            // Redirect back to manage users
+        if (!isset($userID) || !is_numeric($userID)){
+            $this->_helper->flashMessenger->addMessage('Incorrect id passed to edit user');
             $this->_redirect('/user/manage');
             return;
         }
+        
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        
+        // Get the user from the API
+        $user = $this->getFromApi('/user/'.$userID, 'array');
+        
+        // Redirect back to manage users if the user (by the id) was not found
+        if ($user === null){
+            $this->_helper->flashMessenger->addMessage('Unable to get user from the API');
+            $this->_redirect('/user/manage');
+            return;
+        }
+
+        /* 
+        * Check if the user they are trying to edit is a superadmin
+        * if so and the logged in user is only admin redirect them
+        */
+        if($user['role'] == 'superadmin'){
+            if ($identity->role != 'superadmin'){
+                $this->_redirect('/user/manage');
+                return;
+            }
+        }
+
+        // Get the user form
+        $userForm = new Application_Form_UserForm();
+        $userForm->setAction('/cms/user/edit/id/'.$userID);
+        $userForm->setMethod('post');
+        $userForm->setElementDecorators($this->_formDecorators);
+
+        if ($identity->role == 'superadmin'){
+            $userForm->getElement('role')->addMultiOption('superadmin', 'Superadmin');
+        }
+
+        // Set the active values
+        if ($this->_isMobile){
+            $userForm->getElement('active')->addMultiOption('1', 'Active');
+            $userForm->getElement('active')->addMultiOption('0', 'Inactive');
+
+            $userForm->getElement('username')->setAttrib('placeholder', 'Username');
+            $userForm->getElement('password')->setAttrib('placeholder', 'Password');
+            $userForm->getElement('password_repeat')->setAttrib('placeholder', 'Repeat password');
+            $userForm->getElement('first_name')->setAttrib('placeholder', 'First name');
+            $userForm->getElement('last_name')->setAttrib('placeholder', 'Last name');
+            $userForm->getElement('email_address')->setAttrib('placeholder', 'Email address');
+        }else{
+            $userForm->getElement('active')->addMultiOption('1', 'Yes');
+            $userForm->getElement('active')->addMultiOption('0', 'No');
+        }
+
+        // Update the user based on the form post
+        if ($this->getRequest()->isPost()){
+
+            // Check if the form data is valid
+            if ($userForm->isValid($_POST)) {
+
+                $updateAttempt = $this->postToApi('/user', 'update',  $userForm->getValues(), $userID);
+
+                // Duplicate entries checking
+                if ($updateAttempt != 1){
+                    if ($updateAttempt == 'Name Taken' || $updateAttempt == 'Email Taken'){
+
+                        if ($updateAttempt == 'Name Taken'){
+                            $this->_helper->flashMessenger->addMessage('That username is taken, please try again');
+                        }
+                        if ($updateAttempt == 'Email Taken'){
+                            $this->_helper->flashMessenger->addMessage('That email address is taken, please try again');
+                        }
+                    }
+                }else{
+                    $this->_helper->flashMessenger->addMessage('User details updated');
+                    $this->_redirect('/user/manage');
+                    return;
+                }
+
+            }       
+        }
+
+        // Set the values for the form based on the user in the system 
+        $userForm->populate($user);
+
+        // Send the form to the view
+        $this->view->userForm = $userForm;
+
+        $this->view->user = $user;
+        
+        $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
         
     }
     
@@ -363,12 +359,19 @@ class UserController extends Cms_Controllers_Default
         // Get the user buy the user ID parsed
         $userID = $this->getRequest()->getParam('id');
         
-        if (!$userID ){
+        if (!isset($userID) || !is_numeric($userID) ){
             $this->_helper->flashMessenger->addMessage('Unable to find user');
             $this->_redirect('/user/manage');
             return;
         }
         $user = $this->getFromApi('/user/'.$userID);
+        
+        // Check we got an object back from the API
+        if ($user === null){
+            $this->_helper->flashMessenger->addMessage('Unable to find user');
+            $this->_redirect('/user/manage');
+            return;
+        }
         
         if ($this->_isMobile){
             $this->_helper->layout->setLayout('dialog-mobile');
@@ -376,13 +379,8 @@ class UserController extends Cms_Controllers_Default
             $this->_helper->layout->setLayout('dialog');
         }
         
-        if ($user){
-            $this->view->user = $user;
-        }else{
-            $this->_helper->flashMessenger->addMessage('Unable to find user');
-            $this->_redirect('/user/manage');
-            return;
-        }
+        $this->view->user = $user;
+        
     }
     
     
@@ -395,27 +393,24 @@ class UserController extends Cms_Controllers_Default
         $userID = $this->getRequest()->getParam('id');
         
         // If the get param was sent and is in the correct format
-        if (isset($userID) && is_numeric($userID)){
-            
-            // Make post request to remove user from the API
-            $removeAction = $this->postToApi('/user', 'remove', $userID);
-
-            if ($removeAction == 1){
-                $this->_helper->flashMessenger->addMessage('User removed from the system');
-               
-            }else{
-                $this->_helper->flashMessenger->addMessage('Could not find the user to remove');
-            }
-            
-            $this->view->messages = $this->_helper->flashMessenger->getMessages();
-            $this->_redirect('/user/manage');
-            return;
-            
-        }else{
-            // Redirect back to manage users
+        if (!isset($userID) || !is_numeric($userID)){
+            $this->_helper->flashMessenger->addMessage('Invalid ID passed to remove user function');
             $this->_redirect('/user/manage');
             return;
         }
+            
+        // Make post request to remove user from the API
+        $removeAction = $this->postToApi('/user', 'remove', $userID);
+
+        if ($removeAction == 1){
+            $this->_helper->flashMessenger->addMessage('User removed from the system');
+
+        }else{
+            $this->_helper->flashMessenger->addMessage('Could not find the user to remove');
+        }
+        
+        $this->_redirect('/user/manage');
+        return;
     }
     
     
