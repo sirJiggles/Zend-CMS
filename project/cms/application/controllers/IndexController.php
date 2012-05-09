@@ -48,16 +48,13 @@ class IndexController extends Cms_Controllers_Default
             
             // must have data for this conyent type
             if ($contentTypeData !== null){
-                $finalContent[] = $contentTypeData;
+                $finalContent[$contentType->name][] = $contentTypeData;
             }
         }
         
-        var_dump($finalContent);
-        exit();
-        
-        //var_dump($contentTypes);
-        
-        
+        //var_dump($finalContent);
+        //exit();
+
         $this->view->content = $finalContent;
          // Show any flash messages
         $this->view->messages = $this->_helper->flashMessenger->getMessages();

@@ -439,6 +439,49 @@ form select{
     width:150px;
 }
 
+
+/* =============== STYLES FOR THE CONTENT ON THE INDEX PAGE ============ */
+
+#left-content-col{
+    width:160px;
+    border:1px solid #fff;
+    float:left;
+    padding-left:10px;
+    padding-right:10px;
+    height:100%;
+}
+
+#right-side-home-page{
+    float:left;
+    margin-left:10px;
+}
+
+.content-type-container{
+    width:160px;
+    display:block;
+    float:left;
+}
+
+.content-type-container ul{
+    width:150px;
+    background-color:#22B98F;
+    margin:0px;
+    list-style-type: none;
+    margin-bottom:10px;
+    padding:5px;
+     -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.content-type-container ul li{
+    padding:0px;
+    margin:0px;
+}
+
+
+
+
+
 /* ==|== non-semantic helper classes ========================================
    Please define your styles before this section.
    ========================================================================== */

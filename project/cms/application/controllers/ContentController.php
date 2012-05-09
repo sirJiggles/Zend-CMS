@@ -30,7 +30,6 @@ class ContentController extends Cms_Controllers_Default
     {
         $this->view->pageTitle = 'Add Content';
         
-        
         // Get all of the content types from the API then send the array of types
         // to the view
         
@@ -49,7 +48,9 @@ class ContentController extends Cms_Controllers_Default
      */
     public function addAction(){
         
-        // First we need to make sure they sent a alid if for the content type
+        $this->view->pageTitle = 'Add Content';
+        
+        // First we need to make sure they sent a valid id for the content type
         $id = $this->getRequest()->getParam('id');
         
         // Handle if the id not passed correctly
@@ -125,7 +126,160 @@ class ContentController extends Cms_Controllers_Default
             }
         }
         
+    }
+    
+    public function editAction(){
+        
+        $this->view->pageTitle = 'Edit Content';
+        
+        // First check to make sure we got the id correctly for the content
+        $id = $this->getRequest()->getParam('id');
+        
+        if (!isset($id) || !is_numeric($id)){
+            $this->_helper->flashMessenger->addMessage('Could not edit cotent type due to lack of ID');
+            $this->_redirect('/');
+            return;
+        }
+        
+        // Try to get the current content from the API
+        $currentContent = $this->getFromApi('/content/'.$id);
+       
+        // handle cant load from API 
+        if ($currentContent === null){
+            $this->_helper->flashMessenger->addMessage('Unable to load content from API');
+            $this->_redirect('/');
+            return;
+        }
+        
+        // Based on the current content we need to know the fields for this content
+        // so we will now try get the content fields from the API
+        $contentFields = $this->getFromApi('/datatypefields/datatype/'.$currentContent->content_type);
+        
+        // Check to make sure we have the api values correctly from the api that is
+        if ($contentFields === null){
+            $this->_helper->flashMessenger->addMessage('Unable to load content type fields from API');
+            $this->_redirect('/');
+            return;
+        }
+        
+        // Get the insert content form (no inputs at this stage)
+        $contentForm = new Application_Form_ContentForm();
+        $contentForm->setValues($contentFields);
+        $contentForm->startForm();
+        
+        // Add hidden input for the content type ident
+        // anoyingly have to validate that this is correct the other end as editors
+        // have access to this section and can balls it up if they chnage hidden
+        // input values
+        $hiddenContentTypeIdField = new Zend_Form_Element_Hidden('content_type');
+        $hiddenContentTypeIdField->setValue($currentContent->content_type);  
+        $contentForm->addElement($hiddenContentTypeIdField);
+        
+        $contentForm->setElementDecorators($this->_formDecorators);
+        
+        // Check if post
+        if ($this->getRequest()->isPost()){
+                
+            // Check if the form data is valid
+            if ($contentForm->isValid($_POST)) {
+                
+                // attempt to update content via API
+                $updateAttempt = $this->postToApi('/content', 'update',  $contentForm->getValues(), $currentContent->id);
+                
+                // check on status of update
+                if ($updateAttempt != 1){
+                    $this->_helper->flashMessenger->addMessage('Unable to update content via the API');
+                    $this->_redirect('/');
+                    return;
+                }else{
+                    $this->_helper->flashMessenger->addMessage('content updated');
+                    $this->_redirect('/');
+                    return;
+                }
 
+            }       
+        }
+        
+        // Sort the content before adding it back to the form
+        $currentData = unserialize($currentContent->content);
+        $contentFormArray = array();
+        foreach ($currentData as $key => $val){
+            $contentFormArray[$key] = $val[0];
+        }
+        
+        // add content back to the form
+        $contentForm->populate($contentFormArray);
+        
+        // send the form to the view
+        $this->view->contentForm = $contentForm;
         
     }
+    
+   
+    /*
+     * This is the view for confirming of the user wants to remove some content
+     */
+    public function removeConfirmAction(){
+        
+        $this->view->pageTitle = 'Remove Content';
+        
+        // Get the content by id
+        $id = $this->getRequest()->getParam('id');
+        
+        if (!isset($id) || !is_numeric($id)){
+            $this->_helper->flashMessenger->addMessage('You must pass a valid content id');
+            $this->_redirect('/');
+            return;
+        }
+        
+        // Get the content from the api based on the id
+        $content = $this->getFromApi('/content/'.$id);
+        
+        if ($content === null){
+            $this->_helper->flashMessenger->addMessage('Unable to find content in API');
+            $this->_redirect('/');
+            return;
+        }
+        
+        if ($this->_isMobile){
+            $this->_helper->layout->setLayout('dialog-mobile');
+        }else{
+            $this->_helper->layout->setLayout('dialog');
+        }
+
+        $this->view->content = $content;
+    }
+    
+    
+    /*
+     * This is the actual process of removing content from the system
+     */
+    public function removeAction(){
+        
+        // get the id param passed
+        $id = $this->getRequest()->getParam('id');
+        
+        // Sanity check the param
+        if (!isset($id) || !is_numeric($id)){
+            $this->_helper->flashMessenger->addMessage('You must pass a valid id to remove content');
+            $this->_redirect('/');
+            return;
+        }
+        
+        // Attempt to remove the content from the api
+        $removeAction = $this->postToApi('/content', 'remove', $id);
+
+        if ($removeAction == 1){
+            $this->_helper->flashMessenger->addMessage('Content removed from the system');
+        }else{
+            $this->_helper->flashMessenger->addMessage('Could not find the content to remove');
+        }
+        $this->_redirect('/');
+        return;
+            
+
+    }
+    
+    
+    
 }

@@ -85,7 +85,12 @@ class ContentController extends Api_Default
                 case 'add':
                     $data = $this->_contentModel->addContent(unserialize(base64_decode($_POST['data'])));
                     break;
-                
+                case 'update':
+                    $data = $this->_contentModel->updateContent(unserialize(base64_decode($_POST['data'])),$_POST['argOne']);
+                    break;
+                case 'remove':
+                    $data = $this->_contentModel->removeContent(unserialize(base64_decode($_POST['data'])));
+                    break;
                 default:
                     $data = 'Operation not found';
                     break;

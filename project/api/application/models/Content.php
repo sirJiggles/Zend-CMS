@@ -45,7 +45,7 @@ class Application_Model_Content extends Zend_Db_Table{
         try {
             $selectStatememt = $this->select()
                                     ->where('content_type = ?', $type);
-            $row = $this->fetchRow($selectStatememt);
+            $row = $this->fetchAll($selectStatememt);
             
             return $row;
           
@@ -56,25 +56,22 @@ class Application_Model_Content extends Zend_Db_Table{
     
     
     /*
-     * This is the function to remove api users from the system
+     * This is the function to remove content from the system
      * 
-     * @param int $userId
+     * @param int $id
      * @return boolean task status
      */
-    public function removeUser($userId){
+    public function removeContent($id){
         try {
-            if ($userId == 1){
-                return false;
-            }
-            $where = $this->getAdapter()->quoteInto('id = ?', $userId);
+            $where = $this->getAdapter()->quoteInto('id = ?', $id);
             $result = $this->delete($where);
             if ($result){
                 return true;
             }else{
-                return 'Unable to find api user to delete';
+                return 'Unable to find system content to delete';
             }
         } catch (Exception $e) {
-            echo 'Unable to removeUser in API model: '.$e->getMessage();
+            echo 'Unable to removeContent in Content model: '.$e->getMessage();
         }
     }
     
@@ -106,6 +103,11 @@ class Application_Model_Content extends Zend_Db_Table{
                        $contentToStore[$key][] = $value; 
                     }
                 }
+                
+                if (!$typeFound){
+                    return false;
+                }
+                
                 $newData = serialize($contentToStore);
                 
                 $newRow = $this->createRow(array('content_type' => $contentType, 'content' => $newData));
@@ -119,6 +121,59 @@ class Application_Model_Content extends Zend_Db_Table{
             
         }catch (Exception $e) {
             echo 'Unable to addContent in Content model: '.$e->getMessage();
+        }
+    }
+    
+    /*
+     * This is the function for updateting content via the API
+     * 
+     * @param array formData
+     * @param int $id
+     * @return boolean taskresult
+     */
+    
+    public function updateContent($formData, $id){
+         try {
+            
+            if (is_array($formData)){
+                
+                // Flag for identifing if we have the content type id
+                $typeFound = false;
+                // Var for string the content type id
+                $contentType = '';
+                // Array for storing all of the data
+                $contentToStore = array();
+                
+                // Here we grab all of the form inputs and serialise the data in on array
+                foreach ($formData as $key => $value){
+                    if ($key == 'content_type'){
+                        $typeFound = true;
+                        $contentType = $value;
+                    }else{
+                       $contentToStore[$key][] = $value; 
+                    }
+                }
+                
+                if (!$typeFound){
+                    return false;
+                }
+                
+                $newData = serialize($contentToStore);
+                
+                // Update the data
+                $updateData = array('content_type' => $contentType, 'content' => $newData);
+                $where = $this->getAdapter()->quoteInto('id = ?', $id);
+                $this->update($updateData, $where);
+                
+                
+                return true; 
+                
+            }else{
+                throw new Exception('Incorrect variable types passed to updateContent: expecting array of form data and content id');
+            }
+            
+        }catch (Exception $e) {
+            echo 'Unable to updateContent in Content model: '.$e->getMessage();
         }
     }
     
