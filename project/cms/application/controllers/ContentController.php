@@ -109,10 +109,16 @@ class ContentController extends Cms_Controllers_Default
             if ($contentForm->isValid($_POST)) { 
                 // Run the add content function at the api
                 $addAction = $this->postToApi('/content', 'add', $contentForm->getValues());
- 
+                
                 // Error checking
                 if ($addAction != 1){
-                    $this->_helper->flashMessenger->addMessage('Could not add content, please try again');
+                    
+                    if ($addAction == 'Ref Taken'){
+                        $this->_helper->flashMessenger->addMessage('That ref is already taken, please try again');
+                    }else{
+                        print_r($addAction);
+                        $this->_helper->flashMessenger->addMessage('Could not add content, please try again');
+                    }
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
 
                 }else{
@@ -188,9 +194,12 @@ class ContentController extends Cms_Controllers_Default
                 
                 // check on status of update
                 if ($updateAttempt != 1){
-                    $this->_helper->flashMessenger->addMessage('Unable to update content via the API');
-                    $this->_redirect('/');
-                    return;
+                    if ($updateAttempt == 'Ref Taken'){
+                        $this->_helper->flashMessenger->addMessage('That ref is taken please try again');
+                    }else{
+                        $this->_helper->flashMessenger->addMessage('Unable to update content via the API');
+                    }
+                    $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
                 }else{
                     $this->_helper->flashMessenger->addMessage('content updated');
                     $this->_redirect('/');
@@ -206,6 +215,7 @@ class ContentController extends Cms_Controllers_Default
         foreach ($currentData as $key => $val){
             $contentFormArray[$key] = $val[0];
         }
+        $contentFormArray['ref'] = $currentContent->ref;
         
         // add content back to the form
         $contentForm->populate($contentFormArray);

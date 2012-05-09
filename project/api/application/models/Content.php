@@ -17,6 +17,26 @@ class Application_Model_Content extends Zend_Db_Table{
     
     
     /*
+     * This function connects to the data type fields table to get 
+     * the fields for the current content type so we can valuidate
+     * the type of data that is comming in, I know this is a little
+     * hacky but it works for now
+     * 
+     * @param int $id
+     * @return array $results
+     */
+    public function getFieldsForContentType($id){
+        
+        $sql = 'SELECT * FROM `content-type-fields` WHERE `content_type` = ?';
+        $db = $this->getDefaultAdapter();
+        $rows = $db->fetchAll($sql, array($id));
+        return $rows;
+        
+    }
+    
+    
+    
+    /*
      * This function is for getting content by an id
      * 
      * @param int $id
@@ -54,6 +74,25 @@ class Application_Model_Content extends Zend_Db_Table{
         }
     }
     
+    /*
+     * This is the function to get content by ref
+     * 
+     * @param string ref
+     * @return object Zend_Db_Table_Row
+     */
+    public function getByRef($ref){
+        try {
+            $selectStatememt = $this->select()
+                                    ->where('ref = ?', $ref);
+            $row = $this->fetchRow($selectStatememt);
+            
+            return $row;
+          
+        } catch (Exception $e) {
+            echo 'Unable to getByRef in Content model: '.$e->getMessage();
+        }
+    }
+    
     
     /*
      * This is the function to remove content from the system
@@ -87,30 +126,55 @@ class Application_Model_Content extends Zend_Db_Table{
             
             if (is_array($formData)){
                 
-                // Flag for identifing if we have the content type id
-                $typeFound = false;
-                // Var for string the content type id
-                $contentType = '';
-                // Array for storing all of the data
+                // variable defs
                 $contentToStore = array();
+                $fields = array();
                 
-                // Here we grab all of the form inputs and serialise the data in on array
-                foreach ($formData as $key => $value){
-                    if ($key == 'content_type'){
-                        $typeFound = true;
-                        $contentType = $value;
-                    }else{
-                       $contentToStore[$key][] = $value; 
-                    }
-                }
-                
-                if (!$typeFound){
+                // Sanity checking on required inputs
+                if (!isset($formData['ref']) || !isset($formData['content_type'])){
                     return false;
                 }
                 
-                $newData = serialize($contentToStore);
+                // First make sure the ref is not taken
+                $currentContentItems = $this->getByRef($formData['ref']);
                 
-                $newRow = $this->createRow(array('content_type' => $contentType, 'content' => $newData));
+                if ($currentContentItems !== null){
+                    return 'Ref Taken';
+                }
+                
+                // sort the data
+                foreach($formData as $key => $value){
+                    if($key != 'content_type' && $key != 'ref'){
+                        // proceed
+                        $contentToStore[$key][] = $value;
+                        $fields[] = $key;
+                    }
+                }
+                
+                // Now check that the content type exists and expects the form
+                // fields we are about to send it or things could get ugly
+                $contentTypeFields = $this->getFieldsForContentType($formData['content_type']);
+                
+                if ($contentTypeFields === null){
+                    return false;
+                }
+                
+                foreach($contentTypeFields as $currentField){
+                   if (!key_exists($currentField['name'], $formData)){
+                        return false;
+                   }
+                }
+
+                // format the content to go in the db
+                $serealizedContent = serialize($contentToStore);
+                
+                // Save all data as new row to go in db
+                $createRow = array('content_type' => $formData['content_type'],
+                                    'content' => $serealizedContent,
+                                    'ref' => $formData['ref']);
+                
+                // Actualy run the add command
+                $newRow = $this->createRow($createRow);
                 $newRow->save();
                
                return true; 
@@ -137,33 +201,58 @@ class Application_Model_Content extends Zend_Db_Table{
             
             if (is_array($formData)){
                 
-                // Flag for identifing if we have the content type id
-                $typeFound = false;
-                // Var for string the content type id
-                $contentType = '';
-                // Array for storing all of the data
+                // variable defs
                 $contentToStore = array();
+                $fields = array();
                 
-                // Here we grab all of the form inputs and serialise the data in on array
-                foreach ($formData as $key => $value){
-                    if ($key == 'content_type'){
-                        $typeFound = true;
-                        $contentType = $value;
-                    }else{
-                       $contentToStore[$key][] = $value; 
-                    }
-                }
-                
-                if (!$typeFound){
+                // Sanity checking on required inputs
+                if (!isset($formData['ref']) || !isset($formData['content_type'])){
                     return false;
                 }
                 
-                $newData = serialize($contentToStore);
+                // First make sure the ref is not taken
+                $currentContentItems = $this->getByRef($formData['ref']);
                 
-                // Update the data
-                $updateData = array('content_type' => $contentType, 'content' => $newData);
+                if ($currentContentItems !== null){
+                    if ($currentContentItems->id != $id){
+                        return 'Ref Taken';
+                    }
+                }
+                
+                // sort the data
+                foreach($formData as $key => $value){
+                    if($key != 'content_type' && $key != 'ref'){
+                        // proceed
+                        $contentToStore[$key][] = $value;
+                        $fields[] = $key;
+                    }
+                }
+                
+                // Now check that the content type exists and expects the form
+                // fields we are about to send it or things could get ugly
+                $contentTypeFields = $this->getFieldsForContentType($formData['content_type']);
+                
+                if ($contentTypeFields === null){
+                    return false;
+                }
+                
+                foreach($contentTypeFields as $currentField){
+                   if (!key_exists($currentField['name'], $formData)){
+                        return false;
+                   }
+                }
+
+                // format the content to go in the db
+                $serealizedContent = serialize($contentToStore);
+                
+                // Save all data as new row to go in db
+                $updateRow = array('content_type' => $formData['content_type'],
+                                    'content' => $serealizedContent,
+                                    'ref' => $formData['ref']);
+                
+                 // Update the data
                 $where = $this->getAdapter()->quoteInto('id = ?', $id);
-                $this->update($updateData, $where);
+                $this->update($updateRow, $where);
                 
                 
                 return true; 

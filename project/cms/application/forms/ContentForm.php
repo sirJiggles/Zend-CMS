@@ -32,6 +32,21 @@ class Application_Form_ContentForm extends Zend_Form
         $this->setAttrib('class', 'content');
         $this->setAttrib('id', 'contentForm');
         
+        /*
+         * Add the ref field to th form, this is the reference that the user
+         * has to create for each bit of content it has to be uneque within its
+         * content type (so only 1 article called 'article one' and so on)
+         */
+        $ref = new Zend_Form_Element_Text('ref');
+        $ref->addFilter('StringTrim')  
+            ->addFilter(new Zend_Filter_HtmlEntities())
+            ->setRequired(true)
+            ->addErrorMessage('Reference is required')
+            ->setLabel('Reference:');   
+        $this->addElement($ref);
+        
+        
+        
         // Loop through all of the content fields and add them to the system
         // based on the field type
         foreach($this->_contentFields as $field){
