@@ -36,30 +36,39 @@ class IndexController extends Cms_Controllers_Default
             $this->_helper->flashMessenger->addMessage('Could not get content types from the database');
             $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
             return;
-            
         }
         
-        // array to hold all of the final content
-        $finalContent = array();
+        // Send these to the view
+        $this->view->contentTypes = $contentTypes;
         
-        // For each content type that we have get all content
-        foreach ($contentTypes as $contentType){
-            $contentTypeData = $this->getFromApi('/content/type/'.$contentType->id);
+        
+        // Here wecheck if the user wants to get content by a content type 
+        // Check make sure we have the right params for this page
+        
+        $filterValue = $this->getRequest()->getParam('filter');
+        
+        if (isset($filterValue)){
+            // Attempt to load the content type based on the filter for
+            // validation purposes
+             $contentTypeData = $this->getFromApi('/content/type/'.$filterValue);
             
-            // must have data for this conyent type
-            if ($contentTypeData !== null){
-                $finalContent[$contentType->name][] = $contentTypeData;
+            // must have data for this content type
+            if ($contentTypeData === null){
+                $this->_helper->flashMessenger->addMessage('Could not filter by that content type');
+                $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
             }
+            
+            // send the content type data to the view
+            $this->view->typeData = $contentTypeData;
+            
         }
-        
-        //var_dump($finalContent);
-        //exit();
 
-        $this->view->content = $finalContent;
+        
          // Show any flash messages
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
         
     }
+
 
 
 }
