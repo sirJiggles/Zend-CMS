@@ -126,6 +126,46 @@ class ContentControllerTest extends ControllerTestCase
         
     }
     
+    // As an admin we are now going to add some dummy content mark II
+    public function testAddContentCorrectSecond(){
+        
+        // First we need to work out what content tye fields we have
+        // for the content type so we can actually populate the form
+        // so get the fields for the first type from the API
+        $contentFields = $this->_dataTypeFields->getDataFieldsForDataType(1);
+        
+        // check we got something back
+        $this->assertNotEquals(null, $contentFields, 'Could not get contet fields for type 1 (does type 1 exist?)');
+        
+        // create the form array here
+        $fakeData = $this->_spoofFormatContent($contentFields);
+        
+        // Finish the fake data with where it goes and the ref!
+        $fakeData['content_type'] = '1';
+        $fakeData['ref'] = 'unitTestingContentDuplicate';
+        
+        // Spoof the new details
+        $this->request->setMethod('POST')
+             ->setPost($fakeData);
+
+        // Now set the dispatch
+        $this->dispatch('/content/add/id/1');
+        
+        $this->assertAction('add');
+        
+        // Assert that we are redirected to the data type fields manage screen
+        $this->assertRedirectTo('/content');
+        
+        // Check the database to make sure the content is in there ok
+        $contentCheck = $this->_contentModel->getByRef('unitTestingContentDuplicate');
+        
+        // check we got something back
+        $this->assertNotEquals(null, $contentCheck, 'Could not get the fake content from the database, add correct failed');
+        
+        
+        
+    }
+    
     // Test the ref taken functionality when adding content to the system
     public function testRefTakenAdd(){
         
@@ -249,6 +289,40 @@ class ContentControllerTest extends ControllerTestCase
        
     }
     
+    // Test that when we edit the content the ref is not taken
+    // functionality
+    public function testEditContentRefTaken(){
+        
+        // Get the current content from the database based on its ref
+        $currentContent = $this->_contentModel->getByRef('unitTestingContentTwo');
+        
+        // check we got something back
+        $this->assertNotEquals(null, $currentContent, 'Could not get the current fake content from the database');
+        
+        // Rather than formatting the serialised content and so on we will
+        // create the edit content in the same way we did for add
+        $contentFields = $this->_dataTypeFields->getDataFieldsForDataType(1);
+        
+        $fakeData = $this->_spoofFormatContent($contentFields, 'edit');
+         
+        // Finish the fake data with where it goes and the ref!
+        $fakeData['content_type'] = '1';
+        // same as our duplicate one
+        $fakeData['ref'] = 'unitTestingContentDuplicate';
+        
+        // Spoof the new details
+        $this->request->setMethod('POST')
+             ->setPost($fakeData);
+        
+        $this->dispatch('/content/edit/id/'.$currentContent->id);
+
+        $this->assertAction('edit');
+        
+        // Check for the error message on the page
+        $this->assertQueryContentContains('.ui-state-highlight p', 'That ref is already taken, please try again');
+        
+    }
+    
     // Test the edit content action with incorrect format of args
     public function testEditContentIcorrectArgs(){
         $this->dispatch('/content/edit/id/sdsddsf');
@@ -305,10 +379,10 @@ class ContentControllerTest extends ControllerTestCase
         $this->assertController('content');
         $this->assertNotRedirect();
         $this->assertAction('remove-confirm');
-        $this->assertResponseCode(200);        
+        $this->assertResponseCode(200); 
         
     }
-    
+   
     // Lastly we are going to check that we can remove the content from the
     // syetem and thus clean up our mess!
     public function testRemoveContentFoReal(){
@@ -328,6 +402,27 @@ class ContentControllerTest extends ControllerTestCase
         $currentContent = $this->_contentModel->getByRef('unitTestingContentTwo');
         $this->assertEquals(null, $currentContent, 'The content has not been removed from the system for some reason!');
     }
+    
+    // Cleanup by removing the duplicate content test
+    public function removeDuplicateContentCorrect(){
+        
+        // Get the current content from the database based on its ref
+        $currentContent = $this->_contentModel->getByRef('unitTestingContentDuplicate');
+        
+        // check we got something back
+        $this->assertNotEquals(null, $currentContent, 'Could not get the current fake content from the database');
+        
+        // Dispatch the remove confirm url
+        $this->dispatch('/content/remove/id/'.$currentContent->id);
+        
+        $this->assertRedirect('/');
+        
+        // Try to get the content from the system again just to make sure it 
+        // is gone
+        $currentContent = $this->_contentModel->getByRef('unitTestingContentDuplicate');
+        $this->assertEquals(null, $currentContent, 'The content has not been removed from the system for some reason!');
+    }
+    
     
     
     /*

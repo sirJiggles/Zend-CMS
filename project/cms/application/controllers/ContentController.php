@@ -195,7 +195,7 @@ class ContentController extends Cms_Controllers_Default
                 // check on status of update
                 if ($updateAttempt != 1){
                     if ($updateAttempt == 'Ref Taken'){
-                        $this->_helper->flashMessenger->addMessage('That ref is taken please try again');
+                        $this->_helper->flashMessenger->addMessage('That ref is already taken, please try again');
                     }else{
                         $this->_helper->flashMessenger->addMessage('Unable to update content via the API');
                     }
