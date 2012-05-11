@@ -326,26 +326,26 @@ h2{
 
 
 /*================ Styles for the system tables=========*/
-table{
+table.generic{
     width:100%;
 }
 
-table tr.odd{
+table.generic tr.odd{
     background-color:#fff; 
 }
 
-table tr{
+table.generic tr{
     background-color:#d0f6ec;
 }
 
-table th{
+table.generic th{
     background-color:#22b98f;
     color:#fff;
     padding:10px;
     text-align: left;
 }
 
-table td{
+table.generic td{
     padding:10px 10px;
     white-space: normal;
     word-break: break-all;
@@ -353,12 +353,12 @@ table td{
     
 }
 
-table td.center{
+table.generic td.center{
     padding-left:1.4em;
     width:40px;
 }
 
-table td a{
+table.generic td a{
     margin:-5px !important;
 }
 

@@ -108,6 +108,7 @@ class ContentController extends Cms_Controllers_Default
             // Check if the form data is valid
             if ($contentForm->isValid($_POST)) { 
                 // Run the add content function at the api
+                
                 $addAction = $this->postToApi('/content', 'add', $contentForm->getValues());
                 
                 // Error checking
@@ -172,6 +173,7 @@ class ContentController extends Cms_Controllers_Default
         $contentForm = new Application_Form_ContentForm();
         $contentForm->setValues($contentFields);
         $contentForm->startForm();
+        
         
         // Add hidden input for the content type ident
         // anoyingly have to validate that this is correct the other end as editors

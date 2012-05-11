@@ -84,10 +84,10 @@ class Application_Form_ContentForm extends Zend_Form
                     // Add new textarea element to the form
                     $item = new Zend_Form_Element_Textarea($field->name);
                     $item->addFilter('StringTrim')  
-                        ->addFilter(new Zend_Filter_HtmlEntities())
                         ->setRequired(true)
                         ->addErrorMessage(ucfirst($field->name).' is required')
-                        ->setLabel(ucfirst($field->name).':');   
+                        ->setLabel(ucfirst($field->name).':')
+                        ->setAttrib('class', 'ckeditor');
                     $this->addElement($item);
                     break;
                 default:

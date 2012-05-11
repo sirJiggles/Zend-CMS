@@ -15,11 +15,27 @@
         $this->headLink()->prependStylesheet('/cms/assets/css/mobile/jiggly.min.css')
                          ->prependStylesheet('http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css')
                          ->prependStylesheet("/cms/assets/css/style.css");
-        echo $this->headLink();
+
         $this->headScript()->prependFile("/cms/assets/js/desktop/script.js")
                            ->prependFile("http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js")
                            ->prependFile("/cms/assets/js/libs/jquery-1.6.2.min.js")
                            ->prependFile("/cms/assets/js/libs/modernizr-2.0.6.min.js");
+        
+        // Check if the current controller is content, if it is include the ckeditor shizzle
+        $currentController = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+        
+        if ($currentController == 'content'){
+            //$this->headLink()->prependStylesheet('/cms/assets/ckeditor/contents.css');
+            //$this->headLink()->prependStylesheet('/cms/assets/ckeditor/skins/editor.css');
+            
+            $this->headScript()->appendFile('/cms/assets/ckeditor/ckeditor.js')
+                                ->appendFile('/cms/assets/ckeditor/config.js')
+                                ->appendFile('/cms/assets/ckeditor/lang/en-gb.js');
+            //$this->headScript()->prependFile('/cms/assets/ckeditor/plugins/styles/styles/default.js');
+            
+        }
+        
+        echo $this->headLink();
         echo $this->headScript();
     ?>
     
