@@ -322,26 +322,26 @@ h2{
 
 
 /*================ Styles for the system tables=========*/
-table.generic{
+table{
     width:100%;
 }
 
-table.generic tr.odd{
+table tr.odd{
     background-color:#fff; 
 }
 
-table.generic tr{
+table tr{
     background-color:#d0f6ec;
 }
 
-table.generic th{
+table th{
     background-color:#22b98f;
     color:#fff;
     padding:10px;
     text-align: left;
 }
 
-table.generic td{
+table td{
     padding:10px 10px;
     white-space: normal;
     word-break: break-all;
@@ -349,11 +349,11 @@ table.generic td{
     
 }
 
-table.generic td.center{
+table td.center{
     padding-left:1.4em;
 }
 
-table.generic td a{
+table td a{
     margin:-5px !important;
 }
 
@@ -383,6 +383,7 @@ form dl{
 form dl dd{
     display:block;
     margin:0px;
+    width:200px;
     float:left;
 }
 
@@ -450,23 +451,26 @@ form select{
     height:100%;
 }
 
-#right-side-home-page{
-    float:left;
-    margin-left:10px;
-}
 
-.content-type-container{
-    width:160px;
+#bottom-container-home{
+    width:100%;
     display:block;
     float:left;
+    border:1px solid #fff;
 }
 
-.content-type-container ul{
-    width:150px;
-    background-color:#22B98F;
-    margin:0px;
+#bottom-container-home ul{
     list-style-type: none;
-    margin-bottom:10px;
+    margin:0px;
+    padding:0px;
+    overflow:hidden;
+}
+
+#bottom-container-home ul li{
+    height:50px;
+    background-color:#22B98F;
+    float:left;
+    margin-right:5px;
     padding:5px;
      -moz-border-radius: 5px;
     border-radius: 5px;
