@@ -40,20 +40,21 @@ $(document).ready(function () {
                 var moveAmount = 0;
                 var currentLeft = $('#bottom-container-home ul').css('left');
                 currentLeft = parseInt(currentLeft.replace('px', ''));
-                if (e.pageX > centerPoint){
-                    if ( (windowWidth - currentLeft) <= (totalWidthContentBar  + 50)){
-                    //if (currentLeft >= totalWidthContentBar){
-                        moveAmount = currentLeft - 5;
+                if ((e.pageX > (centerPoint + 120)) || (e.pageX < (centerPoint - 120))){
+                    if (e.pageX > centerPoint){
+                        if ( (windowWidth - currentLeft) <= (totalWidthContentBar  + 40)){
+                            moveAmount = currentLeft - 5;
+                        }else{
+                            moveAmount = currentLeft;
+                        }
+
                     }else{
-                       moveAmount = currentLeft;
+                        if (currentLeft < 0){
+                            moveAmount = currentLeft + 5;
+                        }
                     }
-                    
                 }else{
-                    if (currentLeft < 0){
-                        moveAmount = currentLeft + 5;
-                    }else{
-                       moveAmount = currentLeft;
-                    }
+                   moveAmount =  currentLeft;
                 }
                 //console.log(windowWidth);
                 $('#bottom-container-home ul').css('left', moveAmount);  
@@ -68,13 +69,6 @@ $(document).ready(function () {
    }
    
 })
-
-/*
-* Function for moving the content from left to right
-*/
-
-
-
 
 
 /*

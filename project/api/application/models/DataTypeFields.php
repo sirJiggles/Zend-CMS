@@ -98,10 +98,34 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
      */
     public function removeContentTypeField($id){
         try {
+            // Get this item first from the db
+            $selectStatememt = $this->select()
+                                    ->where('id = ?', $id);
+            $currentField = $this->fetchRow($selectStatememt);
+            
+            // First we need to remove all content that uses this field
+            $sql = 'SELECT * FROM `content` WHERE `content_type` = ?';
+            $db = $this->getDefaultAdapter();
+            $rows = $db->fetchAll($sql, array($currentField->content_type));
+            
+            // Reconstruct all of the content that used this field
+            $sql = 'UPDATE `content` SET `content` = ? WHERE `id` = ?';
+            foreach($rows as $row){
+                $contentArray = unserialize($row->content);
+                $newContent = array();
+                foreach($contentArray as $field => $val){
+                    if ($field != $currentField->name){
+                        $newContent[$field] = $val;
+                    }
+                }
+                $db->prepare($sql);
+                $db->execute(array(serialize($newContent), $row->id));
+            }
+            
             $where = $this->getAdapter()->quoteInto('id = ?', $id);
             $result = $this->delete($where);
             if ($result){
-                return true;
+                return 'true';
             }else{
                 return 'Unable to find content type field to delete';
             }
