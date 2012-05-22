@@ -98,19 +98,21 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
      */
     public function removeContentTypeField($id){
         try {
+            
             // Get this item first from the db
             $selectStatememt = $this->select()
                                     ->where('id = ?', $id);
             $currentField = $this->fetchRow($selectStatememt);
             
+            
+            
             // First we need to remove all content that uses this field
-            $sql = 'SELECT * FROM `content` WHERE `content_type` = ?';
-            $db = $this->getDefaultAdapter();
-            $rows = $db->fetchAll($sql, array($currentField->content_type));
+            $contentTable = new Application_Model_Content();
+            $content = $contentTable->getContentByType($currentField->content_type);
             
             // Reconstruct all of the content that used this field
-            $sql = 'UPDATE `content` SET `content` = ? WHERE `id` = ?';
-            foreach($rows as $row){
+            //$sql = 'UPDATE `content` SET `content` = ? WHERE `id` = ?';
+            foreach($content as $row){
                 $contentArray = unserialize($row->content);
                 $newContent = array();
                 foreach($contentArray as $field => $val){
@@ -118,8 +120,21 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
                         $newContent[$field] = $val;
                     }
                 }
-                $db->prepare($sql);
-                $db->execute(array(serialize($newContent), $row->id));
+                
+                
+                $where = $contentTable->getAdapter()->quoteInto('id = ?', $row->id);
+                $contentTable->update(array('content' => serialize($newContent)), $where);
+                
+                
+                //$fakeData = array();
+                //$fakeData['content'] = serialize($newContent);
+                //$fakeData['id'] = $row->id;
+                //$fakeData['content_type'] = $row->content_type;
+                //$fakeData['ref'] = $row->ref;
+                
+                //$contentTable->updateContent($fakeData, $row->id);
+                //$db->prepare($sql);
+                //$db->execute(array(serialize($newContent), $row->id));
             }
             
             $where = $this->getAdapter()->quoteInto('id = ?', $id);

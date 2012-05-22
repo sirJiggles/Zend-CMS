@@ -44,19 +44,21 @@ class Application_Form_ContentForm extends Zend_Form
             ->addErrorMessage('Reference is required')
             ->setLabel('Reference:');   
         $this->addElement($ref);
-        
-        
-        
+
         // Loop through all of the content fields and add them to the system
         // based on the field type
         foreach($this->_contentFields as $field){
+            
+            // Have to reformat the fields for the API
+            $fieldName = str_replace(' ', '_', $field->name);
+            
             switch($field->format){
                 case 'text':
                     // Reset item first
                     $item = '';
                     
                     // Add new text element to the form
-                    $item = new Zend_Form_Element_Text($field->name);
+                    $item = new Zend_Form_Element_Text($fieldName);
                     $item->addFilter('StringTrim')  
                         ->addFilter(new Zend_Filter_HtmlEntities())
                         ->setRequired(true)
@@ -69,7 +71,7 @@ class Application_Form_ContentForm extends Zend_Form
                     $item = '';
                     
                     // Add new text element to the form
-                    $item = new Zend_Form_Element_Text($field->name);
+                    $item = new Zend_Form_Element_Text($fieldName);
                     $item->addFilter('StringTrim')  
                         ->addFilter(new Zend_Filter_HtmlEntities())
                         ->setRequired(true)
@@ -82,7 +84,7 @@ class Application_Form_ContentForm extends Zend_Form
                     $item = '';
                     
                     // Add new textarea element to the form
-                    $item = new Zend_Form_Element_Textarea($field->name);
+                    $item = new Zend_Form_Element_Textarea($fieldName);
                     $item->addFilter('StringTrim')  
                         ->setRequired(true)
                         ->addErrorMessage(ucfirst($field->name).' is required')

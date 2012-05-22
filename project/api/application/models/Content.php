@@ -161,7 +161,7 @@ class Application_Model_Content extends Zend_Db_Table{
                 
                 foreach($contentTypeFields as $currentField){
                    if (!key_exists($currentField['name'], $formData)){
-                        return false;
+                        return 'here two';
                    }
                 }
 

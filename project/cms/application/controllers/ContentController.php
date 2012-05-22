@@ -73,8 +73,6 @@ class ContentController extends Cms_Controllers_Default
         // Get the content fields based on the content type we just got from the API
         $contentFields = $this->getFromApi('/datatypefields/datatype/'.$contentType->id);
         
-        
-        
         // Check to make sure we have the api values correctly from the api that is
         if ($contentFields === null){
             $this->_helper->flashMessenger->addMessage('Unable to load content type fields from API');
@@ -118,6 +116,7 @@ class ContentController extends Cms_Controllers_Default
                         $this->_helper->flashMessenger->addMessage('That ref is already taken, please try again');
                     }else{
                         print_r($addAction);
+                        //exit();
                         $this->_helper->flashMessenger->addMessage('Could not add content, please try again');
                     }
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();

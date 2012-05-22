@@ -302,6 +302,7 @@ class DatatypefieldsController extends Cms_Controllers_Default
             
             // Make post request to remove content type from the API
             $removeAction = $this->postToApi('/datatypefields', 'remove', $id);
+            
 
             if ($removeAction == 1){
                 $this->_helper->flashMessenger->addMessage(ucfirst($contentType['name']).' field removed from the system');
