@@ -159,7 +159,7 @@ class Application_Model_Content extends Zend_Db_Table{
                 // First make sure the ref is not taken
                 $currentContentItems = $this->getByRef($formData['ref']);
                 
-                if ($currentContentItems !== null){
+                if ($currentContentItems instanceof Zend_Db_Table_Row){
                     return 'Ref Taken';
                 }
                 

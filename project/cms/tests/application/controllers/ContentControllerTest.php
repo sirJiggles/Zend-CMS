@@ -129,7 +129,8 @@ class ContentControllerTest extends ControllerTestCase
     // As an admin we are now going to add some dummy content mark II
     public function testAddContentCorrectSecond(){
         
-        // First we need to work out what content tye fields we have
+
+       // First we need to work out what content tye fields we have
         // for the content type so we can actually populate the form
         // so get the fields for the first type from the API
         $contentFields = $this->_dataTypeFields->getDataFieldsForDataType(1);
