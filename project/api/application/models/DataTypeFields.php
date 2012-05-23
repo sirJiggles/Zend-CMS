@@ -221,6 +221,9 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
                 $contentTypeFields = $this->fetchAll();
                 $nameTaken = false;
                 
+                // Format the name to include underscores
+                $formData['name'] = str_replace(' ', '_', $formData['name']);
+                
                 foreach ($contentTypeFields as $curentTypeField){
                     if ($curentTypeField['content_type'] == $formData['content_type']){
                         if ($curentTypeField['name'] == $formData['name']){

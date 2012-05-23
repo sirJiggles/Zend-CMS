@@ -106,7 +106,7 @@ class ContentController extends Cms_Controllers_Default
             // Check if the form data is valid
             if ($contentForm->isValid($_POST)) { 
                 // Run the add content function at the api
-                
+               
                 $addAction = $this->postToApi('/content', 'add', $contentForm->getValues());
                 
                 // Error checking
@@ -115,8 +115,6 @@ class ContentController extends Cms_Controllers_Default
                     if ($addAction == 'Ref Taken'){
                         $this->_helper->flashMessenger->addMessage('That ref is already taken, please try again');
                     }else{
-                        print_r($addAction);
-                        //exit();
                         $this->_helper->flashMessenger->addMessage('Could not add content, please try again');
                     }
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();

@@ -62,8 +62,8 @@ class Application_Form_ContentForm extends Zend_Form
                     $item->addFilter('StringTrim')  
                         ->addFilter(new Zend_Filter_HtmlEntities())
                         ->setRequired(true)
-                        ->addErrorMessage(ucfirst($field->name).' is required')
-                        ->setLabel(ucfirst($field->name).':');   
+                        ->addErrorMessage(ucfirst(str_replace('_', ' ', $field->name)).' is required')
+                        ->setLabel(ucfirst(str_replace('_', ' ', $field->name)).':');   
                     $this->addElement($item);
                     break;
                 case 'image':
@@ -75,8 +75,8 @@ class Application_Form_ContentForm extends Zend_Form
                     $item->addFilter('StringTrim')  
                         ->addFilter(new Zend_Filter_HtmlEntities())
                         ->setRequired(true)
-                        ->addErrorMessage(ucfirst($field->name).' is required')
-                        ->setLabel(ucfirst($field->name).':');   
+                        ->addErrorMessage(ucfirst(str_replace('_', ' ', $field->name)).' is required')
+                        ->setLabel(ucfirst(str_replace('_', ' ', $field->name)).':');
                     $this->addElement($item);
                     break;
                 case 'wysiwyg':
@@ -87,8 +87,8 @@ class Application_Form_ContentForm extends Zend_Form
                     $item = new Zend_Form_Element_Textarea($fieldName);
                     $item->addFilter('StringTrim')  
                         ->setRequired(true)
-                        ->addErrorMessage(ucfirst($field->name).' is required')
-                        ->setLabel(ucfirst($field->name).':')
+                        ->addErrorMessage(ucfirst(str_replace('_', ' ', $field->name)).' is required')
+                        ->setLabel(ucfirst(str_replace('_', ' ', $field->name)).':')
                         ->setAttrib('class', 'ckeditor');
                     $this->addElement($item);
                     break;

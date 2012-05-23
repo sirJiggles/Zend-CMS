@@ -16,7 +16,7 @@
         <?php if ($this->dataTypeFields) : ?>
             <?php foreach($this->dataTypeFields as $field): ?>
                 <tr <?php echo ($i %2 ) ? 'class="odd"' : ''; ?> >
-                    <td><?php echo $field->name; ?></td>
+                    <td><?php echo str_replace('_', ' ', $field->name); ?></td>
                     <td><?php echo $field->format; ?></td>
                     <td class="center"><a data-role="button" data-theme="a"data-icon="gear" href="/cms/datatypefields/edit/id/<?php echo $field->id; ?>/content-type/<?php echo $this->dataType['id']; ?>" title="Edit <?php echo $field->name; ?>">Edit</a></td>
                     <td class="center"><a data-role="button" data-theme="a" data-rel="dialog" data-icon="delete" id="<?php echo $this->dataType['name']; ?>" href="/cms/datatypefields/remove-confirm/id/<?php echo $field->id; ?>/content-type/<?php echo $this->dataType['id'];?>" title="Remove <?php echo $field->name; ?>">Remove</a></td>
