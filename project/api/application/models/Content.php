@@ -114,6 +114,27 @@ class Application_Model_Content extends Zend_Db_Table{
         }
     }
     
+    /*
+     * Function for removing all content for a content type
+     * 
+     * @param int $content_type_id
+     * @return bolean result
+     */
+    public function removeContentForContentType($contentType){
+        try{
+            $where = $this->getAdapter()->quoteInto('content_type = ?', $contentType);
+            $this->delete($where);
+            
+            // Always return true as if there is no content for content type
+            // the system will break
+            return true;
+         
+            
+        }catch (Exception $e){
+            return false;
+        }
+    }
+    
      /*
      * Function for adding API users to the system
      * 

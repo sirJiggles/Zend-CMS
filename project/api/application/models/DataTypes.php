@@ -74,8 +74,30 @@ class Application_Model_DataTypes extends Zend_Db_Table{
      */
     public function removeContentType($id){
         try {
+            
+            // get all content type fields for this content type and remove them
+            $contentTable = new Application_Model_Content();
+            $removeContent = $contentTable->removeContentForContentType($id);
+            
+            // Sanity check the removal of all content for this contet type
+            if (!$removeContent){
+                return false;
+            }
+            
+            // Get all data type fields for this data type and remove them
+            $dataTypeFields = new Application_Model_DataTypeFields();
+            $removeFields = $dataTypeFields->removeFieldsForContentType($id);
+            
+            // Sanity check the removal of the data type fields
+            if (!$removeFields){
+                return false;
+            }
+            
+            // Now actually remove the data type form the system
             $where = $this->getAdapter()->quoteInto('id = ?', $id);
             $result = $this->delete($where);
+            
+            // return the right result based on weather we could remove it
             if ($result){
                 return true;
             }else{

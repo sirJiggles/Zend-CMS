@@ -120,21 +120,10 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
                         $newContent[$field] = $val;
                     }
                 }
-                
-                
+
                 $where = $contentTable->getAdapter()->quoteInto('id = ?', $row->id);
                 $contentTable->update(array('content' => serialize($newContent)), $where);
                 
-                
-                //$fakeData = array();
-                //$fakeData['content'] = serialize($newContent);
-                //$fakeData['id'] = $row->id;
-                //$fakeData['content_type'] = $row->content_type;
-                //$fakeData['ref'] = $row->ref;
-                
-                //$contentTable->updateContent($fakeData, $row->id);
-                //$db->prepare($sql);
-                //$db->execute(array(serialize($newContent), $row->id));
             }
             
             $where = $this->getAdapter()->quoteInto('id = ?', $id);
@@ -149,6 +138,26 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
         }
     }
     
+    /*
+     * Function to remove all datatype fields for a datatype
+     * 
+     * @param int $contentType
+     * @return boolean $result
+     */
+    public function removeFieldsForContentType($contentType){
+        
+        try{
+            $where = $this->getAdapter()->quoteInto('content_type = ?', $contentType);
+            $this->delete($where);
+            
+            // always return true as if there are no fields for the content 
+            // type it will break the system
+            return true;
+            
+        }catch(Exception $e){
+            return false;
+        }
+    }
     
     
     /*
