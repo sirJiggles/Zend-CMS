@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This is the model that handles all of the DataTypes functionality
+ * This is the model that handles all of the Template functionality
  * 
  * 
  * All code in this project is under the GNU general public licence, full 
@@ -13,24 +13,24 @@
  */
 class Application_Model_DataTypes extends Zend_Db_Table{
     
-    protected $_name = 'content-types';
+    protected $_name = 'templates';
     
     /*
-     * Simple function to get all datatypes from the content-types table
+     * Simple function to get all templates from the templates table
      * 
-     * @return Zend_Db_Table $users
+     * @return Zend_Db_Table $templates
      */
-    public function getAllDataTypes(){
+    public function getAllTemplates(){
         return $this->fetchAll();
     }
     
     /*
-     * Function to get content types from the system by the name param
+     * Function to get templates from the system by the name param
      * 
      * @param string $name
      * @return Zend_Db_Table_Row contentType
      */
-    public function getContentTypeByName($name){
+    public function getTemplateByName($name){
         
         try {
             $selectStatememt = $this->select()
@@ -40,18 +40,18 @@ class Application_Model_DataTypes extends Zend_Db_Table{
             return $row;
             
         } catch (Exception $e) {
-            echo 'Unable to getContentTypeByName in DataTypes model: '.$e->getMessage();
+            echo 'Unable to getTemplateByName in Templates model: '.$e->getMessage();
         }
         
     }
     
     /*
-     * Function to get the content types from the database by the id
+     * Function to get the templates from the database by the id
      * 
      * @param int $id
-     * @return Zend_Db_Table_Row content type
+     * @return Zend_Db_Table_Row template
      */
-    public function getContentTypeById($id){
+    public function getTemplateById($id){
         
         try {
             $selectStatememt = $this->select()
@@ -61,39 +61,23 @@ class Application_Model_DataTypes extends Zend_Db_Table{
             return $row;
             
         } catch (Exception $e) {
-            echo 'Unable to getContentTypeById in DataTypes model: '.$e->getMessage();
+            echo 'Unable to getTemplateById in Templates model: '.$e->getMessage();
         }
         
     }
     
     /*
-     * This is the function to remove content types from the system
+     * This is the function to remove templates from the system
      * 
      * @param int $id
      * @return boolean task status
      */
     public function removeContentType($id){
         try {
+
+            // @TODO remove all of the 'content assigned' to this template number
             
-            // get all content type fields for this content type and remove them
-            $contentTable = new Application_Model_Content();
-            $removeContent = $contentTable->removeContentForContentType($id);
-            
-            // Sanity check the removal of all content for this contet type
-            if (!$removeContent){
-                return false;
-            }
-            
-            // Get all data type fields for this data type and remove them
-            $dataTypeFields = new Application_Model_DataTypeFields();
-            $removeFields = $dataTypeFields->removeFieldsForContentType($id);
-            
-            // Sanity check the removal of the data type fields
-            if (!$removeFields){
-                return false;
-            }
-            
-            // Now actually remove the data type form the system
+            //remove the template form the system
             $where = $this->getAdapter()->quoteInto('id = ?', $id);
             $result = $this->delete($where);
             
@@ -101,40 +85,40 @@ class Application_Model_DataTypes extends Zend_Db_Table{
             if ($result){
                 return true;
             }else{
-                return 'Unable to find content type to delete';
+                return 'Unable to find template to delete';
             }
         } catch (Exception $e) {
-            echo 'Unable to removeContentType in DataTypes model: '.$e->getMessage();
+            echo 'Unable to removeTemplate in Template model: '.$e->getMessage();
         }
     }
     
     
     
     /*
-     * Function to update content types based on the id
+     * Function to update templates based on the id
      * 
      * @param array $formData
      * @param array $id
      * @return boolean $result
      * 
      */
-    public function updateContentType($formData, $id){
+    public function updateTemplate($formData, $id){
         
         try {
             
             if (is_array($formData) && is_numeric($id)){
                 
                 /* 
-                 * First get all the content types and make sure the title they 
+                 * First get all the templates and make sure the name they 
                  * are tring to update does not already exist
                  */
-                $contentTypes = $this->fetchAll();
+                $templates = $this->fetchAll();
                 $nameTaken = false;
                
-                foreach ($contentTypes as $contentType){
-                    if ($contentType['id'] != $id){
+                foreach ($templates as $template){
+                    if ($template['id'] != $id){
                         // Check if the new title is taken
-                        if ($contentType['name'] == $formData['name']){
+                        if ($template['name'] == $formData['name']){
                             $nameTaken = true;
                             break;
                         } 
@@ -145,7 +129,22 @@ class Application_Model_DataTypes extends Zend_Db_Table{
                 if (!$nameTaken){
                     
                     $where = $this->getAdapter()->quoteInto('id = ?', $id);
-
+                    $newContentTypes = array();
+                    // Sort the content type form field
+                    foreach($formData as $field => $value){
+                        $parts = explode('-', $field);
+                        if ($parts[0] == 'content'){
+                            
+                            // append the id of contnt type as key and val as val
+                            $newContentTypes[$parts[1]] = $value;
+                            // remove this form field from the array
+                            unset($formData[$field]);
+                        }
+                    }
+                    // spoof the content_types value
+                    $formData['content_types'] = serialize($newContentTypes);
+                    
+                    
                     $this->update($formData, $where);
                     
                     return true;
@@ -154,32 +153,32 @@ class Application_Model_DataTypes extends Zend_Db_Table{
                     return 'Name Taken';
                 }
             }else{
-                throw new Exception('Incorrect variable types passed to updateContentType: expecting array and int');
+                throw new Exception('Incorrect variable types passed to updateTemplate: expecting array and int');
             }
             
         }catch (Exception $e) {
-            echo 'Unable to updateContentType in DataTypes model: '.$e->getMessage();
+            echo 'Unable to updateTemplate in Templates model: '.$e->getMessage();
         }
         
     }
     
     /*
-     * Function for aadding content types to the system
+     * Function for aadding templates to the system
      * 
      * @param array $postData
      * @return boolean task result
      * 
      */
-    public function addContentType($formData){
+    public function addTemplate($formData){
         try {
             
             if (is_array($formData)){
                 
-                $currentTypes = $this->fetchAll();
+                $templates = $this->fetchAll();
                 $nameTaken = false;
                 
-                foreach ($currentTypes as $curentType){
-                    if ($curentType['name'] == $formData['name']){
+                foreach ($templates as $template){
+                    if ($template['name'] == $formData['name']){
                         $nameTaken = true;
                         break;
                     }
@@ -189,6 +188,22 @@ class Application_Model_DataTypes extends Zend_Db_Table{
                 if (!$nameTaken){
 
                     // Add database record
+                    
+                    $newContentTypes = array();
+                    // Sort the content type form field
+                    foreach($formData as $field => $value){
+                        $parts = explode('-', $field);
+                        if ($parts[0] == 'content'){
+                            
+                            // append the id of contnt type as key and val as val
+                            $newContentTypes[$parts[1]] = $value;
+                            // remove this form field from the array
+                            unset($formData[$field]);
+                        }
+                    }
+                    // spoof the content_types value
+                    $formData['content_types'] = serialize($newContentTypes);
+                    
                     $newRow = $this->createRow($formData);
                     $newRow->save();
                     
@@ -200,11 +215,11 @@ class Application_Model_DataTypes extends Zend_Db_Table{
                 
                 
             }else{
-                throw new Exception('Incorrect variable types passed to addContentType: expecting array of form data');
+                throw new Exception('Incorrect variable types passed to addTemplate: expecting array of form data');
             }
             
         }catch (Exception $e) {
-            echo 'Unable to addContentType in DataTypes model: '.$e->getMessage();
+            echo 'Unable to addTemplate in Templates model: '.$e->getMessage();
         }
     }
     

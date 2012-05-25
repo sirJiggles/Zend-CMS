@@ -36,7 +36,6 @@ class Application_Form_TemplateForm extends Zend_Form
         $name = new Zend_Form_Element_Text('name');
         $name->setRequired(true)
                 ->addFilter(new Zend_Filter_HtmlEntities())
-                ->addValidator(new Zend_Validate_EmailAddress())
                 ->addErrorMessage('Name is required')
                 ->setLabel('Template name:');
         
@@ -58,25 +57,19 @@ class Application_Form_TemplateForm extends Zend_Form
         // add to the form
         $this->addElement($fileElement);
         
-        // Loop through all the content types and add a checkbox and text area for each
-        $checkboxes = array();
-        
+        // Loop through all the content types and add a text area for each
+      
         foreach($this->_contentTypes as $contentType){
-            $checkboxes[$contentType->name] = $contentType->name;
-            
-            $amountElement = new Zend_Form_Element_Text('amount-'.$contentType->name);
-            
+
+            $element = new Zend_Form_Element_Text('content-'.$contentType->id);
+            $element->addFilter(new Zend_Filter_HtmlEntities())
+                ->addValidator(new Zend_Validate_Int())
+                ->addErrorMessage('Amount of type must be numeric')
+                ->setValue('0')
+                ->setLabel(ucfirst($contentType->name).':');
+            $this->addElement($element);
             
         }
-        
-        // Checkboxes for all the content types
-        $contentTypes = new Zend_Form_Element_MultiCheckbox('conent-type');
-        $contentTypes->addMultiOptions($checkboxes)
-                ->setLabel('Content types:');
-        $this->addElement($contentTypes);
-        
-        // add text areas for amount of content types
-        
         
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Save');

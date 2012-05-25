@@ -63,6 +63,7 @@ class Application_Form_UserForm extends Zend_Form
         $email->addFilter('StringTrim')
                 ->addFilter(new Zend_Filter_HtmlEntities())
                 ->setRequired(true)
+                ->addValidator(new Zend_Validate_EmailAddress())
                 ->addErrorMessage('Email address is required')
                 ->setLabel('Email Address:');
         

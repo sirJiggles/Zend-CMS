@@ -1,8 +1,8 @@
 <?php
 
 /*
- * This is the datatypes controller, only admin users have access to the
- * datatypes content
+ * This is the section of the api that deals with getting setting etc the templates
+ * in the cms, public users have access to this data
  * 
  * All code in this project is under the GNU general public licence, full 
  * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
@@ -12,17 +12,17 @@
  * @package Controllers
  */
 
-class DatatypesController extends Api_Default
+class TemplatesController extends Api_Default
 {
-    
-    protected $_dataTypesModel = '';
+    // Create an instance of the template model
+    protected $_templatesModel = '';
 
     public function init(){
         
         // Set up the Deafult controller 
         parent::init();
         
-        $this->_dataTypesModel = new Application_Model_DataTypes();
+        $this->_templatesModel = new Application_Model_Templates();
         $this->_helper->viewRenderer->setNoRender(true); 
     }
 
@@ -31,7 +31,7 @@ class DatatypesController extends Api_Default
     public function indexAction()
     {
         if ($this->_isAdmin){
-            $data = $this->_dataTypesModel->getAllDataTypes();
+            $data = $this->_templatesModel->getAllTemplates();
             
             $this->returnData($data);
             
@@ -45,20 +45,20 @@ class DatatypesController extends Api_Default
 
     public function getAction()
     {
-        
+
         // If they have an admin api key
         if ($this->_isAdmin){
             
             $data = 'Operation not found';
             
-            // Try Getting the Content Type By Id
+            // Try Getting the Template By Id
             if ($this->getRequest()->getParam('id')){
-                $data = $this->_dataTypesModel->getContentTypeById($this->getRequest()->getParam('id'));
+                $data = $this->_templatesModel->getTemplateById($this->getRequest()->getParam('id'));
             }
             
             // Get content type by name
             if ($this->getRequest()->getParam('name')){
-                $data = $this->_dataTypesModel->getContentTypeByName($this->getRequest()->getParam('name')); 
+                $data = $this->_templatesModel->getTemplateByName($this->getRequest()->getParam('name')); 
             }
 
             $this->returnData($data);
@@ -69,7 +69,7 @@ class DatatypesController extends Api_Default
             //->setHttpResponseCode(403)
             ->appendBody("You do not have access to this data");
         }
-        
+ 
     }
     
     public function postAction()
@@ -81,13 +81,13 @@ class DatatypesController extends Api_Default
             // Work out the type of action they want to perform
             switch($_POST['operation']){
                 case 'update':
-                    $data = $this->_dataTypesModel->updateContentType(unserialize(base64_decode($_POST['data'])), $_POST['argOne']);
+                    $data = $this->_templatesModel->updateTemplate(unserialize(base64_decode($_POST['data'])), $_POST['argOne']);
                     break;
                 case 'add':
-                    $data = $this->_dataTypesModel->addContentType(unserialize(base64_decode($_POST['data'])));
+                    $data = $this->_templatesModel->addTemplate(unserialize(base64_decode($_POST['data'])));
                     break;
                 case 'remove':
-                    $data = $this->_dataTypesModel->removeContentType(unserialize(base64_decode($_POST['data'])));
+                    $data = $this->_templatesModel->removeTemplate(unserialize(base64_decode($_POST['data'])));
                     break;
                 default:
                     $data = 'Operation not found';
@@ -103,6 +103,7 @@ class DatatypesController extends Api_Default
             ->setHttpResponseCode(403)
             ->appendBody("You do not have access to this data");
         }
+
 
     }
     

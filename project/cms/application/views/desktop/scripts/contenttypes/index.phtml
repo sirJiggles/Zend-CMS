@@ -1,0 +1,36 @@
+<h2>Content Types</h2>
+<p><a href="/cms/contenttypes/add" data-role="button" data-theme="a" data-icon="plus">Add Content Type</a></p>
+
+<?php if ($this->contentTypes) : ?>
+    <!-- This is the table that contains all the users in the system -->
+    <table class="generic">
+        <thead>
+            <th>Content Type</th>
+            <th style="text-align:center;">Rename</th>
+            <th style="text-align:center;">Fields</th>
+            <th style="text-align:center;">Remove</th>
+        </thead>
+
+        <tbody>
+            <!--display all of the content types, and the buttons to edit them-->
+            <?php $i = 0; ?>
+            <?php foreach($this->contentTypes as $contentType): ?>
+                <tr <?php echo ($i %2 ) ? 'class="odd"' : ''; ?> >
+                    <td><?php echo $contentType->name; ?></td>
+                    <td class="center"><a data-role="button" data-theme="a" href="/cms/contenttypes/edit/id/<?php echo $contentType->id; ?>" title="Rename <?php echo $contentType->name; ?>">Rename</a></td>
+                    <td class="center"><a data-role="button" data-theme="a" data-icon="gear" href="/cms/contenttypefields/index/id/<?php echo $contentType->id; ?>" title="Edit Fields">Edit Fields</a></td>
+                    <td class="center"><a data-role="button" data-theme="a" data-rel="dialog" data-icon="delete" id="<?php echo $contentType->name; ?>" href="/cms/contenttypes/remove-confirm/id/<?php echo $contentType->id; ?>" title="Remove <?php echo $contentType->name; ?>">Remove</a></td>
+                </tr>
+                <?php $i ++; ?>
+            <?php endforeach; ?>
+        </tbody>
+
+
+
+    </table>
+<?php else: ?>
+    <p>No content types defined, please add a content type</p>
+<?php endif; ?>
+
+    
+

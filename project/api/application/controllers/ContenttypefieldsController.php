@@ -1,8 +1,8 @@
 <?php
 
 /*
- * This is the datatype fields controller, only admin users have access to the
- * datatype fields content
+ * This is the content type fields controller, only admin users have access to the
+ * content type fields content
  * 
  * All code in this project is under the GNU general public licence, full 
  * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
@@ -12,17 +12,17 @@
  * @package Controllers
  */
 
-class DatatypefieldsController extends Api_Default
+class ContenttypefieldsController extends Api_Default
 {
     
-    protected $_dataTypeFieldsModel = '';
+    protected $_contentTypeFieldsModel = '';
 
     public function init(){
         
         // Set up the Deafult controller 
         parent::init();
        
-        $this->_dataTypeFieldsModel = new Application_Model_DataTypeFields();
+        $this->_contentTypeFieldsModel = new Application_Model_ContentTypeFields();
         $this->_helper->viewRenderer->setNoRender(true); 
     }
 
@@ -31,7 +31,7 @@ class DatatypefieldsController extends Api_Default
     public function indexAction()
     {
         if ($this->_isAdmin){
-            $data = $this->_dataTypeFieldsModel->getAllDataTypeFields();
+            $data = $this->_contentTypeFieldsModel->getAllContentTypeFields();
             
             $this->returnData($data);
             
@@ -53,17 +53,17 @@ class DatatypefieldsController extends Api_Default
             
             // Try Getting the Content Type By Id
             if ($this->getRequest()->getParam('id')){
-                $data = $this->_dataTypeFieldsModel->getContentTypeFieldById($this->getRequest()->getParam('id'));
+                $data = $this->_contentTypeFieldsModel->getContentTypeFieldById($this->getRequest()->getParam('id'));
             }
             
             // Get content type by name
             if ($this->getRequest()->getParam('name')){
-                $data = $this->_dataTypeFieldsModel->getContentFieldByName($this->getRequest()->getParam('name')); 
+                $data = $this->_contentTypeFieldsModel->getContentFieldByName($this->getRequest()->getParam('name')); 
             }
             
             // Get the content fields for the content type parsed
-            if ($this->getRequest()->getParam('datatype')){
-                $data = $this->_dataTypeFieldsModel->getDataFieldsForDataType($this->getRequest()->getParam('datatype')); 
+            if ($this->getRequest()->getParam('contenttype')){
+                $data = $this->_contentTypeFieldsModel->getContentFieldsForContentType($this->getRequest()->getParam('contenttype')); 
             }
 
 
@@ -87,13 +87,13 @@ class DatatypefieldsController extends Api_Default
             // Work out the type of action they want to perform
             switch($_POST['operation']){
                 case 'update':
-                    $data = $this->_dataTypeFieldsModel->updateContentTypeField(unserialize(base64_decode($_POST['data'])), $_POST['argOne']);
+                    $data = $this->_contentTypeFieldsModel->updateContentTypeField(unserialize(base64_decode($_POST['data'])), $_POST['argOne']);
                     break;
                 case 'add':
-                    $data = $this->_dataTypeFieldsModel->addContentTypeField(unserialize(base64_decode($_POST['data'])));
+                    $data = $this->_contentTypeFieldsModel->addContentTypeField(unserialize(base64_decode($_POST['data'])));
                     break;
                 case 'remove':
-                    $data = $this->_dataTypeFieldsModel->removeContentTypeField(unserialize(base64_decode($_POST['data'])));
+                    $data = $this->_contentTypeFieldsModel->removeContentTypeField(unserialize(base64_decode($_POST['data'])));
                     break;
                 default:
                     $data = 'Operation not found';

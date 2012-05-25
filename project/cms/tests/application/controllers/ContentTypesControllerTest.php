@@ -11,20 +11,20 @@
  * @package Test_Controllers
  */
 
-// Get an instance the data types model file
-require_once '../../api/application/models/DataTypes.php';
+// Get an instance the content types model file
+require_once '../../api/application/models/ContentTypes.php';
 
-class DataTypesControllerTest extends ControllerTestCase
+class ContentTypesControllerTest extends ControllerTestCase
 {
     
     // We need the model from the api for util functions like get test content types
-    protected  $_dataTypesModel;
+    protected  $_contentTypesModel;
     
     public function setUp(){
        // Set the parent up (disable the admin login)
        parent::setUp();
-       // Get an instance of the user controller
-       $this->_dataTypesModel = new Application_Model_DataTypes();
+       // Get an instance of the content types model
+       $this->_contentTypesModel = new Application_Model_ContentTypes();
        
        $this->loginSuperAdmin();
 
@@ -33,9 +33,9 @@ class DataTypesControllerTest extends ControllerTestCase
     // Test that the index page exists
     public function testLandOnIndexPage()
     {
-        $this->dispatch('/datatypes');
+        $this->dispatch('/contenttypes');
         $this->assertNotRedirect();
-        $this->assertController('datatypes');
+        $this->assertController('contenttypes');
         $this->assertAction('index');
         $this->assertResponseCode(200);
         
@@ -47,7 +47,7 @@ class DataTypesControllerTest extends ControllerTestCase
         $this->loginEditor();
         
         // Now we will attempt to access the content types section
-        $this->dispatch('/datatypes');
+        $this->dispatch('/contenttypes');
         $this->assertRedirectTo('/error/not-the-droids');
     }
     
@@ -57,7 +57,7 @@ class DataTypesControllerTest extends ControllerTestCase
         $this->loginAdmin();
         
         // Now we will attempt to access the content types section
-        $this->dispatch('/datatypes');
+        $this->dispatch('/contenttypes');
         $this->assertRedirectTo('/error/not-the-droids');
     }
     
@@ -72,11 +72,11 @@ class DataTypesControllerTest extends ControllerTestCase
              ->setPost(array('name' => 'TestContentTypeOne'));
         
         // Make sure we are in the right place and have the right things on screen
-        $this->dispatch('/datatypes/add');
+        $this->dispatch('/contenttypes/add');
         $this->assertAction('add');
         
-        // Assert that we are redirected to the user manage screen, thus added
-        $this->assertRedirectTo('/datatypes');
+        // Assert that we are redirected to the contenttypes screen, thus added
+        $this->assertRedirectTo('/contenttypes');
         
     }
     
@@ -87,7 +87,7 @@ class DataTypesControllerTest extends ControllerTestCase
             ->setPost(array('name' => ''));
         
         // Post the data to the following location
-        $this->dispatch('/datatypes/add');
+        $this->dispatch('/contenttypes/add');
         $this->assertAction('add');
         
         // Check our error messages on the screen
@@ -107,13 +107,13 @@ class DataTypesControllerTest extends ControllerTestCase
              ->setPost(array('name' => 'TestContentTypeOne'));
         
         // Post the data to the following location
-        $this->dispatch('/datatypes/add');
+        $this->dispatch('/contenttypes/add');
         $this->assertAction('add');
         
-        $this->assertRedirectTo('/datatypes');
+        $this->assertRedirectTo('/contenttypes');
         
         // Then lets make sure its not been renamed
-        $contentTypeApi = $this->_dataTypesModel->getContentTypeByName('TestContentTypeOne');
+        $contentTypeApi = $this->_contentTypesModel->getContentTypeByName('TestContentTypeOne');
         $this->assertNotNull($contentTypeApi, 'The item by the original name could not be found name check failing!');
         
     }
@@ -127,69 +127,69 @@ class DataTypesControllerTest extends ControllerTestCase
              ->setPost(array('name' => 'RenameTestContentType'));
         
         // get the content type form the api so we can get the id
-        $contentTypeApi = $this->_dataTypesModel->getContentTypeByName('TestContentTypeOne');
+        $contentTypeApi = $this->_contentTypesModel->getContentTypeByName('TestContentTypeOne');
         
         // Post the data to the following location
-        $this->dispatch('/datatypes/edit/id/'.$contentTypeApi->id);
+        $this->dispatch('/contenttypes/edit/id/'.$contentTypeApi->id);
         $this->assertAction('edit');
         
         // Test that taken to manage page (where flash message is displayed)
-        $this->assertRedirectTo('/datatypes');
+        $this->assertRedirectTo('/contenttypes');
     }
     
     
     // Test incorrect request to edit content type action
     public function testIncorrectArgsEdit(){
-        $this->dispatch('/datatypes/edit/id/sdasd');
-        $this->assertRedirectTo('/datatypes');
+        $this->dispatch('/contenttypes/edit/id/sdasd');
+        $this->assertRedirectTo('/contenttypes');
     }
     
     // Test content type not found given correct args (hopefully no one will have this id)
     public function testContentTypeNotFoundEdit(){
-        $this->dispatch('/datatypes/edit/id/9999999999999999999999');
-        $this->assertRedirectTo('/datatypes');
+        $this->dispatch('/contenttypes/edit/id/9999999999999999999999');
+        $this->assertRedirectTo('/contenttypes');
     }
     
     
     // Test unable to find content type to remove by git params
     public function testCantLocateRemoveUserId(){
-        $this->dispatch('/datatypes/remove/id/9999999999999999999999');
-        $this->assertRedirectTo('/datatypes');
+        $this->dispatch('/contenttypes/remove/id/9999999999999999999999');
+        $this->assertRedirectTo('/contenttypes');
         
         // Make sure the test content type has not beed removed
-        $contentTypeApi = $this->_dataTypesModel->getContentTypeByName('RenameTestContentType');
+        $contentTypeApi = $this->_contentTypesModel->getContentTypeByName('RenameTestContentType');
         $this->assertEquals('RenameTestContentType', $contentTypeApi->name, 'Content Type has been removed for some reason!');
     }
     
     // Test the remove datatype confirm action
     public function testRemoveConfirmAction(){
-        $this->dispatch('/datatypes/remove-confirm');
-        $this->assertRedirectTo('/datatypes');
+        $this->dispatch('/contenttypes/remove-confirm');
+        $this->assertRedirectTo('/contenttypes');
     }
     
     // Test the remove datatype confirm action with an actual type id
     public function testRemoveConfirmWithId(){
-        $contentTypeApi = $this->_dataTypesModel->getContentTypeByName('RenameTestContentType');
-        $this->dispatch('/datatypes/remove-confirm/id/'.$contentTypeApi->id);
+        $contentTypeApi = $this->_contentTypesModel->getContentTypeByName('RenameTestContentType');
+        $this->dispatch('/contenttypes/remove-confirm/id/'.$contentTypeApi->id);
         $this->assertResponseCode(200);
     }
     
     // Test remove datatype confirm action with incorrect ID
     public function testRemoveConfirmInccorectId(){
-        $this->dispatch('/datatypes/remove-confirm/id/999999999999999');
-        $this->assertRedirectTo('/datatypes');
+        $this->dispatch('/contenttypes/remove-confirm/id/999999999999999');
+        $this->assertRedirectTo('/contenttypes');
     }
     
     
     // Here we test that we can remove the test content type
     public function testRemoveContentType(){
-        $contentTypeApi = $this->_dataTypesModel->getContentTypeByName('RenameTestContentType');
+        $contentTypeApi = $this->_contentTypesModel->getContentTypeByName('RenameTestContentType');
         if ($contentTypeApi != null){
-            $this->dispatch('/datatypes/remove/id/'.$contentTypeApi->id);
-            $this->assertRedirectTo('/datatypes');
+            $this->dispatch('/contenttypes/remove/id/'.$contentTypeApi->id);
+            $this->assertRedirectTo('/contenttypes');
             
             // Test the content type has been removed from the db
-            $contentTypeApi = $this->_dataTypesModel->getContentTypeByName('RenameTestContentType');
+            $contentTypeApi = $this->_contentTypesModel->getContentTypeByName('RenameTestContentType');
             $this->assertEquals(null, $contentTypeApi, 'Content Type has not been removed!');
         }
     }

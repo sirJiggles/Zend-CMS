@@ -11,7 +11,7 @@
  * @package Controllers
  */
 
-class DatatypesController extends Cms_Controllers_Default
+class ContenttypesController extends Cms_Controllers_Default
 {
     
     /*
@@ -31,10 +31,11 @@ class DatatypesController extends Cms_Controllers_Default
         $this->view->pageTitle = 'Content Types';
         
         // Get all the content types from the API
-        $dataTypes = $this->getFromApi('/datatypes');
+        $contentTypes = $this->getFromApi('/contenttypes');
         
-        $this->view->dataTypes = $dataTypes;
-        
+        if ($contentTypes !== null){
+            $this->view->contentTypes = $contentTypes;
+        }
         // Show any flash messages 
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
         
@@ -68,7 +69,7 @@ class DatatypesController extends Cms_Controllers_Default
             // Check if the form data is valid
             if ($contentTypeForm->isValid($_POST)) { 
                 // Run the add user function at the api
-                $addAction = $this->postToApi('/datatypes', 'add', $contentTypeForm->getValues());
+                $addAction = $this->postToApi('/contenttypes', 'add', $contentTypeForm->getValues());
  
                 // Duplicate entries checking
                 if ($addAction != 1){
@@ -76,13 +77,13 @@ class DatatypesController extends Cms_Controllers_Default
 
                         $this->_helper->flashMessenger->addMessage('That name is taken, please try again');
                         $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
-                        $this->_redirect('/datatypes');
+                        $this->_redirect('/contenttypes');
                     }
                 }else{
                      // Set the flash message
                     $this->_helper->flashMessenger->addMessage('Content type added to the system');
                     $this->view->messages = $this->_helper->flashMessenger->getMessages();
-                    $this->_redirect('/datatypes');
+                    $this->_redirect('/contenttypes');
                     return;
                 }
                 
@@ -109,12 +110,12 @@ class DatatypesController extends Cms_Controllers_Default
         if (isset($id) && is_numeric($id)){
 
             // Get the content type from the API
-            $contentType = $this->getFromApi('/datatypes/'.$id, 'array');
+            $contentType = $this->getFromApi('/contenttypes/'.$id, 'array');
             
 
             // Get the content type form
             $contentTypeForm = new Application_Form_ContentTypeForm();
-            $contentTypeForm->setAction('/cms/datatypes/edit/id/'.$id);
+            $contentTypeForm->setAction('/cms/contenttypes/edit/id/'.$id);
             $contentTypeForm->setMethod('post');
             $contentTypeForm->setElementDecorators($this->_formDecorators);
             
@@ -129,7 +130,7 @@ class DatatypesController extends Cms_Controllers_Default
                 // Check if the form data is valid
                 if ($contentTypeForm->isValid($_POST)) {
 
-                    $updateAttempt = $this->postToApi('/datatypes', 'update',  $contentTypeForm->getValues(), $id);
+                    $updateAttempt = $this->postToApi('/contenttypes', 'update',  $contentTypeForm->getValues(), $id);
                     
                     // Duplicate entries checking
                     if ($updateAttempt != 1){
@@ -137,13 +138,13 @@ class DatatypesController extends Cms_Controllers_Default
 
                             $this->_helper->flashMessenger->addMessage('That name is taken, please try again');
                             $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
-                            $this->_redirect('/datatypes');
+                            $this->_redirect('/contenttypes');
 
                         }
                     }else{
                         $this->_helper->flashMessenger->addMessage('Content Type details updated');
                         $this->view->messages = $this->_helper->flashMessenger->getMessages();
-                        $this->_redirect('/datatypes');
+                        $this->_redirect('/contenttypes');
                         return;
                     }
                     
@@ -152,7 +153,7 @@ class DatatypesController extends Cms_Controllers_Default
             
             // Redirect back to manage content types if the content type (by the id) was not found
             if ($contentType === null){
-                $this->_redirect('/datatypes');
+                $this->_redirect('/contenttypes');
                 return;
             }
             
@@ -166,7 +167,7 @@ class DatatypesController extends Cms_Controllers_Default
             $this->view->contentType = $contentType;
         }else{
             // Redirect back to content types
-            $this->_redirect('/datatypes');
+            $this->_redirect('/contenttypes');
             return;
         }
         
@@ -184,10 +185,10 @@ class DatatypesController extends Cms_Controllers_Default
         
         if (!$id ){
             $this->_helper->flashMessenger->addMessage('Unable to find content type');
-            $this->_redirect('/datatypes');
+            $this->_redirect('/contenttypes');
             return;
         }
-        $contentType = $this->getFromApi('/datatypes/'.$id);
+        $contentType = $this->getFromApi('/contenttypes/'.$id);
         
         
         if ($this->_isMobile){
@@ -200,7 +201,7 @@ class DatatypesController extends Cms_Controllers_Default
             $this->view->contentType = $contentType;
         }else{
             $this->_helper->flashMessenger->addMessage('Unable to find content type');
-            $this->_redirect('/datatypes');
+            $this->_redirect('/contenttypes');
             return;
         }
     }
@@ -218,7 +219,7 @@ class DatatypesController extends Cms_Controllers_Default
         if (isset($id) && is_numeric($id)){
             
             // Make post request to remove content type from the API
-            $removeAction = $this->postToApi('/datatypes', 'remove', $id);
+            $removeAction = $this->postToApi('/contenttypes', 'remove', $id);
 
             if ($removeAction == 1){
                 $this->_helper->flashMessenger->addMessage('Content type removed from the system');
@@ -228,12 +229,12 @@ class DatatypesController extends Cms_Controllers_Default
             }
             
             $this->view->messages = $this->_helper->flashMessenger->getMessages();
-            $this->_redirect('/datatypes');
+            $this->_redirect('/contenttypes');
             return;
             
         }else{
             // Redirect back to content types
-            $this->_redirect('/datatypes');
+            $this->_redirect('/contenttypes');
             return;
         }
     }

@@ -2,7 +2,7 @@
 
 /*
  * This is the model for prefoming CRUD operations on the content fields for 
- * content types
+ * content type fields
  * 
  * All code in this project is under the GNU general public licence, full 
  * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
@@ -11,29 +11,29 @@
  * @copyright Copyright (c) Gareth Fuller
  * @package Models
  */
-class Application_Model_DataTypeFields extends Zend_Db_Table{
+class Application_Model_ContentTypeFields extends Zend_Db_Table{
     
     protected $_name = 'content-type-fields';
     
     /*
-     * Simple function to get all datatype fields from the content-types table
+     * Simple function to get all content type fields from the content-types table
      * 
-     * @return Zend_Db_Table data type fields
+     * @return Zend_Db_Table content type fields
      */
-    public function getAllDataTypeFields(){
+    public function getAllContentTypeFields(){
         return $this->fetchAll();
     }
     
     /*
-     * This function gets all of the data type fields for the data type by id
-     * parsed to the system, for example if we have data type of 1 (article)
-     * here we get all the data type fields for that data type (this is for the 
+     * This function gets all of the content type fields for the content type by id
+     * parsed to the system, for example if we have content type of 1 (article)
+     * here we get all the content type fields for that content type (this is for the 
      * main page where superadmins can edit the fields for the content tyes)
      * 
      * @param int $id
      * @return Zend_Db_Table $users
      */
-    public function getDataFieldsForDataType($id){
+    public function getContentFieldsForContentType($id){
         try {
             $selectStatememt = $this->select()
                                     ->where('content_type = ?', $id);
@@ -42,7 +42,7 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
             return $row;
             
         } catch (Exception $e) {
-            echo 'Unable to getDataFieldsForDataType in DataTypeFields model: '.$e->getMessage();
+            echo 'Unable to getContentFieldsForContentType in ContentTypeFields model: '.$e->getMessage();
         }
     }
     
@@ -64,7 +64,7 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
             return $row;
             
         } catch (Exception $e) {
-            echo 'Unable to getContentFieldByName in DataTypeFileds model: '.$e->getMessage();
+            echo 'Unable to getContentFieldByName in ContentTypeFields model: '.$e->getMessage();
         }
         
     }
@@ -85,7 +85,7 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
             return $row;
             
         } catch (Exception $e) {
-            echo 'Unable to getContentFieldById in DataTypeFields model: '.$e->getMessage();
+            echo 'Unable to getContentFieldById in ContentTypeFields model: '.$e->getMessage();
         }
         
     }
@@ -129,17 +129,17 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
             $where = $this->getAdapter()->quoteInto('id = ?', $id);
             $result = $this->delete($where);
             if ($result){
-                return 'true';
+                return '1';
             }else{
                 return 'Unable to find content type field to delete';
             }
         } catch (Exception $e) {
-            echo 'Unable to removeContentTypeField in DataTypeFields model: '.$e->getMessage();
+            echo 'Unable to removeContentTypeField in ContentTypeFields model: '.$e->getMessage();
         }
     }
     
     /*
-     * Function to remove all datatype fields for a datatype
+     * Function to remove all content type fields for a datatype
      * 
      * @param int $contentType
      * @return boolean $result
@@ -210,7 +210,7 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
             }
             
         }catch (Exception $e) {
-            echo 'Unable to updateContentTypeField in DataTypeFields model: '.$e->getMessage();
+            echo 'Unable to updateContentTypeField in ContentTypeFields model: '.$e->getMessage();
         }
         
     }
@@ -261,7 +261,7 @@ class Application_Model_DataTypeFields extends Zend_Db_Table{
             }
             
         }catch (Exception $e) {
-            echo 'Unable to addContentTypeField in DataTypeField model: '.$e->getMessage();
+            echo 'Unable to addContentTypeField in ContentTypeFields model: '.$e->getMessage();
         }
     }
     

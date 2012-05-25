@@ -22,7 +22,7 @@ class Access_Config extends Zend_Acl {
         $roles = array('admin', 'editor', 'superadmin');
 
         // List of the controllers we are going to allocate
-        $controllers = array('user', 'index', 'error', 'api', 'content', 'datatypes', 'datatypefields', 'template');
+        $controllers = array('user', 'index', 'error', 'api', 'content', 'contenttypes', 'contenttypefields', 'template');
         
         // Loop through the rolse and controllers and add them to the system
         foreach ($roles as $role) {
@@ -48,28 +48,28 @@ class Access_Config extends Zend_Acl {
         $this->deny('editor', 'api', 'remove');
         $this->deny('editor', 'api', 'remove-confirm');
         $this->deny('editor', 'api', 'add');
-        $this->deny('editor', 'datatypes', 'index');
-        $this->deny('editor', 'datatypes', 'add');
-        $this->deny('editor', 'datatypes', 'edit');
-        $this->deny('editor', 'datatypes', 'remove');
-        $this->deny('editor', 'datatypes', 'remove-confirm');
-        $this->deny('editor', 'datatypefields', 'index');
-        $this->deny('editor', 'datatypefields', 'add');
-        $this->deny('editor', 'datatypefields', 'edit');
-        $this->deny('editor', 'datatypefields', 'remove');
-        $this->deny('editor', 'datatypefields', 'remove-confirm');
+        $this->deny('editor', 'contenttypes', 'index');
+        $this->deny('editor', 'contenttypes', 'add');
+        $this->deny('editor', 'contenttypes', 'edit');
+        $this->deny('editor', 'contenttypes', 'remove');
+        $this->deny('editor', 'contenttypes', 'remove-confirm');
+        $this->deny('editor', 'contenttypefields', 'index');
+        $this->deny('editor', 'contenttypefields', 'add');
+        $this->deny('editor', 'contenttypefields', 'edit');
+        $this->deny('editor', 'contenttypefields', 'remove');
+        $this->deny('editor', 'contenttypefields', 'remove-confirm');
         
         // Here comes the credencial definition for the admin user
-        $this->deny('admin', 'datatypes', 'index');
-        $this->deny('admin', 'datatypes', 'add');
-        $this->deny('admin', 'datatypes', 'edit');
-        $this->deny('admin', 'datatypes', 'remove');
-        $this->deny('admin', 'datatypes', 'remove-confirm');
-        $this->deny('admin', 'datatypefields', 'index');
-        $this->deny('admin', 'datatypefields', 'add');
-        $this->deny('admin', 'datatypefields', 'edit');
-        $this->deny('admin', 'datatypefields', 'remove');
-        $this->deny('admin', 'datatypefields', 'remove-confirm');
+        $this->deny('admin', 'contenttypes', 'index');
+        $this->deny('admin', 'contenttypes', 'add');
+        $this->deny('admin', 'contenttypes', 'edit');
+        $this->deny('admin', 'contenttypes', 'remove');
+        $this->deny('admin', 'contenttypes', 'remove-confirm');
+        $this->deny('admin', 'contenttypefields', 'index');
+        $this->deny('admin', 'contenttypefields', 'add');
+        $this->deny('admin', 'contenttypefields', 'edit');
+        $this->deny('admin', 'contenttypefields', 'remove');
+        $this->deny('admin', 'contenttypefields', 'remove-confirm');
         
         
         // Add acl to registery (so we can access from the authPlugin class)

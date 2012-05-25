@@ -1,0 +1,40 @@
+<h2>Content Fields: <?php echo $this->contentType['name']; ?></h2>
+<p><a href="/cms/contenttypefields/add/content-type/<?php echo $this->contentType['id']; ?>" data-role="button" data-theme="a" data-icon="plus">Add Content Field</a></p>
+
+<?php if ($this->contentTypeFields) : ?>
+    <!-- This is the table that contains all the content type fields in the system -->
+    <table class="generic">
+        <thead>
+            <th>Field Name</th>
+            <th>Type</th>
+            <th style="text-align:center;">Edit</th>
+            <th style="text-align:center;">Remove</th>
+        </thead>
+
+        <tbody>
+            <!--display all of the users and the links to edit the buggers-->
+            <?php $i = 0; ?>
+            
+            <?php foreach($this->contentTypeFields as $field): ?>
+                <tr <?php echo ($i %2 ) ? 'class="odd"' : ''; ?> >
+                    <td><?php echo str_replace('_', ' ', $field->name); ?></td>
+                    <td><?php echo $field->format; ?></td>
+                    <td class="center"><a data-role="button" data-theme="a"data-icon="gear" href="/cms/contenttypefields/edit/id/<?php echo $field->id; ?>/content-type/<?php echo $this->contentType['id']; ?>" title="Edit <?php echo $field->name; ?>">Edit</a></td>
+                    <td class="center"><a data-role="button" data-theme="a" data-rel="dialog" data-icon="delete" id="<?php echo $this->contentType['name']; ?>" href="/cms/contenttypefields/remove-confirm/id/<?php echo $field->id; ?>/content-type/<?php echo $this->contentType['id'];?>" title="Remove <?php echo $field->name; ?>">Remove</a></td>
+                </tr>
+                <?php $i ++; ?>
+            <?php endforeach; ?>
+
+        </tbody>
+
+
+
+    </table>
+<?php else: ?>
+    <p>No content field types defined</p>
+<?php endif; ?>
+
+
+
+    
+
