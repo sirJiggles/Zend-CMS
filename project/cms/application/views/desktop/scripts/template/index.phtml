@@ -1,0 +1,29 @@
+<h2>Templates</h2>
+
+<p><a href="/cms/template/add" data-role="button" data-theme="a" data-icon="plus">Add Template</a></p>
+
+<!-- Show all the templates in the system -->
+<table class="generic">
+    <thead>
+        <th>Name</th>
+        <th style="text-align:center;">Edit</th>
+        <th style="text-align:center;">Remove</th>
+    </thead>
+    
+    <tbody>
+        <!-- display all the templates and the edit / remove buttons -->
+        <?php $i = 0; ?>
+        <?php foreach($this->templates as $template): ?>
+            <tr <?php echo ($i %2 ) ? 'class="odd"' : ''; ?> >
+                <td><?php echo $template->name; ?></td>
+                <td class="center"><a data-role="button" data-theme="a" data-icon="gear" href="/cms/template/index/id/<?php echo $template->id; ?>" title="Edit Template">Edit</a></td>
+                <td class="center"><a data-role="button" data-theme="a" data-rel="dialog" data-icon="delete" id="<?php echo $template->name; ?>" href="/cms/template/remove-confirm/id/<?php echo $template->id; ?>" title="Remove <?php echo $template->name; ?>">Remove</a></td>
+            </tr>
+            <?php $i ++; ?>
+        <?php endforeach; ?>
+    </tbody>
+    
+</table>
+
+    
+
