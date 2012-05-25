@@ -14,15 +14,17 @@ class Application_Form_TemplateForm extends Zend_Form
 {
     
     protected $_templateFiles = '';
+    protected $_contentTypes = '';
     
     public function init()
     {
-        // Nothing in here anymore..
+        // Nothing in here ..
     }
     
-    public function setValues($files){
+    public function setValues($files, $contentTypes){
         // Set the template files for the form select box
         $this->_templateFiles = $files;
+        $this->_contentTypes = $contentTypes;
     }
     
     public function startForm(){
@@ -54,7 +56,27 @@ class Application_Form_TemplateForm extends Zend_Form
             
         }
         // add to the form
-        $this->addElememt($fileElement);
+        $this->addElement($fileElement);
+        
+        // Loop through all the content types and add a checkbox and text area for each
+        $checkboxes = array();
+        
+        foreach($this->_contentTypes as $contentType){
+            $checkboxes[$contentType->name] = $contentType->name;
+            
+            $amountElement = new Zend_Form_Element_Text('amount-'.$contentType->name);
+            
+            
+        }
+        
+        // Checkboxes for all the content types
+        $contentTypes = new Zend_Form_Element_MultiCheckbox('conent-type');
+        $contentTypes->addMultiOptions($checkboxes)
+                ->setLabel('Content types:');
+        $this->addElement($contentTypes);
+        
+        // add text areas for amount of content types
+        
         
         // Submit input field
         $submit = new Zend_Form_Element_Submit('Save');
@@ -63,7 +85,7 @@ class Application_Form_TemplateForm extends Zend_Form
                 ->setAttrib('class', 'submit');
         
         // add the save button
-        $this->addElememt($submit);
+        $this->addElement($submit);
 
         
     }

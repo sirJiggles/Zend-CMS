@@ -51,17 +51,19 @@ class TemplateController extends Cms_Controllers_Default
         $this->view->pageTitle = 'Add Template';
         
         // Get a list of all the files in the template directory
-        $directory = realpath($_SERVER['DOCUMENT_ROOT'].'/templates');
+        $directory = realpath($_SERVER['DOCUMENT_ROOT'].'/../cms/templates');
+
         $handler = opendir($directory);
         $files = array();
 
         // open directory and walk through the filenames
         while ($file = readdir($handler)) {
-        // if file isn't this directory or its parent, add it to the results
-        if ($file != "." && $file != "..") {
-            // check to make sure not file with . at start
-            if (substr($file, 0, 1) != "."){
-                $files[] = $file;
+            // if file isn't this directory or its parent, add it to the results
+            if ($file != "." && $file != "..") {
+                // check to make sure not file with . at start
+                if (substr($file, 0, 1) != "."){
+                    $files[] = $file;
+                }
             }
         }
         // tidy up: close the handler
@@ -71,12 +73,20 @@ class TemplateController extends Cms_Controllers_Default
         // some template files in the directory
         if (!isset($files[0]) || $files[0] == ''){
             $this->_helper->flashMessenger->addMessage('No template files in the template directory');
+            $this->view->messages = $this->_helper->flashMessenger->getMessages();
+            return;
+        }
+        
+        $contentTypes = $this->getFromApi('/datatypes');
+        
+        if ($contentTypes === null){
+            $this->_helper->flashMessenger->addMessage('No content types defined in the system');
             return;
         }
         
         // Get an instance of the template form
         $templateForm = new Application_Form_TemplateForm();
-        $templateForm->setValues($files);
+        $templateForm->setValues($files, $contentTypes);
         $templateForm->startForm();
         
         $templateForm->setElementDecorators($this->_formDecorators);
