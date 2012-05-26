@@ -72,7 +72,7 @@ class Application_Model_Templates extends Zend_Db_Table{
      * @param int $id
      * @return boolean task status
      */
-    public function removeContentType($id){
+    public function removeTemplate($id){
         try {
 
             // @TODO remove all of the 'content assigned' to this template number
@@ -132,7 +132,7 @@ class Application_Model_Templates extends Zend_Db_Table{
                     $newContentTypes = array();
                     // Sort the content type form field
                     foreach($formData as $field => $value){
-                        $parts = explode('-', $field);
+                        $parts = explode('_', $field);
                         if ($parts[0] == 'content'){
                             
                             // append the id of contnt type as key and val as val
@@ -192,7 +192,7 @@ class Application_Model_Templates extends Zend_Db_Table{
                     $newContentTypes = array();
                     // Sort the content type form field
                     foreach($formData as $field => $value){
-                        $parts = explode('-', $field);
+                        $parts = explode('_', $field);
                         if ($parts[0] == 'content'){
                             
                             // append the id of contnt type as key and val as val
@@ -201,6 +201,7 @@ class Application_Model_Templates extends Zend_Db_Table{
                             unset($formData[$field]);
                         }
                     }
+                    
                     // spoof the content_types value
                     $formData['content_types'] = serialize($newContentTypes);
                     
