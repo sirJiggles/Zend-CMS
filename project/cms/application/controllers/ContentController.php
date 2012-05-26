@@ -320,6 +320,12 @@ class ContentController extends Cms_Controllers_Default
         
         $content = $this->getFromApi('/content/'.$id);
         
+        if ($content === null){
+            $this->_helper->flashMessenger->addMessage('Could not find the content you wish to remove');
+            $this->_redirect('/content');
+            return;
+        }
+        
         // Attempt to remove the content from the api
         $removeAction = $this->postToApi('/content', 'remove', $id);
 
