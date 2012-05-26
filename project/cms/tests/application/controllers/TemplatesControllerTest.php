@@ -82,7 +82,7 @@ class TemplatesControllerTest extends ControllerTestCase
     }
     
     // testsuperadmin has access to add
-    public function testSuperAdminAccessAdd(){
+    /*public function testSuperAdminAccessAdd(){
         $this->loginSuperAdmin();
         $this->dispatch('/templates/add');
         $this->assertNotRedirect();
@@ -120,7 +120,7 @@ class TemplatesControllerTest extends ControllerTestCase
         
         
     }
-   
+   */
    
     
     /*

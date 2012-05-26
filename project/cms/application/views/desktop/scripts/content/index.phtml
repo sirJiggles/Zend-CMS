@@ -1,10 +1,8 @@
 <div id="center-container">
-    <h2>Add Content</h2>
+    <h2>Content</h2>
 
-    <p>Select the type of content you would like to add.</p>
-    
     <?php foreach($this->contentTypes as $contentType) : ?>
-    <a data-role="button" data-theme="a" data-icon="plus" title="<?php echo ucfirst($contentType->name); ?>" href="/cms/content/add/id/<?php echo $contentType->id; ?>"><?php echo ucfirst($contentType->name); ?></a>
+    <a data-role="button" data-theme="a" data-icon="plus" title="<?php echo ucfirst($contentType->name); ?>" href="/cms/content/manage/type/<?php echo $contentType->id; ?>"><?php echo ucfirst($contentType->name); ?></a>
     <?php endforeach; ?>
 </div>
 

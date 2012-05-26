@@ -43,6 +43,49 @@ class ContentController extends Cms_Controllers_Default
         
     }
     
+    // This is where users can manage the content based on the type
+    public function manageAction(){
+
+        $type = $this->getRequest()->getParam('type');
+        
+        if (isset($type)){
+            // Get all the content for this type
+            $content = $this->getFromApi('/content/type/'.$type);
+            
+            // Get the content type object so we can get the name of it for display
+            $contentType = $this->getFromApi('/contenttypes/'.$type);
+            
+            // Content type is a must have so check here for it
+            if ($contentType === null){
+                $this->_helper->flashMessenger->addMessage('Could not get content type data from the API');
+                $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+                $this->_redirect('/content');
+                return;
+            }
+            
+            // Check if there is no content defined for this type yet, if not display message
+            if ($content === null){
+                $this->_helper->flashMessenger->addMessage('No Content currently defined');
+            }
+            
+            // send the content data to the view
+            $this->view->content = $content;
+            
+            // send content type data to the view
+            $this->view->contentType = $contentType;
+            
+        }else{
+            $this->_helper->flashMessenger->addMessage('Need to parse a content type');
+            $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+            $this->_redirect('/content');
+            return;
+        }
+
+        
+         // Show any flash messages
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
+    }
+    
     /*
      * This is where content actually gets added into the cms ... 
      */
@@ -66,7 +109,7 @@ class ContentController extends Cms_Controllers_Default
         // handle cant load from API 
         if ($contentType === null){
             $this->_helper->flashMessenger->addMessage('Unable to load content type from API');
-            $this->_redirect('/content');
+            $this->_redirect('/content/manage/type/'.$id);
             return;
         }
         
@@ -76,7 +119,7 @@ class ContentController extends Cms_Controllers_Default
         // Check to make sure we have the api values correctly from the api that is
         if ($contentFields === null){
             $this->_helper->flashMessenger->addMessage('Unable to load content type fields from API');
-            $this->_redirect('/content');
+            $this->_redirect('/content/manage/type/'.$id);
             return;
         }
         
@@ -123,7 +166,7 @@ class ContentController extends Cms_Controllers_Default
                      // Set the flash message
                     $this->_helper->flashMessenger->addMessage('Content added to the system');
                     $this->view->messages = $this->_helper->flashMessenger->getMessages();
-                    $this->_redirect('/content');
+                    $this->_redirect('/content/manage/type/'.$id);
                     return;
                 }
                 return;
@@ -141,7 +184,7 @@ class ContentController extends Cms_Controllers_Default
         
         if (!isset($id) || !is_numeric($id)){
             $this->_helper->flashMessenger->addMessage('Could not edit cotent type due to lack of ID');
-            $this->_redirect('/');
+            $this->_redirect('/content');
             return;
         }
         
@@ -151,7 +194,7 @@ class ContentController extends Cms_Controllers_Default
         // handle cant load from API 
         if ($currentContent === null){
             $this->_helper->flashMessenger->addMessage('Unable to load content from API');
-            $this->_redirect('/');
+            $this->_redirect('/content');
             return;
         }
         
@@ -162,7 +205,7 @@ class ContentController extends Cms_Controllers_Default
         // Check to make sure we have the api values correctly from the api that is
         if ($contentFields === null){
             $this->_helper->flashMessenger->addMessage('Unable to load content type fields from API');
-            $this->_redirect('/');
+            $this->_redirect('/content/manage/type/'.$currentContent->content_type);
             return;
         }
         
@@ -201,7 +244,7 @@ class ContentController extends Cms_Controllers_Default
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
                 }else{
                     $this->_helper->flashMessenger->addMessage('content updated');
-                    $this->_redirect('/');
+                    $this->_redirect('/content/manage/type/'.$currentContent->content_type);
                     return;
                 }
 
@@ -237,7 +280,7 @@ class ContentController extends Cms_Controllers_Default
         
         if (!isset($id) || !is_numeric($id)){
             $this->_helper->flashMessenger->addMessage('You must pass a valid content id');
-            $this->_redirect('/');
+            $this->_redirect('/content');
             return;
         }
         
@@ -246,7 +289,7 @@ class ContentController extends Cms_Controllers_Default
         
         if ($content === null){
             $this->_helper->flashMessenger->addMessage('Unable to find content in API');
-            $this->_redirect('/');
+            $this->_redirect('/content');
             return;
         }
         
@@ -271,9 +314,11 @@ class ContentController extends Cms_Controllers_Default
         // Sanity check the param
         if (!isset($id) || !is_numeric($id)){
             $this->_helper->flashMessenger->addMessage('You must pass a valid id to remove content');
-            $this->_redirect('/');
+            $this->_redirect('/content');
             return;
         }
+        
+        $content = $this->getFromApi('/content/'.$id);
         
         // Attempt to remove the content from the api
         $removeAction = $this->postToApi('/content', 'remove', $id);
@@ -283,7 +328,7 @@ class ContentController extends Cms_Controllers_Default
         }else{
             $this->_helper->flashMessenger->addMessage('Could not find the content to remove');
         }
-        $this->_redirect('/');
+        $this->_redirect('/content/manage/type/'.$content->content_type);
         return;
             
 

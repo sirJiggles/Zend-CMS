@@ -114,7 +114,7 @@ class ContentControllerTest extends ControllerTestCase
         $this->assertAction('add');
         
         // Assert that we are redirected to the data type fields manage screen
-        $this->assertRedirectTo('/content');
+        $this->assertRedirectTo('/content/manage/type/1');
         
         // Check the database to make sure the content is in there ok
         $contentCheck = $this->_contentModel->getByRef('unitTestingContentOne');
@@ -155,7 +155,7 @@ class ContentControllerTest extends ControllerTestCase
         $this->assertAction('add');
         
         // Assert that we are redirected to the data type fields manage screen
-        $this->assertRedirectTo('/content');
+        $this->assertRedirectTo('/content/manage/type/1');
         
         // Check the database to make sure the content is in there ok
         $contentCheck = $this->_contentModel->getByRef('unitTestingContentDuplicate');
@@ -243,7 +243,7 @@ class ContentControllerTest extends ControllerTestCase
         $this->assertAction('edit');
         
         // Taken back to the homepage
-        $this->assertRedirect('/');
+        $this->assertRedirect('/content/manage/type/1');
         
         // Check to make sure the content has beed edited by tyring to get it 
         // by the new ref value
@@ -285,7 +285,7 @@ class ContentControllerTest extends ControllerTestCase
         $this->assertAction('edit');
         
         // Taken back to the homepage, must have worked
-        $this->assertRedirect('/');
+        $this->assertRedirect('/content/manage/type/1');
         
        
     }
@@ -327,13 +327,13 @@ class ContentControllerTest extends ControllerTestCase
     // Test the edit content action with incorrect format of args
     public function testEditContentIcorrectArgs(){
         $this->dispatch('/content/edit/id/sdsddsf');
-        $this->assertRedirect('/');
+        $this->assertRedirect('/content');
     }
     
     // Test the edit content action with the not found args
     public function testEditContentNotFoundArgs(){
         $this->dispatch('/content/edit/id/908030934545');
-        $this->assertRedirect('/');
+        $this->assertRedirect('/content');
         
     }
     
@@ -341,28 +341,28 @@ class ContentControllerTest extends ControllerTestCase
     public function testRemoveContentIncorrectId(){
         
         $this->dispatch('/content/remove/id/9999999999999999999999');
-        $this->assertRedirectTo('/');
+        $this->assertRedirectTo('/content');
     }
     
     // Test incorrect format of arguments to remove action
     public function testRemoveContentInocrrectFormatArgs(){
         
         $this->dispatch('/content/remove/id/fsdfdsfsdf');
-        $this->assertRedirectTo('/');
+        $this->assertRedirectTo('/content');
     }
     
     // Test inocrrect not found id for remove-confirm action
     public function testRemoveConfirmNoIdFound(){
         
         $this->dispatch('/content/remove-confirm/id/983493498378923492345');
-        $this->assertRedirectTo('/');
+        $this->assertRedirectTo('/content');
     }
     
     // Test incorrect format of the args for the remove confirm action
     public function testRemoveConfirmIncorrectFormatId(){
         
         $this->dispatch('/content/remove-confirm/id/fsdfdsfsdf');
-        $this->assertRedirectTo('/');
+        $this->assertRedirectTo('/content');
     }
     
     // Now test that we can navigate correctly to the remove confirm action
@@ -396,7 +396,7 @@ class ContentControllerTest extends ControllerTestCase
         // Dispatch the remove confirm url
         $this->dispatch('/content/remove/id/'.$currentContent->id);
         
-        $this->assertRedirect('/');
+        $this->assertRedirect('/content/manage/type/1');
         
         // Try to get the content from the system again just to make sure it 
         // is gone
@@ -416,7 +416,7 @@ class ContentControllerTest extends ControllerTestCase
         // Dispatch the remove confirm url
         $this->dispatch('/content/remove/id/'.$currentContent->id);
         
-        $this->assertRedirect('/');
+        $this->assertRedirect('/content/manage/type/1');
         
         // Try to get the content from the system again just to make sure it 
         // is gone

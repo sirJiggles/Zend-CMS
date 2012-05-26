@@ -1,0 +1,40 @@
+<?php if ($this->contentType) : ?>
+
+<h2>Current Content: <?php echo $this->contentType->name; ?></h2>
+<p><a href="/cms/content/add/id/<?php echo $this->contentType->id; ?>" data-role="button" data-theme="a" data-icon="plus">Add Content</a></p>
+
+
+    <!-- This is the table that contains all the content in the system for the content type  -->
+    <table class="generic">
+        <thead>
+            <th>Reference</th>
+            <th style="text-align:center;">Edit</th>
+            <th style="text-align:center;">Remove</th>
+        </thead>
+
+        <tbody>
+            <!--display all of the users and the links to edit the buggers-->
+            <?php $i = 0; ?>
+            <?php if ($this->content) :?>
+                <?php foreach($this->content as $content): ?>
+                    <tr <?php echo ($i %2 ) ? 'class="odd"' : ''; ?> >
+                        <td><?php echo $content->ref; ?></td>
+                        <td class="center"><a data-role="button" data-theme="a"data-icon="gear" href="/cms/content/edit/id/<?php echo $content->id; ?>/content-type/<?php echo $this->contentType->id; ?>" title="Edit <?php echo $content->ref; ?>">Edit</a></td>
+                        <td class="center"><a data-role="button" data-theme="a" data-rel="dialog" data-icon="delete"  href="/cms/content/remove-confirm/id/<?php echo $content->id; ?>/content-type/<?php echo $this->contentType->id;?>" title="Remove <?php echo $content->ref; ?>">Remove</a></td>
+                    </tr>
+                    <?php $i ++; ?>
+                <?php endforeach; ?>
+           <?php endif; ?>
+        </tbody>
+
+
+
+    </table>
+<?php else: ?>
+    <p>No content type defined</p>
+<?php endif; ?>
+
+
+
+    
+

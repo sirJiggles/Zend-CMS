@@ -87,8 +87,6 @@ class TemplatesController extends Cms_Controllers_Default
                 // Run the add template function response from the api
                 $addAction = $this->postToApi('/templates', 'add', $templateForm->getValues());
                 
-                var_dump($addAction);
-                
                 // Error checking
                 if ($addAction != 1){
                     
