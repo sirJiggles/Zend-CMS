@@ -58,6 +58,12 @@ class Access_Config extends Zend_Acl {
         $this->deny('editor', 'contenttypefields', 'edit');
         $this->deny('editor', 'contenttypefields', 'remove');
         $this->deny('editor', 'contenttypefields', 'remove-confirm');
+        $this->deny('editor', 'templates', 'index');
+        $this->deny('editor', 'templates', 'add');
+        $this->deny('editor', 'templates', 'edit');
+        $this->deny('editor', 'templates', 'remove');
+        $this->deny('editor', 'templates', 'remove-confirm');
+ 
         
         // Here comes the credencial definition for the admin user
         $this->deny('admin', 'contenttypes', 'index');
@@ -70,6 +76,11 @@ class Access_Config extends Zend_Acl {
         $this->deny('admin', 'contenttypefields', 'edit');
         $this->deny('admin', 'contenttypefields', 'remove');
         $this->deny('admin', 'contenttypefields', 'remove-confirm');
+        $this->deny('admin', 'templates', 'index');
+        $this->deny('admin', 'templates', 'add');
+        $this->deny('admin', 'templates', 'edit');
+        $this->deny('admin', 'templates', 'remove');
+        $this->deny('admin', 'templates', 'remove-confirm');
         
         
         // Add acl to registery (so we can access from the authPlugin class)

@@ -20,7 +20,7 @@ class Application_Model_ContentTypes extends Zend_Db_Table{
      * 
      * @return Zend_Db_Table $users
      */
-    public function getAllDataTypes(){
+    public function getAllContentTypes(){
         return $this->fetchAll();
     }
     

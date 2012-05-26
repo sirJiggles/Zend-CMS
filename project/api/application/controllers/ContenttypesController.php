@@ -31,7 +31,7 @@ class ContenttypesController extends Api_Default
     public function indexAction()
     {
         if ($this->_isAdmin){
-            $data = $this->_contentTypesModel->getAllDataTypes();
+            $data = $this->_contentTypesModel->getAllContentTypes();
             
             $this->returnData($data);
             
