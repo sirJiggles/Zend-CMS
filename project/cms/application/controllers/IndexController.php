@@ -30,7 +30,7 @@ class IndexController extends Cms_Controllers_Default
     {
        
         // First get all the types of data that we can have in the system
-        $contentTypes = $this->getFromApi('/datatypes');
+        $contentTypes = $this->getFromApi('/contenttypes');
         
         if ($contentTypes === null){
             $this->_helper->flashMessenger->addMessage('Could not get content types from the database');
