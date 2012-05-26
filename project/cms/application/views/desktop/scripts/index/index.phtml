@@ -24,10 +24,11 @@
                      * where type is the type of content and value is the content id
                      * assigned to that type for this page (based on the template)
                      */
-                    
+                    $i = 0;
                     foreach($currentMapping as $map){
                         echo '<ul>';
                         $name = '';
+                        
                         // get the name of the content type
                         foreach($this->contentTypes as $contentType){
                             if ($contentType->id == $map['type']){
@@ -37,8 +38,9 @@
                         }
                         if ($name != ''){
                             $class = ($map['value'] != 0) ? 'active' : '';
-                            echo '<li><a href="#" title="'.$name.'" '.$class.'>'.$name.'</a></li>';
+                            echo '<li><a href="index/editassignment/page/'.$page->id.'/id/'.$i.'" title="'.$name.'" '.$class.'>'.$name.'</a></li>';
                         }
+                        $i ++;
                         echo '</ul>';
                        
                     }
@@ -53,7 +55,3 @@
 
     </ul>
 <?php endif; ?>
-
-<div id="popup-container" class="hide">
-    
-</div>

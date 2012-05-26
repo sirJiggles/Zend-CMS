@@ -102,73 +102,58 @@ class IndexController extends Cms_Controllers_Default
         
     }
     
-    public function editAction(){
+    public function editAssignmentAction(){
         
-        $this->view->pageTitle = 'Edit Page';
+        $this->view->pageTitle = 'Edit Content Assignment';
         
-        // First check to make sure we got the id correctly for the template
-        $id = $this->getRequest()->getParam('id');
+        // First check to make sure we got the id correctly for the page
+        $pageId = $this->getRequest()->getParam('page');
+        $typeId = $this->getRequest()->getParam('id');
         
-        if (!isset($id) || !is_numeric($id)){
-            $this->_helper->flashMessenger->addMessage('Could not edit template due to lack of ID');
-            $this->_redirect('/templates');
+        if (!isset($pageId) || !is_numeric($pageId)){
+            $this->_helper->flashMessenger->addMessage('Could not edit page assignment due to lack of page id');
+            $this->_redirect('/');
             return;
         }
         
-        $currentTemplate = $this->getFromApi('/templates/'.$id);
-        
-        if ($currentTemplate === null){
-            $this->_helper->flashMessenger->addMessage('Could not get current template from API');
-            $this->_redirect('/templates');
+        if (!isset($typeId) || !is_numeric($typeId)){
+            $this->_helper->flashMessenger->addMessage('Could not edit page assignment due to lack of id');
+            $this->_redirect('/');
             return;
         }
         
-        $files = $this->_getFiles();
+        $currentPage = $this->getFromApi('/pages/'.$pageId);
         
-        // Thow message about not being able to add templates until there are
-        // some template files in the directory
-        if (!isset($files[0]) || $files[0] == ''){
-            $this->_helper->flashMessenger->addMessage('No template files in the template directory');
-            $this->view->messages = $this->_helper->flashMessenger->getMessages();
-            return;
-        }
-        
-        $contentTypes = $this->getFromApi('/contenttypes');
-        
-        if ($contentTypes === null){
-            $this->_helper->flashMessenger->addMessage('No content types defined in the system');
-            $this->view->messages = $this->_helper->flashMessenger->getMessages();
+        if ($currentPage === null){
+            $this->_helper->flashMessenger->addMessage('Could not get current page from API');
+            $this->_redirect('/');
             return;
         }
 
+        // Get an instance of the edit assignment form
+        $assignmentForm = new Application_Form_ContentAssignmentForm();
+        $assignmentForm->setValues($currentPage, $typeId);
+        $assignmentForm->startForm();
         
-        // Get an instance of the template form
-        $templateForm = new Application_Form_TemplateForm();
-        $templateForm->setValues($files, $contentTypes);
-        $templateForm->startForm();
-        
-        $templateForm->setElementDecorators($this->_formDecorators);
+        $assignmentForm->setElementDecorators($this->_formDecorators);
         
        
         // Check if post
         if ($this->getRequest()->isPost()){
                 
             // Check if the form data is valid
-            if ($templateForm->isValid($_POST)) {
+            if ($assignmentForm->isValid($_POST)) {
                 
                 // attempt to update content via API
-                $updateAttempt = $this->postToApi('/templates', 'update',  $templateForm->getValues(), $currentTemplate->id);
+                $updateAttempt = $this->postToApi('/pages', 'update-assignment',  $assignmentForm->getValues(), $currentPage->id);
                 
                 // check on status of update
                 if ($updateAttempt != 1){
-                    if ($updateAttempt == 'Name Taken'){
-                        $this->_helper->flashMessenger->addMessage('That name is already taken, please try again');
-                    }else{
-                        $this->_helper->flashMessenger->addMessage('Unable to update template via the API');
-                    }
+                    $this->_helper->flashMessenger->addMessage('Unable to update page assignment via the API');
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+                    return;
                 }else{
-                    $this->_helper->flashMessenger->addMessage('template updated');
+                    $this->_helper->flashMessenger->addMessage('content assignment updated');
                     $this->_redirect('/templates');
                     return;
                 }
@@ -176,17 +161,17 @@ class IndexController extends Cms_Controllers_Default
             }       
         }
         
-        // Sort the content_types before adding it back to the form
-        $currentData = unserialize($currentTemplate->content_types);
+        // Sort the content_assigned before adding it back to the form
+        $currentData = unserialize($page->content_assigned);
         $newFormData = array();
-        foreach ($currentData as $key => $val){
+        foreach ($currentData as $map){
             $newFormData['content_'.$key] = $val[0];
         }
         $newFormData['name'] = $currentTemplate->name;
         $newFormData['file'] = $currentTemplate->file;
         
         // add template data back to the form
-        $templateForm->populate($newFormData);
+        $assignmentForm->populate($newFormData);
         
         // send the form to the view
         $this->view->templateForm = $templateForm;
