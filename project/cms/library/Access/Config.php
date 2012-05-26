@@ -22,7 +22,7 @@ class Access_Config extends Zend_Acl {
         $roles = array('admin', 'editor', 'superadmin');
 
         // List of the controllers we are going to allocate
-        $controllers = array('user', 'index', 'error', 'api', 'content', 'contenttypes', 'contenttypefields', 'template');
+        $controllers = array('user', 'index', 'error', 'api', 'content', 'contenttypes', 'contenttypefields', 'templates');
         
         // Loop through the rolse and controllers and add them to the system
         foreach ($roles as $role) {

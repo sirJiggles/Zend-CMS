@@ -33,7 +33,7 @@ class ContentController extends Cms_Controllers_Default
         // Get all of the content types from the API then send the array of types
         // to the view
         
-        $contentTypes = $this->getFromApi('/datatypes');
+        $contentTypes = $this->getFromApi('/contenttypes');
         
         if ($contentTypes != null){
             $this->view->contentTypes = $contentTypes;
@@ -61,7 +61,7 @@ class ContentController extends Cms_Controllers_Default
         }
  
         // Get content type data from the API
-        $contentType = $this->getFromApi('/datatypes/'.$id);
+        $contentType = $this->getFromApi('/contenttypes/'.$id);
        
         // handle cant load from API 
         if ($contentType === null){
@@ -71,7 +71,7 @@ class ContentController extends Cms_Controllers_Default
         }
         
         // Get the content fields based on the content type we just got from the API
-        $contentFields = $this->getFromApi('/datatypefields/datatype/'.$contentType->id);
+        $contentFields = $this->getFromApi('/contenttypefields/contenttype/'.$contentType->id);
         
         // Check to make sure we have the api values correctly from the api that is
         if ($contentFields === null){
@@ -157,7 +157,7 @@ class ContentController extends Cms_Controllers_Default
         
         // Based on the current content we need to know the fields for this content
         // so we will now try get the content fields from the API
-        $contentFields = $this->getFromApi('/datatypefields/datatype/'.$currentContent->content_type);
+        $contentFields = $this->getFromApi('/contenttypefields/contentype/'.$currentContent->content_type);
         
         // Check to make sure we have the api values correctly from the api that is
         if ($contentFields === null){

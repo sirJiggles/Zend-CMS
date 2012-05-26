@@ -15,7 +15,7 @@
 require_once '../../api/application/models/Content.php';
 
 // Get instance of the model for getting the content type fields
-require_once '../../api/application/models/DataTypeFields.php';
+require_once '../../api/application/models/ContentTypeFields.php';
 
 class ContentControllerTest extends ControllerTestCase
 {
@@ -25,7 +25,7 @@ class ContentControllerTest extends ControllerTestCase
     
     // Need an instance of the contet type fields so that we can check the filds
     // types of the dummy content we are going to add / remove
-    protected $_dataTypeFields = '';
+    protected $_contentTypeFields = '';
     
     public function setUp(){
        // Set the parent up (disable the admin login)
@@ -34,7 +34,7 @@ class ContentControllerTest extends ControllerTestCase
        $this->_contentModel = new Application_Model_Content();
        
        // Get an instance of the content type fields model
-       $this->_dataTypeFields = new Application_Model_DataTypeFields();
+       $this->_contentTypeFields = new Application_Model_ContentTypeFields();
        
     }
     
@@ -92,7 +92,7 @@ class ContentControllerTest extends ControllerTestCase
         // First we need to work out what content tye fields we have
         // for the content type so we can actually populate the form
         // so get the fields for the first type from the API
-        $contentFields = $this->_dataTypeFields->getDataFieldsForDataType(1);
+        $contentFields = $this->_contentTypeFields->getContentFieldsForContentType(1);
         
         // check we got something back
         $this->assertNotEquals(null, $contentFields, 'Could not get contet fields for type 1 (does type 1 exist?)');
@@ -133,7 +133,7 @@ class ContentControllerTest extends ControllerTestCase
        // First we need to work out what content tye fields we have
         // for the content type so we can actually populate the form
         // so get the fields for the first type from the API
-        $contentFields = $this->_dataTypeFields->getDataFieldsForDataType(1);
+        $contentFields = $this->_contentTypeFields->getContentFieldsForContentType(1);
         
         // check we got something back
         $this->assertNotEquals(null, $contentFields, 'Could not get contet fields for type 1 (does type 1 exist?)');
@@ -173,7 +173,7 @@ class ContentControllerTest extends ControllerTestCase
         // First we need to work out what content tye fields we have
         // for the content type so we can actually populate the form
         // so get the fields for the first type from the API
-        $contentFields = $this->_dataTypeFields->getDataFieldsForDataType(1);
+        $contentFields = $this->_contentTypeFields->getContentFieldsForContentType(1);
         
         // check we got something back
         $this->assertNotEquals(null, $contentFields, 'Could not get contet fields for type 1 (does type 1 exist?)');
@@ -225,7 +225,7 @@ class ContentControllerTest extends ControllerTestCase
         
         // Rather than formatting the serialised content and so on we will
         // create the edit content in the same way we did for add
-        $contentFields = $this->_dataTypeFields->getDataFieldsForDataType(1);
+        $contentFields = $this->_contentTypeFields->getContentFieldsForContentType(1);
         
         $fakeData = $this->_spoofFormatContent($contentFields, 'edit');
          
@@ -267,7 +267,7 @@ class ContentControllerTest extends ControllerTestCase
         
         // Rather than formatting the serialised content and so on we will
         // create the edit content in the same way we did for add
-        $contentFields = $this->_dataTypeFields->getDataFieldsForDataType(1);
+        $contentFields = $this->_contentTypeFields->getContentFieldsForContentType(1);
         
         $fakeData = $this->_spoofFormatContent($contentFields, 'edit');
          
@@ -302,7 +302,7 @@ class ContentControllerTest extends ControllerTestCase
         
         // Rather than formatting the serialised content and so on we will
         // create the edit content in the same way we did for add
-        $contentFields = $this->_dataTypeFields->getDataFieldsForDataType(1);
+        $contentFields = $this->_contentTypeFields->getContentFieldsForContentType(1);
         
         $fakeData = $this->_spoofFormatContent($contentFields, 'edit');
          

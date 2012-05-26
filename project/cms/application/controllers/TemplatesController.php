@@ -12,7 +12,7 @@
  * @package Controllers
  */
 
-class TemplateController extends Cms_Controllers_Default
+class TemplatesController extends Cms_Controllers_Default
 {
     
     /*
@@ -77,10 +77,11 @@ class TemplateController extends Cms_Controllers_Default
             return;
         }
         
-        $contentTypes = $this->getFromApi('/datatypes');
+        $contentTypes = $this->getFromApi('/contenttypes');
         
         if ($contentTypes === null){
             $this->_helper->flashMessenger->addMessage('No content types defined in the system');
+            $this->view->messages = $this->_helper->flashMessenger->getMessages();
             return;
         }
         
@@ -100,12 +101,10 @@ class TemplateController extends Cms_Controllers_Default
             // Check if the form data is valid
             if ($templateForm->isValid($_POST)) {
                 
-                // Check to make sure the template file they have selected exists
-                
-                
-                
                 // Run the add template function response from the api
-                $addAction = $this->postToApi('/template', 'add', $templateForm->getValues());
+                $addAction = $this->postToApi('/templates', 'add', $templateForm->getValues());
+                
+                var_dump($addAction);
                 
                 // Error checking
                 if ($addAction != 1){
@@ -121,9 +120,10 @@ class TemplateController extends Cms_Controllers_Default
                      // Set the flash message
                     $this->_helper->flashMessenger->addMessage('Template added to the system');
                     $this->view->messages = $this->_helper->flashMessenger->getMessages();
-                    $this->_redirect('/template');
+                    $this->_redirect('/templates');
                     return;
                 }
+                
                 return;
             }
         }

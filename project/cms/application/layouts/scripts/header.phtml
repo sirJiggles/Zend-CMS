@@ -20,6 +20,7 @@ if ($auth->hasIdentity()){
             
         <?php if ($identity->role == 'superadmin') :?>
             <a data-role="button" data-theme="a" data-icon="gear" title="Content Types" href="/cms/contenttypes">Content Types</a>
+            <a data-role="button" data-theme="a" data-icon="gear" title="Templates" href="/cms/templates">Templates</a>
         <?php endif; ?>
 
         <a data-role="button" data-theme="a" href="/cms/logout" title="Logout">Logout</a>

@@ -64,7 +64,7 @@ class Application_Form_TemplateForm extends Zend_Form
             $element = new Zend_Form_Element_Text('content-'.$contentType->id);
             $element->addFilter(new Zend_Filter_HtmlEntities())
                 ->addValidator(new Zend_Validate_Int())
-                ->addErrorMessage('Amount of type must be numeric')
+                ->addErrorMessage('Amount must be numeric')
                 ->setValue('0')
                 ->setLabel(ucfirst($contentType->name).':');
             $this->addElement($element);

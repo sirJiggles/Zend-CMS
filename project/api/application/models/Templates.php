@@ -11,7 +11,7 @@
  * @copyright Copyright (c) Gareth Fuller
  * @package Models
  */
-class Application_Model_DataTypes extends Zend_Db_Table{
+class Application_Model_Templates extends Zend_Db_Table{
     
     protected $_name = 'templates';
     
