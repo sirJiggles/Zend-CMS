@@ -83,6 +83,7 @@ class TemplatesControllerTest extends ControllerTestCase
     
     // testsuperadmin has access to add
     public function testSuperAdminAccessAdd(){
+        $this->loginSuperAdmin();
         $this->dispatch('/templates/add');
         $this->assertNotRedirect();
         $this->assertController('templates');
@@ -104,7 +105,7 @@ class TemplatesControllerTest extends ControllerTestCase
              ->setPost($templateFields);
 
         // Now set the dispatch
-        $this->dispatch('/templates/add/');
+        $this->dispatch('/templates/add');
         
         $this->assertAction('add');
         
