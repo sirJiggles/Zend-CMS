@@ -157,7 +157,7 @@ class ContentController extends Cms_Controllers_Default
         
         // Based on the current content we need to know the fields for this content
         // so we will now try get the content fields from the API
-        $contentFields = $this->getFromApi('/contenttypefields/contentype/'.$currentContent->content_type);
+        $contentFields = $this->getFromApi('/contenttypefields/contenttype/'.$currentContent->content_type);
         
         // Check to make sure we have the api values correctly from the api that is
         if ($contentFields === null){
