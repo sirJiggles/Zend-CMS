@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This is the model that handles all of the Template functionality
+ * This is the model that handles all of the Pages functionality
  * 
  * 
  * All code in this project is under the GNU general public licence, full 
@@ -11,26 +11,26 @@
  * @copyright Copyright (c) Gareth Fuller
  * @package Models
  */
-class Application_Model_Templates extends Zend_Db_Table{
+class Application_Model_Pages extends Zend_Db_Table{
     
-    protected $_name = 'templates';
+    protected $_name = 'pages';
     
     /*
-     * Simple function to get all templates from the templates table
+     * Simple function to get all pages from the pages table
      * 
-     * @return Zend_Db_Table $templates
+     * @return Zend_Db_Table $pages
      */
-    public function getAllTemplates(){
+    public function getAllPages(){
         return $this->fetchAll();
     }
     
     /*
-     * Function to get templates from the system by the name param
+     * Function to get page from the system by the name param
      * 
      * @param string $name
-     * @return Zend_Db_Table_Row contentType
+     * @return Zend_Db_Table_Row page
      */
-    public function getTemplateByName($name){
+    public function getPageByName($name){
         
         try {
             $selectStatememt = $this->select()
@@ -40,18 +40,18 @@ class Application_Model_Templates extends Zend_Db_Table{
             return $row;
             
         } catch (Exception $e) {
-            echo 'Unable to getTemplateByName in Templates model: '.$e->getMessage();
+            echo 'Unable to getPageByName in Pages model: '.$e->getMessage();
         }
         
     }
     
     /*
-     * Function to get the templates from the database by the id
+     * Function to get the pages from the database by the id
      * 
      * @param int $id
-     * @return Zend_Db_Table_Row template
+     * @return Zend_Db_Table_Row page
      */
-    public function getTemplateById($id){
+    public function getPageById($id){
         
         try {
             $selectStatememt = $this->select()
@@ -61,22 +61,20 @@ class Application_Model_Templates extends Zend_Db_Table{
             return $row;
             
         } catch (Exception $e) {
-            echo 'Unable to getTemplateById in Templates model: '.$e->getMessage();
+            echo 'Unable to getPageById in Pages model: '.$e->getMessage();
         }
         
     }
     
     /*
-     * This is the function to remove templates from the system
+     * This is the function to remove pages from the system
      * 
      * @param int $id
      * @return boolean task status
      */
-    public function removeTemplate($id){
+    public function removePage($id){
         try {
 
-            // @TODO remove all of the 'content assigned' to this template number
-            
             //remove the template form the system
             $where = $this->getAdapter()->quoteInto('id = ?', $id);
             $result = $this->delete($where);
@@ -85,40 +83,38 @@ class Application_Model_Templates extends Zend_Db_Table{
             if ($result){
                 return true;
             }else{
-                return 'Unable to find template to delete';
+                return 'Unable to find page to delete';
             }
         } catch (Exception $e) {
-            echo 'Unable to removeTemplate in Template model: '.$e->getMessage();
+            echo 'Unable to removePage in Pages model: '.$e->getMessage();
         }
     }
-    
-    
-    
+
     /*
-     * Function to update templates based on the id
+     * Function to update pages based on the id
      * 
      * @param array $formData
      * @param array $id
      * @return boolean $result
      * 
      */
-    public function updateTemplate($formData, $id){
+    public function updatePage($formData, $id){
         
         try {
             
             if (is_array($formData) && is_numeric($id)){
                 
                 /* 
-                 * First get all the templates and make sure the name they 
+                 * First get all the pages and make sure the name they 
                  * are tring to update does not already exist
                  */
-                $templates = $this->fetchAll();
+                $pages = $this->fetchAll();
                 $nameTaken = false;
                
-                foreach ($templates as $template){
-                    if ($template['id'] != $id){
+                foreach ($pages as $page){
+                    if ($page['id'] != $id){
                         // Check if the new title is taken
-                        if ($template['name'] == $formData['name']){
+                        if ($page['name'] == $formData['name']){
                             $nameTaken = true;
                             break;
                         } 
@@ -135,11 +131,8 @@ class Application_Model_Templates extends Zend_Db_Table{
                         $parts = explode('_', $field);
                         if ($parts[0] == 'content'){
                             
-                            if ($value != 0){
-                                // append the id of contnt type as key and val as val
-                                $newContentTypes[] = array( 'type' => $parts[1],
-                                                            'amount' => $value);
-                            }
+                            // append the id of contnt type as key and val as val
+                            $newContentTypes[$parts[1]] = $value;
                             // remove this form field from the array
                             unset($formData[$field]);
                         }
@@ -156,32 +149,32 @@ class Application_Model_Templates extends Zend_Db_Table{
                     return 'Name Taken';
                 }
             }else{
-                throw new Exception('Incorrect variable types passed to updateTemplate: expecting array and int');
+                throw new Exception('Incorrect variable types passed to updatePage: expecting array and int');
             }
             
         }catch (Exception $e) {
-            echo 'Unable to updateTemplate in Templates model: '.$e->getMessage();
+            echo 'Unable to updatePage in Pages model: '.$e->getMessage();
         }
         
     }
     
     /*
-     * Function for aadding templates to the system
+     * Function for aadding pages to the system
      * 
      * @param array $postData
      * @return boolean task result
      * 
      */
-    public function addTemplate($formData){
+    public function addPage($formData){
         try {
             
             if (is_array($formData)){
                 
-                $templates = $this->fetchAll();
+                $pages = $this->fetchAll();
                 $nameTaken = false;
                 
-                foreach ($templates as $template){
-                    if ($template['name'] == $formData['name']){
+                foreach ($pages as $page){
+                    if ($page['name'] == $formData['name']){
                         $nameTaken = true;
                         break;
                     }
@@ -189,27 +182,26 @@ class Application_Model_Templates extends Zend_Db_Table{
                 }
                 
                 if (!$nameTaken){
-
+                    
                     // Add database record
                     
-                    $newContentTypes = array();
-                    // Sort the content type form field
-                    foreach($formData as $field => $value){
-                        $parts = explode('_', $field);
-                        if ($parts[0] == 'content'){
-                            
-                            if ($value != 0){
-                                // append the id of contnt type as key and val as val
-                                $newContentTypes[] = array( 'type' => $parts[1],
-                                                            'amount' => $value);
-                            }
-                            // remove this form field from the array
-                            unset($formData[$field]);
-                        }
-                    }
+                    // Get the template the user has selected from the API
+                    $templateModel = new Application_Model_Templates();
+                    $template = $templateModel->getTemplateById($formData['template']);
                     
-                    // spoof the content_types value
-                    $formData['content_types'] = serialize($newContentTypes);
+                    $contentTypes = unserialize($template->content_types);
+                    
+                    $newContentAssigned = array();
+                    
+                    foreach($contentTypes as $contentType){
+                        for ($i = 0; $i < $contentType['amount']; $i ++){
+                            $newContentAssigned[] = array('type' => $contentType['type'],
+                                                          'value' => 0);
+                        }
+
+                    }
+                    // spoof the content_assigned value
+                    $formData['content_assigned'] = serialize($newContentAssigned);
                     
                     $newRow = $this->createRow($formData);
                     $newRow->save();
@@ -222,11 +214,11 @@ class Application_Model_Templates extends Zend_Db_Table{
                 
                 
             }else{
-                throw new Exception('Incorrect variable types passed to addTemplate: expecting array of form data');
+                throw new Exception('Incorrect variable types passed to addPage: expecting array of form data');
             }
             
         }catch (Exception $e) {
-            echo 'Unable to addTemplate in Templates model: '.$e->getMessage();
+            echo 'Unable to addPage in Pages model: '.$e->getMessage();
         }
     }
     

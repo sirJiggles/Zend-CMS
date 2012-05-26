@@ -212,8 +212,11 @@ td { vertical-align: top; }
 .clear-both{
     clear:both;
     font-size:0em;
-    line-height: 0em;
-    
+    line-height: 0em; 
+}
+
+.hide{
+    display:none;
 }
 
 /* Info popups */
@@ -445,89 +448,25 @@ form select{
     width:150px;
 }
 
+/* ================= popup styles ================*/
+
+#popup-container{
+    width:100%;
+    height:100%;
+    position:absolute;
+    background-color: #000;
+    top:0px;
+    left:0px;
+}
+
+#popup-container #popup-inner{
+    width:400px;
+    margin:0px auto;
+    margin-top:50px;
+}
 
 /* =============== STYLES FOR THE CONTENT ON THE INDEX PAGE ============ */
 
-#left-content-col{
-    width:180px;
-    float:left;
-    height:87%;
-}
-
-#left-content-col ul{
-    list-style-type: none;
-    margin:0px;
-    padding:0px;
-}
-
-#left-content-col ul li{
-    margin-bottom:10px;
-}
-
-#left-content-col ul li a{
-    text-decoration:none;
-    outline:none;
-}
-
-#left-content-col ul li a:hover{
-    text-decoration:underline;
-}
-
-
-#bottom-container-home{
-    width:100%;
-    display:block;
-    float:left;
-    overflow: hidden;
-}
-
-#bottom-container-home ul{
-    list-style-type: none;
-    margin:0px;
-    padding:0px;
-    width:100%;
-    position:relative;
-    left:0px;
-    float:left;
-    display:block;
-}
-
-#bottom-container-home ul li{
-    height:50px;
-    background-color:#22B98F;
-    float:left;
-    margin-right:5px;
-    margin-top:5px;
-    padding:10px;
-     -moz-border-radius: 5px;
-    border-radius: 5px;
-}
-
-#bottom-container-home ul li h4{
-    margin:0px;
-    width:100%;
-}
-
-#bottom-container-home ul li a{
-    color:#a5eeda;
-    text-decoration: none;
-    outline:none;
-}
-
-#bottom-container-home ul li a:hover{
-    color:#a5eeda;
-    text-decoration: underline;
-    outline:none;
-}
-
-#bottom-container-home ul li a.move-icon{
-    display:block;
-    float:left;
-    width:100%;
-    height:20px;
-    text-decoration:none;
-    outline:none;
-}
 
 
 /* ==|== non-semantic helper classes ========================================

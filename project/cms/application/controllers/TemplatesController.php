@@ -188,8 +188,8 @@ class TemplatesController extends Cms_Controllers_Default
         // Sort the content_types before adding it back to the form
         $currentData = unserialize($currentTemplate->content_types);
         $newFormData = array();
-        foreach ($currentData as $key => $val){
-            $newFormData['content_'.$key] = $val[0];
+        foreach ($currentData as $currentItem){
+            $newFormData['content_'.$currentItem['type']] = $currentItem['amount'];
         }
         $newFormData['name'] = $currentTemplate->name;
         $newFormData['file'] = $currentTemplate->file;

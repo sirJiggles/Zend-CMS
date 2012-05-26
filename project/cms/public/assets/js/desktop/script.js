@@ -16,6 +16,7 @@ $(document).ready(function () {
 
     $.mobile.ajaxEnabled = false;
    
+   
    /*
    // Javascript for the homepage content scrolloing functionality
    if ($('#bottom-container-home').length > 0){

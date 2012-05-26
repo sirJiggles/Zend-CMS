@@ -1,42 +1,59 @@
+<h2>Pages</h2>
 
-    <div id="left-content-col">
-        <h3>Select a type of content</h3>
-        <?php if (isset($this->contentTypes)) : ?>
-            <?php foreach($this->contentTypes as $contentType): ?>
+<a href="index/add" title="Add Page" id="add-page-button">Add Page</a>
 
-                <ul>
-                    <li><a href="/cms/index/index/filter/<?php echo $contentType->id; ?>" id="content-select-<?php echo $contentType->name; ?>" title="<?php echo ucfirst($contentType->name); ?>"><?php echo ucfirst($contentType->name); ?></a></li>
-                </ul>
+<?php if ($this->pages) : ?>
+    <ul id="pages">
 
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
-
-
-    <div id="center-container-home">
-
-
-        <!-- this is the where the pages are going to go -->
-
-
-    </div>
-
-    <div id="bottom-container-home">
-        <?php if (isset($this->typeData)) : ?>
-            <ul>
-                <?php foreach($this->typeData as $item): ?>
-                    <li>
-                        <a href="#" class="move-icon">#</a>
-                        <h4><?php echo $item->ref; ?></h4>
-                        <a href="/cms/content/edit/id/<?php echo $item->id; ?>" title="Edit">Edit</a>
-                        <a href="/cms/content/remove-confirm/id/<?php echo $item->id;?>" title="Remove">Remove</a> 
-                    </li>
+        <?php
+            $i = 0;
+            foreach($this->pages as $page): 
+        ?>
+                
+            <li class="page-wrapper">
+                <h4><?php echo $page->name; ?></h4>
                 <?php
-                endforeach;
+                    $currentMapping = unserialize($page->content_assigned);
+                    /* 
+                     * gives us something like 
+                     * 
+                     * array[0] = array('type' = 7, 'value' = 0)
+                     *      [1] = array('type' = 7, 'value' = 0)
+                     *      [2] = array('type' = 3, 'value' = 0);
+                     * 
+                     * where type is the type of content and value is the content id
+                     * assigned to that type for this page (based on the template)
+                     */
+                    
+                    foreach($currentMapping as $map){
+                        echo '<ul>';
+                        $name = '';
+                        // get the name of the content type
+                        foreach($this->contentTypes as $contentType){
+                            if ($contentType->id == $map['type']){
+                                $name = $contentType->name;
+                                break;
+                            }
+                        }
+                        if ($name != ''){
+                            $class = ($map['value'] != 0) ? 'active' : '';
+                            echo '<li><a href="#" title="'.$name.'" '.$class.'>'.$name.'</a></li>';
+                        }
+                        echo '</ul>';
+                       
+                    }
+                    
                 ?>
-            </ul>
-        <?php endif; ?>
+            </li>
         
-    </div>
+        <?php
+            $i ++;
+            endforeach; 
+        ?>
 
+    </ul>
+<?php endif; ?>
 
+<div id="popup-container" class="hide">
+    
+</div>

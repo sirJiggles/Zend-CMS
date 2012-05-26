@@ -1,7 +1,7 @@
 <?php if ($this->contentType) : ?>
 
 <h2>Current Content: <?php echo $this->contentType->name; ?></h2>
-<p><a href="/cms/content/add/id/<?php echo $this->contentType->id; ?>" data-role="button" data-theme="a" data-icon="plus">Add Content</a></p>
+<p><a href="/cms/content/add/id/<?php echo $this->contentType->id; ?>" data-role="button" data-theme="a" data-icon="plus" title="Add <?php echo $this->contentType->name; ?>">Add <?php echo $this->contentType->name; ?></a></p>
 
 
     <!-- This is the table that contains all the content in the system for the content type  -->

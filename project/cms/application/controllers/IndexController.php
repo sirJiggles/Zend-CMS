@@ -35,6 +35,13 @@ class IndexController extends Cms_Controllers_Default
         if ($pages !== null){
             
             $this->view->pages = $pages;
+            
+            // Get all content types from the API to reduce the amount of calls
+            $contentTypes = $this->getFromApi('contenttypes');
+
+            $this->view->contentTypes = $contentTypes;
+ 
+            
         }
         
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
@@ -45,6 +52,7 @@ class IndexController extends Cms_Controllers_Default
      * This is where users can add pages to the system
      */
     public function addAction(){
+        
         
         $this->view->pageTitle = 'Add Page';
         
