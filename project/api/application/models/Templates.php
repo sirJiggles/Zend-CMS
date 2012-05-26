@@ -150,6 +150,73 @@ class Application_Model_Templates extends Zend_Db_Table{
                     
                     $this->update($formData, $where);
                     
+                    /*
+                     * The superadmins could have increased the amount of conternt types on 
+                     * existing pages so we need to get all pages and add / remove the
+                     * content assignment based on the template update
+                     */
+                    
+                    $pagesModel = new Application_Model_Pages();
+                    $allPages = $pagesModel->getAllPages();
+                    foreach($allPages as $page){
+                        // check if it uses this template
+                        if($page->template == $id){
+                            // Update the content assignment (this may leave some content unassigned)
+                            $contentAssignment = unserialize($page->content_assigned);
+                           
+                            // count the amount of each type in the new template
+                            $typeCountNew = array();
+                            foreach($newContentTypes as $templateAssignment){
+                                $typeCountNew[$templateAssignment['type']] = $templateAssignment['amount']; 
+                            }
+                            
+                            // rebuild the content assignment based on the amount
+                            // of new types for each field
+                            $newData = array();
+                            $typesUsed = array();
+                            foreach($contentAssignment as $map){
+                                // if the amount of types we have used is within the amount 
+                                // for that type in the template add it to the new data
+                                if($typesUsed[$map['type']] < $typeCountNew[$map['type']]){
+                                    $newData[] = array('type' => $map['type'],
+                                                       'value' => $map['value']);
+                                    if (!isset( $typesUsed[$map['type']])){
+                                         $typesUsed[$map['type']] = 1;
+                                    }else{
+                                        $typesUsed[$map['type']] = $typesUsed[$map['type']] + 1;
+                                    }
+                                    
+                                }
+                            }
+                            
+                            // now add any new types if we have not reached the quota for the 
+                            // amount of new types
+                            foreach($typesUsed as $type => $amountUsed){
+                                if ($amountUsed < $typeCountNew[$type]){
+                                    while($typesUsed[$type] <= $typeCountNew[$type]){
+                                        $newData[] = array('type' => $type,
+                                                            'value' => 0);
+                                        $typesUsed[$type] ++;
+                                         if (!isset( $typesUsed[$type])){
+                                            $typesUsed[$type] = 1;
+                                        }else{
+                                            $typesUsed[$type] = $typesUsed[$type] + 1;
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            $fakeData = array();
+                            $fakeData['name'] = $page->name;
+                            $fakeData['template'] = $page->template;
+                            $fakeData['content_assigned'] = serialize($newData);
+                            
+                            // Finally save this new map to the page
+                            $pagesModel->updatePage($fakeData, $page->id);
+                        }
+                    }
+                    
+                    
                     return true;
                 }else{
                     

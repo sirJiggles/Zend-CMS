@@ -173,6 +173,7 @@ class TemplatesController extends Cms_Controllers_Default
                     if ($updateAttempt == 'Name Taken'){
                         $this->_helper->flashMessenger->addMessage('That name is already taken, please try again');
                     }else{
+                        var_dump($updateAttempt);
                         $this->_helper->flashMessenger->addMessage('Unable to update template via the API');
                     }
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();

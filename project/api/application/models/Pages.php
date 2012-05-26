@@ -125,21 +125,13 @@ class Application_Model_Pages extends Zend_Db_Table{
                 if (!$nameTaken){
                     
                     $where = $this->getAdapter()->quoteInto('id = ?', $id);
-                    $newContentTypes = array();
-                    // Sort the content type form field
-                    foreach($formData as $field => $value){
-                        $parts = explode('_', $field);
-                        if ($parts[0] == 'content'){
-                            
-                            // append the id of contnt type as key and val as val
-                            $newContentTypes[$parts[1]] = $value;
-                            // remove this form field from the array
-                            unset($formData[$field]);
-                        }
-                    }
-                    // spoof the content_types value
-                    $formData['content_types'] = serialize($newContentTypes);
+                   
+                    if (!isset($formData['content_assigned'])){
+                        // fake the data here (reconstruction)
                     
+                        // spoof the content_types value
+                        $formData['content_assigned'] = 'something';
+                    }
                     
                     $this->update($formData, $where);
                     
