@@ -221,7 +221,7 @@ class ContentTypeFieldsControllerTest extends ControllerTestCase
          * Get the items from this content type to make sure there are not
          * now teo with the same name
          */
-        $contentFields = $this->_contentTypeFieldsModel->getDataFieldsForDataType(1);
+        $contentFields = $this->_contentTypeFieldsModel->getContentFieldsForContentType(1);
         $duplicateFound = false;
         $namesFound = array();
         foreach($contentFields as $field){
