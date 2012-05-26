@@ -386,7 +386,7 @@ class ContentControllerTest extends ControllerTestCase
    
     // Lastly we are going to check that we can remove the content from the
     // syetem and thus clean up our mess!
-    public function testRemoveContentFoReal(){
+    public function testRemoveContentForReal(){
          // Get the current content from the database based on its ref
         $currentContent = $this->_contentModel->getByRef('unitTestingContentTwo');
         
@@ -405,7 +405,7 @@ class ContentControllerTest extends ControllerTestCase
     }
     
     // Cleanup by removing the duplicate content test
-    public function removeDuplicateContentCorrect(){
+    public function testRemoveDuplicateContentCorrect(){
         
         // Get the current content from the database based on its ref
         $currentContent = $this->_contentModel->getByRef('unitTestingContentDuplicate');
