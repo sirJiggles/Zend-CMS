@@ -82,6 +82,9 @@ class PagesController extends Api_Default
                 case 'update':
                     $data = $this->_pagesModel->updatePage(unserialize(base64_decode($_POST['data'])), $_POST['argOne']);
                     break;
+                case 'update-assignment':
+                    $data = $this->_pagesModel->updatePageAssignment(unserialize(base64_decode($_POST['data'])), $_POST['argOne'], $_POST['argTwo']);
+                    break;
                 case 'add':
                     $data = $this->_pagesModel->addPage(unserialize(base64_decode($_POST['data'])));
                     break;

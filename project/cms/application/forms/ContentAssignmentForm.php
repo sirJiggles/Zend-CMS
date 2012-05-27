@@ -13,18 +13,19 @@
 class Application_Form_ContentAssignmentForm extends Zend_Form
 {
     
-    protected $_page = '';
-    protected $_type = '';
+    protected $_content = '';
+    protected $_currentActive = '';
 
     public function init()
     {
         // Nothing in here ..
     }
     
-    public function setValues($page, $type){
-        // Set the page and the type for the form
-        $this->_page = $page;
-        $this->_type = $type;
+    public function setValues($content, $currentActive){
+        // Set the content so we can loop over it 
+        $this->_content = $content;
+        // Set the current active for this content so we can make it active
+        $this->_currentActive = $currentActive;
     }
     
     public function startForm(){
@@ -32,34 +33,33 @@ class Application_Form_ContentAssignmentForm extends Zend_Form
         $this->setAttrib('class', 'page');
         $this->setAttrib('id', 'conentAssignment');
         
-        $contentMap = unserialize($this->_page->content_assignment);
-        $contentType = $contentMap[$this->_type];
         
-
-        // Name input field
-        $name = new Zend_Form_Element_Text('name');
-        $name->setRequired(true)
-                ->addFilter(new Zend_Filter_HtmlEntities())
-                ->addErrorMessage('Name is required')
-                ->setLabel('Page name:');
+        $assignment = new Zend_Form_Element_Radio('assignment');
+        $assignment->setAttrib('data-native-menu', 'false')
+                ->setAttrib('data-theme', 'a')
+                ->setAttrib('class', 'hide')
+                ->setDecorators(array('ViewHelper',
+                                'Description',
+                                'Errors',
+                                array(array('Input' => 'HtmlTag'), array('tag' => 'dd')),
+                                array(array('row' => 'HtmlTag'), 
+                                      array('tag' => 'fieldset', 'data-role' => 'controlgroup'))));
+                                       
         
-        $this->addElement($name);
-       
-        
-        $templateElement = new Zend_Form_Element_Select('template');
-        $templateElement->setLabel('Template:')
-                ->setAttrib('data-native-menu', 'false')
-                ->setAttrib('data-theme', 'a');
-        
-        // Loop through all of the files in the templates directory and add
-        // them to the select box for template file
-        foreach ($this->_templates as $template){
+        // Loop through all the content for this type
+        foreach ($this->_content as $content){
             
-            $templateElement->addMultiOption($template->id, $template->name);
+            $assignment->addMultiOption($content->id, $content->ref);
             
         }
+        
+        // Set the currently active item
+        if ($this->_currentActive != 0){
+            $assignment->setValue($this->_currentActive);
+        }
+        
         // add to the form
-        $this->addElement($templateElement);
+        $this->addElement($assignment);
         
          // Submit input field
         $submit = new Zend_Form_Element_Submit('Save');

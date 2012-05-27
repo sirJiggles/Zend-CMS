@@ -151,6 +151,59 @@ class Application_Model_Pages extends Zend_Db_Table{
     }
     
     /*
+     * Function to update the content assignment for an existing page
+     * 
+     * @param array formData
+     * @param int pageNum
+     * @param int slot (cotent assignment ref)
+     * @return int operationResult
+     */
+    public function updatePageAssignment($formData, $id, $slot){
+        
+        try {
+            
+            if (is_array($formData) && is_numeric($id) && is_numeric($slot)){
+                
+                
+                $page = $this->getPageById($id);
+                
+                if ($page === null){
+                    return false;
+                }
+                
+                $currentAssignment = unserialize($page->content_assigned);
+                
+                // Set the new value for the content assignment
+                $currentAssignment[$slot]['value'] = $formData['assignment'];
+                
+                unset($formData['assignment']);
+                
+                // Set the data in the maner the db expects it
+                $newData = array();
+                $newData['name'] = $page->name;
+                $newData['template'] = $page->template;
+                $newData['content_assigned'] = serialize($currentAssignment);
+                
+                
+                // Run the database operations 
+                $where = $this->getAdapter()->quoteInto('id = ?', $id);
+                $this->update($newData, $where);
+
+                return true;
+               
+            }else{
+                throw new Exception('Incorrect variable types passed to updatePageAssignment: expecting array and int');
+            }
+            
+        }catch (Exception $e) {
+            echo 'Unable to updatePageAssignment in Pages model: '.$e->getMessage();
+        }
+        
+        
+        
+    }
+    
+    /*
      * Function for aadding pages to the system
      * 
      * @param array $postData

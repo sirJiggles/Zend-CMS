@@ -271,6 +271,10 @@ ul.errors{
     height: 30px !important;
 }
 
+.ui-radio{
+    width:100% !important;
+}
+
 .ui-btn-icon-notext .ui-btn-inner {
     padding: 5px 5px 2px 11px !important;
 }
@@ -446,6 +450,24 @@ form select{
     height:30px;
     color: #f990d2;
     width:150px;
+}
+
+/*=== Content assignment form styles ==============*/
+
+form#conentAssignment{
+    width:100%;
+}
+
+form#conentAssignment dd{
+    width:100%;
+}
+
+form#conentAssignment dl{
+    width:100%;
+}
+
+form#conentAssignment label{
+    width:100%;
 }
 
 /* ================= popup styles ================*/

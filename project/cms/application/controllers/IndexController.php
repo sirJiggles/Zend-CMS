@@ -109,13 +109,18 @@ class IndexController extends Cms_Controllers_Default
         
     }
     
-    public function editAssignmentAction(){
+    /*
+     * This is where users can actually assign content to content slots
+     */
+    public function editassignmentAction(){
         
         $this->view->pageTitle = 'Edit Content Assignment';
         
         // First check to make sure we got the id correctly for the page
         $pageId = $this->getRequest()->getParam('page');
-        $typeId = $this->getRequest()->getParam('id');
+        
+        // The type id is wo we know whcih item they have clicked on 0 for first 1 for second etc
+        $slot = $this->getRequest()->getParam('id');
         
         if (!isset($pageId) || !is_numeric($pageId)){
             $this->_helper->flashMessenger->addMessage('Could not edit page assignment due to lack of page id');
@@ -123,7 +128,7 @@ class IndexController extends Cms_Controllers_Default
             return;
         }
         
-        if (!isset($typeId) || !is_numeric($typeId)){
+        if (!isset($slot) || !is_numeric($slot)){
             $this->_helper->flashMessenger->addMessage('Could not edit page assignment due to lack of id');
             $this->_redirect('/');
             return;
@@ -136,13 +141,24 @@ class IndexController extends Cms_Controllers_Default
             $this->_redirect('/');
             return;
         }
+        
+        // Work out based on the type and the page what content is availible to them
+        $contentAssignment = unserialize($currentPage->content_assigned);
+        $currentItem = $contentAssignment[$slot];
+        $currentActive = $contentAssignment[$slot]['value'];
+        $contentTypeId = $currentItem['type'];
+        
+        
+        // Nw get all content for content type from system
+        $content = $this->getFromApi('/content/type/'.$contentTypeId);
 
         // Get an instance of the edit assignment form
         $assignmentForm = new Application_Form_ContentAssignmentForm();
-        $assignmentForm->setValues($currentPage, $typeId);
+        $assignmentForm->setValues($content, $currentActive);
         $assignmentForm->startForm();
         
-        $assignmentForm->setElementDecorators($this->_formDecorators);
+        // Send the content type id to the view
+        $this->view->typeId = $contentTypeId;
         
        
         // Check if post
@@ -152,16 +168,17 @@ class IndexController extends Cms_Controllers_Default
             if ($assignmentForm->isValid($_POST)) {
                 
                 // attempt to update content via API
-                $updateAttempt = $this->postToApi('/pages', 'update-assignment',  $assignmentForm->getValues(), $currentPage->id);
+                $updateAttempt = $this->postToApi('/pages', 'update-assignment',  $assignmentForm->getValues(), $currentPage->id, $slot);
                 
                 // check on status of update
                 if ($updateAttempt != 1){
                     $this->_helper->flashMessenger->addMessage('Unable to update page assignment via the API');
                     $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+                    $this->_redirect('/');
                     return;
                 }else{
                     $this->_helper->flashMessenger->addMessage('content assignment updated');
-                    $this->_redirect('/templates');
+                    $this->_redirect('/');
                     return;
                 }
 
@@ -169,7 +186,7 @@ class IndexController extends Cms_Controllers_Default
         }
         
         // Sort the content_assigned before adding it back to the form
-        $currentData = unserialize($page->content_assigned);
+        /*$currentData = unserialize($page->content_assigned);
         $newFormData = array();
         foreach ($currentData as $map){
             $newFormData['content_'.$key] = $val[0];
@@ -178,10 +195,10 @@ class IndexController extends Cms_Controllers_Default
         $newFormData['file'] = $currentTemplate->file;
         
         // add template data back to the form
-        $assignmentForm->populate($newFormData);
+        $assignmentForm->populate($newFormData);*/
         
         // send the form to the view
-        $this->view->templateForm = $templateForm;
+        $this->view->assignmentForm = $assignmentForm;
         
     }
     
