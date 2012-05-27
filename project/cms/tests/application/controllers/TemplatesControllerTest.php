@@ -80,25 +80,25 @@ class TemplatesControllerTest extends ControllerTestCase
         $this->dispatch('/templates/add');
         $this->assertRedirectTo('/error/not-the-droids'); 
     }
-    /*
+    
     // testsuperadmin has access to add
     public function testSuperAdminAccessAdd(){
-        $this->loginSuperAdmin();
         $this->dispatch('/templates/add');
         $this->assertNotRedirect();
         $this->assertController('templates');
         $this->assertAction('add');
         $this->assertResponseCode(200);
+        
+        
     }
+    
     
     // Test we can add templates to the system correctly
     public function testAddTemplateCorrect(){
-        // For this we need to spoof our form data so we will
-        // get this from one of the internal util functions for this class
-        $templateFields = $this->_getSpoofData();
-        
-        // Set the name of the first content type to be something memorable
-        $templateFields['name']=  'testAddTemplateOnePhpUnit';
+
+        // Set the name and file for the template we are about to create
+        $templateFields = array('name' => 'testTemplateOnePhpUnit',
+                                'file' => 'test.php');
         
         // Spoof the new details
         $this->request->setMethod('POST')
@@ -113,37 +113,216 @@ class TemplatesControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/templates');
         
         // Check the database to make sure the template is in there ok
-        $contentCheck = $this->_templateModel->getTemplateByName('testAddTemplateOnePhpUnit');
+        $contentCheck = $this->_templateModel->getTemplateByName('testTemplateOnePhpUnit');
         
         // check we got something back
         $this->assertNotEquals(null, $contentCheck, 'Could not get the fake template from the database, add correct failed');
-        
-        
+         
     }
-    */
-   
-   
     
-    /*
-     * This is our utils function for getting spoof form data
-     * 
-     * @return array formData
-     */
-    public function _getSpoofData(){
+    // Test that we can add a second template into the system
+    public function testAddSecondTemplateCorrect(){
+        // Set the name and file for the template we are about to create
+        $templateFields = array('name' => 'testTemplateTwoPhpUnit',
+                                'file' => 'test.php');
         
-        // Our return data array
+        // Spoof the new details
+        $this->request->setMethod('POST')
+             ->setPost($templateFields);
+
+        // Now set the dispatch
+        $this->dispatch('/templates/add');
+        
+        $this->assertAction('add');
+        
+        // Assert that we are redirected to the templates manage screen
+        $this->assertRedirectTo('/templates');
+        
+        // Check the database to make sure the template is in there ok
+        $contentCheck = $this->_templateModel->getTemplateByName('testTemplateTwoPhpUnit');
+        
+        // check we got something back
+        $this->assertNotEquals(null, $contentCheck, 'Could not get the fake template two from the database, add correct failed');
+         
+    }
+    
+    // Test name taken error message for the add template action
+    public function testNameTakenAdd(){
+        
+        // Create the fake data with the same name as the one we just setup
+        $templateFields = array('name' => 'testTemplateTwoPhpUnit',
+                                'file' => 'test.php');
+        
+        // Spoof the new details
+        $this->request->setMethod('POST')
+             ->setPost($templateFields);
+        
+        // Now set the dispatch
+        $this->dispatch('/templates/add');
+        
+        $this->assertAction('add');
+        
+        // Check for the error message on the page
+        $this->assertQueryContentContains('.ui-state-highlight p', 'That name is already taken, please try again');
+    }
+    
+    // Test the input required error messages for the add fucntionality
+    public function testRequiredInputsAdd(){
+        // Create fake data missing the name
+        $fakeData = array('name' => '', 'file' => 'test.php');
+        
+        // Spoof the new details
+        $this->request->setMethod('POST')
+             ->setPost($fakeData);
+        
+        // Now set the dispatch
+        $this->dispatch('/templates/add');
+        
+        $this->assertAction('add');
+        
+        $this->assertQueryContentContains('ul.errors li', 'Name is required');
+
+    }
+    
+    // Test that we can edit the first template (for this we will assign the first
+    // availible content type to the template)
+    public function testEditFirstTemplateCorrect(){
+        
+        // Get the current template so we can get the id of the one we are editing
+        $template = $this->_templateModel->getTemplateByName('testTemplateOnePhpUnit');
+        
+        // Get the content types 
+        $contentTypes = $this->_contentTypes->getAllContentTypes();
+        
         $fakeData = array();
         
-        // First we need to get the content types that are in the system
-        $contentTypes = $this->_contentTypes->getAllContentTypes();
-        $i = 0;
-        foreach($contentTypes as $type){
-            // Construct the form data in the format it expects
-            $fakeData['content_'.$type->id] = $i;
-            $i ++;
-        }
+        // Add 2 of the first content type to the template
+        $type = $contentTypes[1]->id;
+        $fakeData['content_'.$type] = 2;
+        
+        // Also change the name of the template
+        $fakeData['name'] = 'testTemplateOnePhpUnitRename';
         $fakeData['file'] = 'test.php';
-        $fakeData['name'] = 'some name';
+        
+        // Spoof the new details
+        $this->request->setMethod('POST')
+             ->setPost($fakeData);
+        
+        // Now set the dispatch
+        $this->dispatch('/templates/edit/id/'.$template->id);
+        
+        $this->assertAction('edit');
+        
+        // Get the template from the system to make sure it has been changed
+        $template = $this->_templateModel->getTemplateByName('testTemplateOnePhpUnitRename');
+        
+        $this->assertNotEquals(null, $template, 'Could not get the fake template one from the database, edit correct failed');
+         
+    }
+    
+    // Test the name take fucntionality for edit template
+    public function testNameTakenEdit(){
+        // Get the current template so we can get the id of the one we are editing
+        $template = $this->_templateModel->getTemplateByName('testTemplateOnePhpUnitRename');
+        
+        // Get the content types 
+        $contentTypes = $this->_contentTypes->getAllContentTypes();
+        
+        $fakeData = array();
+        
+        // Add 2 of the first content type to the template
+        $type = $contentTypes[1]->id;
+        $fakeData['content_'.$type] = 2;
+        // Also change the name of the template
+        $fakeData['name'] = 'testTemplateTwoPhpUnit';
+        $fakeData['file'] = 'test.php';
+        
+        // Spoof the new details
+        $this->request->setMethod('POST')
+             ->setPost($fakeData);
+        
+        // Now set the dispatch
+        $this->dispatch('/templates/edit/id/'.$template->id);
+        
+        $this->assertAction('edit');
+        
+        $this->assertQueryContentContains('.ui-state-highlight p', 'That name is already taken, please try again');
+    }
+    
+    // Test the possibility of the template ID not being passed to edit template
+    public function testIdPassedToEdit(){
+        $this->dispatch('/templates/edit/id/someIncorrectData');
+        $this->assertRedirectTo('/templates');
+    }
+    
+    // Test the template id passed to edit template action but the id not found
+    public function testIdPassedButNotFoundEdit(){
+        $this->dispatch('/templates/edit/id/999999999999999999');
+        $this->assertRedirectTo('/templates');
+    }
+    
+    // Test accessing the remove confirm action correctly
+    public function testRemoveConfirmCorrect(){
+        // Get the first template from the system to get its ID
+        $template = $this->_templateModel->getTemplateByName('testTemplateOnePhpUnitRename');
+        
+        // Hit the page
+        $this->dispatch('/templates/remove-confirm/id/'.$template->id);
+        $this->assertAction('remove-confirm');
+        $this->assertController('templates');
+        $this->assertNotRedirect();
+        $this->assertResponseCode(200);
+    }
+    
+    // Test passing in a incorrectly formated argument to the remove conifrm page
+    public function testIncorrectFormatArgumentRemoveConfirm(){
+        $this->dispatch('/templates/remove-confirm/id/someIncorrectData');
+        $this->assertRedirectTo('/templates');
+    }
+    
+    // Test passing in a number but for a template that cant be found on remove confirm
+    public function testTemplateNotFoundRemoveConfirm(){
+        $this->dispatch('/templates/remove-confirm/id/999999999999999999');
+        $this->assertRedirectTo('/templates');
+    }
+   
+    // Test actually removing the first template from the system
+    public function testRemoveTemplateCorrect(){
+        $template = $this->_templateModel->getTemplateByName('testTemplateOnePhpUnitRename');
+        
+        // Hit the page
+        $this->dispatch('/templates/remove/id/'.$template->id);
+        $this->assertRedirectTo('/templates');
+        
+        // Check the content has been removed
+        $template = $this->_templateModel->getTemplateByName('testTemplateOnePhpUnitRename');
+        $this->assertEquals(null, $template, 'Template still exists in system should have been removed');
+         
+    }
+    
+    // Test sending incorectly formated arguments to the remove action
+    public function testIncorrectArgsRemove(){
+        $this->dispatch('/templates/remove/id/someIncorrectData');
+        $this->assertRedirectTo('/templates');
+    }
+    
+    // Test sending the id for a template that does not exist to the remove action
+    public function testIdButNotFoundRemove(){
+        $this->dispatch('/templates/remove/id/999999999999999999');
+        $this->assertRedirectTo('/templates');
+    }
+    
+    // Lastly remove our second test template from the system
+    public function testRemoveSecondTemplate(){
+        $template = $this->_templateModel->getTemplateByName('testTemplateTwoPhpUnit');
+        
+        // Hit the page
+        $this->dispatch('/templates/remove/id/'.$template->id);
+        $this->assertRedirectTo('/templates');
+        
+        // Check the content has been removed
+        $template = $this->_templateModel->getTemplateByName('testTemplateTwoPhpUnit');
+        $this->assertEquals(null, $template, 'Template still exists in system should have been removed');
     }
     
 

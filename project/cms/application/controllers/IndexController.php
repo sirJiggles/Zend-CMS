@@ -59,6 +59,13 @@ class IndexController extends Cms_Controllers_Default
         // Get all the templates form the API
         $templates = $this->getFromApi('/templates');
         
+        if ($templates === null){
+            $this->_helper->flashMessenger->addMessage('No templates defined in the system');
+            $this->view->messages = $this->_helper->flashMessenger->getMessages();
+            $this->_redirect('/');
+            return;
+        }
+        
         // Get an instance of the page form
         $pageForm = new Application_Form_PageForm();
         $pageForm->setValues($templates);
@@ -243,6 +250,9 @@ class IndexController extends Cms_Controllers_Default
 
     }
     
+    /*
+     * This fucntion is used to get all the files in the templates directory
+     */
     public function _getFiles(){
         
         // Get a list of all the files in the template directory

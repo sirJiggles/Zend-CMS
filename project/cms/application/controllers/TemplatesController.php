@@ -270,6 +270,12 @@ class TemplatesController extends Cms_Controllers_Default
     
     public function _getFiles(){
         
+        // Check if in unit test mode, we cant siumalte reading file structure
+        if (defined('TEST_MODE')){
+            $files = array('test.php');
+            return $files;
+        }
+        
         // Get a list of all the files in the template directory
         $directory = realpath($_SERVER['DOCUMENT_ROOT'].'/../cms/templates');
 

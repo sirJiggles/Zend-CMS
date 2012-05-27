@@ -27,42 +27,44 @@ class Application_Form_PageForm extends Zend_Form
     
     public function startForm(){
     
-        $this->setAttrib('class', 'page');
-        $this->setAttrib('id', 'pageForm');
+        if ($this->_templates){
+            $this->setAttrib('class', 'page');
+            $this->setAttrib('id', 'pageForm');
 
-        // Name input field
-        $name = new Zend_Form_Element_Text('name');
-        $name->setRequired(true)
-                ->addFilter(new Zend_Filter_HtmlEntities())
-                ->addErrorMessage('Name is required')
-                ->setLabel('Page name:');
-        
-        $this->addElement($name);
-       
-        
-        $templateElement = new Zend_Form_Element_Select('template');
-        $templateElement->setLabel('Template:')
-                ->setAttrib('data-native-menu', 'false')
-                ->setAttrib('data-theme', 'a');
-        
-        // Loop through all of the files in the templates directory and add
-        // them to the select box for template file
-        foreach ($this->_templates as $template){
-            
-            $templateElement->addMultiOption($template->id, $template->name);
-            
+            // Name input field
+            $name = new Zend_Form_Element_Text('name');
+            $name->setRequired(true)
+                    ->addFilter(new Zend_Filter_HtmlEntities())
+                    ->addErrorMessage('Name is required')
+                    ->setLabel('Page name:');
+
+            $this->addElement($name);
+
+
+            $templateElement = new Zend_Form_Element_Select('template');
+            $templateElement->setLabel('Template:')
+                    ->setAttrib('data-native-menu', 'false')
+                    ->setAttrib('data-theme', 'a');
+
+            // Loop through all of the files in the templates directory and add
+            // them to the select box for template file
+            foreach ($this->_templates as $template){
+
+                $templateElement->addMultiOption($template->id, $template->name);
+
+            }
+            // add to the form
+            $this->addElement($templateElement);
+
+            // Submit input field
+            $submit = new Zend_Form_Element_Submit('Save');
+            $submit->setValue('Save')
+                    ->setAttrib('data-theme', 'e')
+                    ->setAttrib('class', 'submit');
+
+            // add the save button
+            $this->addElement($submit);
         }
-        // add to the form
-        $this->addElement($templateElement);
-        
-         // Submit input field
-        $submit = new Zend_Form_Element_Submit('Save');
-        $submit->setValue('Save')
-                ->setAttrib('data-theme', 'e')
-                ->setAttrib('class', 'submit');
-        
-        // add the save button
-        $this->addElement($submit);
         
     }
 }

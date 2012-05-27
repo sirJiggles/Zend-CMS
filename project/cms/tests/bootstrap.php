@@ -23,6 +23,9 @@ if (!defined('APPLICATION_PATH')){
 // Custom variables 
 define('TESTS_PATH', realpath(dirname(__FILE__)));
 
+// Create a flag for test mode for things we just cant test like readdir
+define('TEST_MODE', true);
+
 // Spoof the server name so we dont send out emails
 $_SERVER['SERVER_NAME'] = 'jiggly.dev';
 
