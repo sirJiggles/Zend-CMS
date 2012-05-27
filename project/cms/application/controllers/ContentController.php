@@ -143,6 +143,9 @@ class ContentController extends Cms_Controllers_Default
         // Send the form to the view baby
         $this->view->contentForm = $contentForm;
         
+        // Send the content name to the view
+        $this->view->contentName = $contentType->name;
+        
         // Add the content based on the form post
         if ($this->getRequest()->isPost()){
            
@@ -264,6 +267,9 @@ class ContentController extends Cms_Controllers_Default
         
         // send the form to the view
         $this->view->contentForm = $contentForm;
+        
+        // Send the ref of the current content to the view
+        $this->view->contentRef = $currentContent->ref;
         
     }
     

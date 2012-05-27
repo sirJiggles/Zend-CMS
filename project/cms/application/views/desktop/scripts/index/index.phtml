@@ -7,12 +7,13 @@
 
         <?php
             $i = 0;
-            foreach($this->pages as $page): 
+            foreach($this->pages as $page):
         ?>
                 
-            <li class="page-wrapper">
+            <li class="page-item">
+                <span>
                 <h4><?php echo $page->name; ?></h4>
-                <?php
+                <?php 
                     $currentMapping = unserialize($page->content_assigned);
                     /* 
                      * gives us something like 
@@ -24,9 +25,12 @@
                      * where type is the type of content and value is the content id
                      * assigned to that type for this page (based on the template)
                      */
+                
                     $i = 0;
+                    echo '<ul>';
                     foreach($currentMapping as $map){
-                        echo '<ul>';
+                        echo '<li class="lock">';
+                        echo '<span>';
                         $name = '';
                         
                         // get the name of the content type
@@ -37,16 +41,20 @@
                             }
                         }
                         if ($name != ''){
-                            $class = ($map['value'] != 0) ? 'active' : '';
-                            echo '<li><a href="index/editassignment/page/'.$page->id.'/id/'.$i.'" title="'.$name.'" '.$class.'>'.$name.'</a></li>';
+                            $class = ($map['value'] != 0) ? 'class="active"' : '';
+                            echo '<a href="index/editassignment/page/'.$page->id.'/id/'.$i.'" title="'.$name.'" '.$class.'>'.$name.'</a>';
                         }
                         $i ++;
-                        echo '</ul>';
+                        echo '</span>';
+                        echo '</li>';
                        
                     }
-                    
+                    echo '</ul>';
+                    echo '<div class="clear-both"></div>';
                 ?>
+                </span>
             </li>
+            
         
         <?php
             $i ++;

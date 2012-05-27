@@ -15,6 +15,23 @@ $(document).ready(function () {
     }
 
     $.mobile.ajaxEnabled = false;
+    
+    // Javascript for the sortable pages
+    if ($('#pages').length > 0){
+        
+        $('#pages').nestedSortable({
+            handle: 'span',
+            items: 'li',
+            opacity: 0.6,
+            toleranceElement: '> span',
+            listType: 'ul',
+            items: 'li:not(.lock)',
+            update: function(event, ui) {
+                //re calculate height of page li's
+                alert($('.page-item').height());
+            }
+        });
+    }
    
    
    /*
