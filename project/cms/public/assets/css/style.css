@@ -476,16 +476,27 @@ ul#pages{
     margin:0px;
     padding:0px;
     margin-top:10px;
+    width:350px;
+    display:block;
+    float:left;
 }
 
 ul#pages li.page-item{
     margin-bottom:10px;
-    background-color: #fff;
+    color:#000;
+    display:block;
+    float:left;
+    
+}
+
+ul#pages li.page-item span.item-wrapper{
+     background-color: #fff;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    color:#000;
     width:300px;
+    display:block;
+    float:left;
 }
 
 ul#pages li.page-item h4{

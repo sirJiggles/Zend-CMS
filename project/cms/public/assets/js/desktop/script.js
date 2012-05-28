@@ -26,9 +26,9 @@ $(document).ready(function () {
             toleranceElement: '> span',
             listType: 'ul',
             items: 'li:not(.lock)',
+            tabSize: 20,
             update: function(event, ui) {
-                //re calculate height of page li's
-                alert($('.page-item').height());
+                // run save code here
             }
         });
     }

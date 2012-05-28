@@ -1,6 +1,7 @@
 <h2>Pages</h2>
 
 <a href="index/add" title="Add Page" id="add-page-button">Add Page</a>
+<div class="clear-both"></div>
 
 <?php if ($this->pages) : ?>
     <ul id="pages">
@@ -11,7 +12,7 @@
         ?>
                 
             <li class="page-item">
-                <span>
+                <span class="item-wrapper">
                 <h4><?php echo $page->name; ?></h4>
                 <?php 
                     $currentMapping = unserialize($page->content_assigned);
@@ -50,7 +51,6 @@
                        
                     }
                     echo '</ul>';
-                    echo '<div class="clear-both"></div>';
                 ?>
                 </span>
             </li>
