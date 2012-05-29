@@ -146,6 +146,9 @@
 			}
 
 			var newList = document.createElement(o.listType);
+                        
+                        newList.setAttribute("class", 'subList'); //For Most Browsers
+                        newList.setAttribute("className", 'subList'); //For IE; harmless to other browsers.
 
 			this.beyondMaxLevels = 0;
 
