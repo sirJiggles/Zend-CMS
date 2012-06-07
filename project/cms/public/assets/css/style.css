@@ -490,7 +490,7 @@ ul#pages li.page-item{
 }
 
 ul#pages li.page-item span.item-wrapper{
-     background-color: #fff;
+     background-color: #ccc;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;

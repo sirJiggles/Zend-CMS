@@ -14,7 +14,7 @@ $(document).ready(function () {
         
     }
 
-    $.mobile.ajaxEnabled = false;
+    //$.mobile.ajaxEnabled = false;
     
     // Javascript for the sortable pages
     if ($('#pages').length > 0){
@@ -31,6 +31,8 @@ $(document).ready(function () {
                 // run save code here
             }
         });
+        
+        //$('#pages').s({opacity: 0.6});
     }
    
    
