@@ -6,6 +6,40 @@ var timer = null;
 var isIntervalSet = false;
 var totalWidthContentBar = 0;
 
+// Function to indent the pages
+function indentPage(object, event){
+    // if there is a page above this one o{n the same level
+    var previousPage = $(object).parent().parent().prev()[0];
+    if (typeof previousPage !== 'undefined'){
+        var parent = $(object).parent().parent();
+        
+        // Check of the previous page contains a sub ul
+        var ulCheck = $(previousPage).find('ul.sortable');
+        
+        if (typeof ulCheck[0] === 'undefined'){
+            $(previousPage).append('<ul class="sortable"></ul>');
+        }
+        
+        $(previousPage).find('ul.sortable').append('<li clas="page-item">'+parent.html()+'</li>');
+        // remove the old element
+        parent.remove();
+    }
+    // Apply sortable functionality
+    $('#pages ul.sortable').sortable({opacity: 0.6});
+}
+
+// Function to outdent the pages
+function outdentPage(object, event){
+    var containerPage = $(object).parent().parent().parent().parent();
+    var wrapper = $(object).parent().parent();
+    // add this item after current wrapping page
+    $('<li class="page-item">'+$(wrapper).html()+'</li>').insertAfter($(containerPage));
+    // Remove this item from current page
+    $(wrapper).remove();
+    // re-settup the sortable event
+    $('#pages ul.sortable').sortable({opacity: 0.6});
+}
+
 $(document).ready(function () {
 
     if ($('#flash-mssg-container').length > 0){
@@ -19,20 +53,39 @@ $(document).ready(function () {
     // Javascript for the sortable pages
     if ($('#pages').length > 0){
         
-        $('#pages').nestedSortable({
-            handle: 'span',
-            items: 'li',
-            opacity: 0.6,
-            toleranceElement: '> span',
-            listType: 'ul',
-            items: 'li:not(.lock)',
-            tabSize: 20,
-            update: function(event, ui) {
-                // run save code here
-            }
-        });
+        // Handle the indent page action
+        $('a.indent').click(function(e){
+            e.preventDefault();
+            indentPage(this, e);
+            
+            // add actions for buttons again
+            $('a.indent').click(function(e){
+                indentPage(this, e);
+            })
+             $('a.outdent').click(function(e){
+                outdentPage(this, e);
+            })
+            
+        })
         
-        //$('#pages').s({opacity: 0.6});
+        // Handle the outdent page action
+        $('a.outdent').click(function(e){
+            e.preventDefault();
+            outdentPage(this, e);
+            // add actions for buttons again
+            $('a.indent').click(function(e){
+                indentPage(this, e);
+            })
+             $('a.outdent').click(function(e){
+                outdentPage(this, e);
+            })
+            
+        })
+        
+        
+        $('#pages').sortable({opacity: 0.6});
+        $('#pages ul.sortable').sortable({opacity: 0.6});
+       
     }
    
    

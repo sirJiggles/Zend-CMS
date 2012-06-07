@@ -13,39 +13,41 @@
                 
             <li class="page-item">
                 <span class="item-wrapper">
-                <h4><?php echo $page->name; ?></h4>
-                <?php 
-                    $currentMapping = unserialize($page->content_assigned);
-                    /* 
-                     * gives us something like 
-                     * 
-                     * array[0] = array('type' = 7, 'value' = 0)
-                     *      [1] = array('type' = 7, 'value' = 0)
-                     *      [2] = array('type' = 3, 'value' = 0);
-                     * 
-                     * where type is the type of content and value is the content id
-                     * assigned to that type for this page (based on the template)
-                     */
-                
-                    $i = 0;
-                    echo '<ul>';
-                    foreach($currentMapping as $map){
-                        echo '<li class="lock">';
-                        echo '<span>';
-                        $name = '';
-                        
-                        // get the name of the content type
-                        foreach($this->contentTypes as $contentType){
-                            if ($contentType->id == $map['type']){
-                                $name = $contentType->name;
-                                break;
+                    <a class="indent" href="#">indent</a> | <a class="outdent" href="#">Outdent</a>
+                    <h4><?php echo $page->name; ?></h4>
+
+                    <?php 
+                        $currentMapping = unserialize($page->content_assigned);
+                        /* 
+                        * gives us something like 
+                        * 
+                        * array[0] = array('type' = 7, 'value' = 0)
+                        *      [1] = array('type' = 7, 'value' = 0)
+                        *      [2] = array('type' = 3, 'value' = 0);
+                        * 
+                        * where type is the type of content and value is the content id
+                        * assigned to that type for this page (based on the template)
+                        */
+
+                        $i = 0;
+                        echo '<ul>';
+                        foreach($currentMapping as $map){
+                            echo '<li class="lock">';
+                            echo '<span>';
+                            $name = '';
+
+                            // get the name of the content type
+                            foreach($this->contentTypes as $contentType){
+                                if ($contentType->id == $map['type']){
+                                    $name = $contentType->name;
+                                    break;
+                                }
                             }
-                        }
-                        if ($name != ''){
-                            $class = ($map['value'] != 0) ? 'class="active"' : '';
-                            echo '<a href="index/editassignment/page/'.$page->id.'/id/'.$i.'" title="'.$name.'" '.$class.'>'.$name.'</a>';
-                        }
-                        $i ++;
+                            if ($name != ''){
+                                $class = ($map['value'] != 0) ? 'class="active"' : '';
+                                echo '<a href="index/editassignment/page/'.$page->id.'/id/'.$i.'" title="'.$name.'" '.$class.'>'.$name.'</a>';
+                            }
+                            $i ++;
                         echo '</span>';
                         echo '</li>';
                        
