@@ -255,14 +255,16 @@ function performMouseStop(object, event, noPropagation){
 
                 _touchMove: function( event ) {
                     this._modifyEvent( event );
-                    this._mouseDrag( event );   
+                    performMouseDrag(this, event);
+                    //this._mouseMove( event );   
                 },
 
                 _touchEnd: function( event ) {
                     this.element
                     .unbind( "touchmove." + this.widgetName )
                     .unbind( "touchend." + this.widgetName );
-                    this._mouseStop( event ); 
+                    performMouseStop(this, event, 'some string');
+                    //this._mouseUp( event ); 
                 },
 
                 _modifyEvent: function( event ) {
