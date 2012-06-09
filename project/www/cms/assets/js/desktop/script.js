@@ -26,18 +26,35 @@ function indentPage(object, event){
     }
     // Apply sortable functionality
     $('#pages ul.sortable').sortable({opacity: 0.6});
+    
+    $('a.indent').click(function(e){
+        indentPage(this, e);
+    })
+        $('a.outdent').click(function(e){
+        outdentPage(this, e);
+    })
 }
 
 // Function to outdent the pages
 function outdentPage(object, event){
     var containerPage = $(object).parent().parent().parent().parent();
-    var wrapper = $(object).parent().parent();
-    // add this item after current wrapping page
-    $('<li class="page-item">'+$(wrapper).html()+'</li>').insertAfter($(containerPage));
-    // Remove this item from current page
-    $(wrapper).remove();
-    // re-settup the sortable event
-    $('#pages ul.sortable').sortable({opacity: 0.6});
+
+    if (typeof containerPage !== 'undefined' && $(containerPage).hasClass('page-item')){
+        var wrapper = $(object).parent().parent();
+        // add this item after current wrapping page
+        $('<li class="page-item">'+$(wrapper).html()+'</li>').insertAfter($(containerPage));
+        // Remove this item from current page
+        $(wrapper).remove();
+        // re-settup the sortable event
+        $('#pages ul.sortable').sortable({opacity: 0.6});
+
+        $('a.indent').click(function(e){
+            indentPage(this, e);
+        })
+            $('a.outdent').click(function(e){
+            outdentPage(this, e);
+        })
+    }
 }
 
 $(document).ready(function () {
@@ -57,29 +74,12 @@ $(document).ready(function () {
         $('a.indent').click(function(e){
             e.preventDefault();
             indentPage(this, e);
-            
-            // add actions for buttons again
-            $('a.indent').click(function(e){
-                indentPage(this, e);
-            })
-             $('a.outdent').click(function(e){
-                outdentPage(this, e);
-            })
-            
         })
         
         // Handle the outdent page action
         $('a.outdent').click(function(e){
             e.preventDefault();
             outdentPage(this, e);
-            // add actions for buttons again
-            $('a.indent').click(function(e){
-                indentPage(this, e);
-            })
-             $('a.outdent').click(function(e){
-                outdentPage(this, e);
-            })
-            
         })
         
         
@@ -87,59 +87,6 @@ $(document).ready(function () {
         $('#pages ul.sortable').sortable({opacity: 0.6});
        
     }
-   
-   
-   /*
-   // Javascript for the homepage content scrolloing functionality
-   if ($('#bottom-container-home').length > 0){
-       
-       // Get all the li's in the ul and their width to work out the width of the ul
-       var liItems = $('#bottom-container-home').find('li');
-       
-       for(var i = 0; i < liItems.length; i ++){
-           // Get the width of the item
-           totalWidthContentBar = totalWidthContentBar + ($(liItems[i]).width() + 25);
-       }
-       $('#bottom-container-home ul').css('width', totalWidthContentBar);
-     
-
-        $('#bottom-container-home').mousemove(function(e) {
-            if (isIntervalSet) {
-                return;
-            }
-            timer = window.setInterval(function() {
-                var centerPoint = ($(window).width() / 2);
-                var windowWidth = $(window).width();
-                var moveAmount = 0;
-                var currentLeft = $('#bottom-container-home ul').css('left');
-                currentLeft = parseInt(currentLeft.replace('px', ''));
-                if ((e.pageX > (centerPoint + 120)) || (e.pageX < (centerPoint - 120))){
-                    if (e.pageX > centerPoint){
-                        if ( (windowWidth - currentLeft) <= (totalWidthContentBar  + 40)){
-                            moveAmount = currentLeft - 5;
-                        }else{
-                            moveAmount = currentLeft;
-                        }
-
-                    }else{
-                        if (currentLeft < 0){
-                            moveAmount = currentLeft + 5;
-                        }
-                    }
-                }else{
-                   moveAmount =  currentLeft;
-                }
-                //console.log(windowWidth);
-                $('#bottom-container-home ul').css('left', moveAmount);  
-            }, 10);
-            isIntervalSet = true;
-        }).mouseout(function() {
-            isIntervalSet = false;
-            window.clearTimeout(timer);
-            timer = null;
-        });
-
-   }*/
    
 })
 
