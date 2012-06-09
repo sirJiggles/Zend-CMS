@@ -48,7 +48,7 @@ $(document).ready(function () {
         
     }
 
-    //$.mobile.ajaxEnabled = false;
+    $.mobile.ajaxEnabled = false;
     
     // Javascript for the sortable pages
     if ($('#pages').length > 0){

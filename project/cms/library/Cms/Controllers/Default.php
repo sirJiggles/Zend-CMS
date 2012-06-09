@@ -26,17 +26,20 @@ class Cms_Controllers_Default extends Zend_Controller_Action
         $apiModel = new Application_Model_ApiCms();
         $this->_apiKey = $apiModel->getApiKey();
         
-        // Have to define the API Urls here as registery values cause phpunit to fail
-        switch(APPLICATION_ENV){
-            case 'development':
-                $apiUrl = 'http://api.jiggly.dev/';
-                break;
-            case 'staging':
-                break;
-            case 'production':
-            default:
-                $apiUrl = 'http://api.jigglycms.com/';
-                break;
+        // for test mode we have no server url so we need to set it here
+        if(defined('TEST_MODE')){
+            switch(APPLICATION_ENV){
+                case 'development':
+                    $apiUrl = 'http://api.jiggly.dev';
+                    break;
+                case 'production':
+                    $apiUrl = 'http://api.jigglycms.com';
+                    break;
+                
+            }
+        }else{
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+            $apiUrl = $protocol.'api.'.$_SERVER['HTTP_HOST'];
         }
         
         // Create the Zend Rest Client 
@@ -91,6 +94,7 @@ class Cms_Controllers_Default extends Zend_Controller_Action
                                       ->getBody();
                 
                 $data = $this->formatResonse($data, $format);
+                
                 
                 return $data;
             }

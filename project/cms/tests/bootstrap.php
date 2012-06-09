@@ -39,9 +39,7 @@ define('APPLICATION_ENV', 'production');
 
 // Ensure library/ is on include_path (we will just add all possible zf ones for now as deving on multiple machines)
 set_include_path(implode(PATH_SEPARATOR, array(
-    realpath('/library/Zend/1.11.11'),
-    realpath('/Subversion/libary/Zend/1.11.11'),
-    realpath('/home/gareth/Dropbox/library/Zend/1.11.11'),
+    realpath(APPLICATION_PATH . '/../../Zend-Framework/'),
     get_include_path(),
 )));
 

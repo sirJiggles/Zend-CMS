@@ -14,7 +14,7 @@
 
 // Define path to application directory
 defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(__FILE__)) . '/../application');
+    || define('APPLICATION_PATH', realpath(dirname(__FILE__)) . '/../../cms/application');
 
 // Define application environment
 defined('APPLICATION_ENV')
@@ -22,7 +22,7 @@ defined('APPLICATION_ENV')
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
-    //realpath(APPLICATION_PATH . '/../library'),
+    realpath(APPLICATION_PATH . '/../../Zend-Framework/'),
     get_include_path()
    
 )));
@@ -41,8 +41,3 @@ $application = new Zend_Application(
 
 $application->bootstrap()
             ->run();
-
-
-
-
-
