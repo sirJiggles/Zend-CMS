@@ -1,6 +1,8 @@
 <h2>Pages</h2>
 
 <a href="index/add" title="Add Page" id="add-page-button">Add Page</a>
+<a href="#" title="Change View" id="page-alt-view">Change view</a>
+
 <div class="clear-both"></div>
 
 <?php if ($this->pages) : ?>
@@ -13,7 +15,9 @@
                 
             <li class="page-item">
                 <span class="item-wrapper">
-                    <a class="indent" href="#">indent</a> | <a class="outdent" href="#">Outdent</a>
+                    <div class="page-level-controlls">
+                        <a class="indent" href="#">indent</a> | <a class="outdent" href="#">Outdent</a>
+                    </div>
                     <h4><?php echo $page->name; ?></h4>
 
                     <?php 
@@ -30,7 +34,7 @@
                         */
 
                         $i = 0;
-                        echo '<ul>';
+                        echo '<ul class="content-buttons">';
                         foreach($currentMapping as $map){
                             echo '<li class="lock">';
                             echo '<span>';

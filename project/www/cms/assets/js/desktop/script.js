@@ -2,9 +2,6 @@
  * Author: Gareth Fuller
  * 
  */
-var timer = null;
-var isIntervalSet = false;
-var totalWidthContentBar = 0;
 
 // Function to indent the pages
 function indentPage(object, event){
@@ -85,6 +82,14 @@ $(document).ready(function () {
         
         $('#pages').sortable({opacity: 0.6});
         $('#pages ul.sortable').sortable({opacity: 0.6});
+        
+        // Controlls to toggle list view and full view of pages
+        $('#page-alt-view').click(function(e){
+            e.preventDefault();
+            $('.content-buttons').toggle('slow', function() {
+            });
+                
+        })
        
     }
    
