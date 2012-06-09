@@ -17,19 +17,13 @@ function indentPage(object, event){
             $(previousPage).append('<ul class="sortable"></ul>');
         }
         
-        $(previousPage).find('ul.sortable').append('<li clas="page-item">'+parent.html()+'</li>');
+        $(previousPage).find('ul.sortable').append('<li class="page-item">'+parent.html()+'</li>');
         // remove the old element
         parent.remove();
+        saveStructure();
+        settupPages();
     }
-    // Apply sortable functionality
-    $('#pages ul.sortable').sortable({opacity: 0.6});
-    
-    $('a.indent').click(function(e){
-        indentPage(this, e);
-    })
-        $('a.outdent').click(function(e){
-        outdentPage(this, e);
-    })
+   
 }
 
 // Function to outdent the pages
@@ -42,16 +36,83 @@ function outdentPage(object, event){
         $('<li class="page-item">'+$(wrapper).html()+'</li>').insertAfter($(containerPage));
         // Remove this item from current page
         $(wrapper).remove();
-        // re-settup the sortable event
-        $('#pages ul.sortable').sortable({opacity: 0.6});
+        saveStructure();
+        settupPages();
 
-        $('a.indent').click(function(e){
-            indentPage(this, e);
-        })
-            $('a.outdent').click(function(e){
-            outdentPage(this, e);
-        })
     }
+}
+
+// Function for saving the page structure (at the moment we only go 6 levels deep)
+function saveStructure(){
+
+    var structure = '';
+    var mainPages = $('#pages > li.page-item');
+    
+    // Level one check 
+    for(var i = 0; i < mainPages.length; i++){
+        var mainPageId = $(mainPages[i]).find('.item-wrapper').attr('id');
+        structure = structure +'[1-'+mainPageId+']';
+        var pagesLvlTwo = $(mainPages[i]).children().find('> .page-item');
+        
+        // Level Two check
+        for (var j = 0; j < pagesLvlTwo.length; j++){
+            var pageLvlTwoId = $(pagesLvlTwo[j]).find('.item-wrapper').attr('id');
+            structure = structure +'[2-'+pageLvlTwoId+']';
+            var pagesLvlThree = $(pagesLvlTwo[j]).children().find('> .page-item');
+            
+            // Level Three check
+            for (var k = 0; k < pagesLvlThree.length; k++){
+                var pageLvlThreeId = $(pagesLvlThree[k]).find('.item-wrapper').attr('id');
+                structure = structure +'[3-'+pageLvlThreeId+']';
+                var pagesLvlFour = $(pagesLvlThree[k]).children().find('> .page-item');
+                
+                // Level Four check
+                for (var l = 0; l < pagesLvlFour.length; l++){
+                    var pageLvlFourId = $(pagesLvlFour[l]).find('.item-wrapper').attr('id');
+                    structure = structure +'[4-'+pageLvlFourId+']';
+                    var pagesLvlFive = $(pagesLvlFour[l]).children().find('> .page-item');
+                    
+                    // Level Five check
+                    for (var m = 0; m < pagesLvlFive.length; m++){
+                        var pageLvlFiveId = $(pagesLvlFive[m]).find('.item-wrapper').attr('id');
+                        structure = structure +'[5-'+pageLvlFiveId+']';
+                        var pagesLvlSix = $(pagesLvlFive[m]).children().find('> .page-item');
+                        
+                        // Level Five check
+                        for (var n = 0; n < pagesLvlSix.length; n++){
+                            var pageLvlSixId = $(pagesLvlSix[n]).find('.item-wrapper').attr('id');
+                            structure = structure +'[6-'+pageLvlSixId+']';
+                            
+                        } // End pages lvl 6
+                    } // End pages lvl 5
+                } // End pages lvl 4
+            }// End pages lvl three
+        }// End pages lvl two
+    } // End top lvl pages
+    
+    console.log(structure);
+    
+    //console.log(structureArray);
+}
+
+function settupPages(){
+    $('#pages').sortable({
+                        opacity: 0.6,
+                        update: function(event, ui) { saveStructure(); }
+                        });
+    $('#pages ul.sortable').sortable({
+                        opacity: 0.6,
+                        update: function(event, ui) { saveStructure(); }
+                        });
+    
+     $('a.indent').click(function(e){
+        e.preventDefault();
+        indentPage(this, e);
+    })
+        $('a.outdent').click(function(e){
+        e.preventDefault();
+        outdentPage(this, e);
+    })
 }
 
 $(document).ready(function () {
@@ -67,21 +128,7 @@ $(document).ready(function () {
     // Javascript for the sortable pages
     if ($('#pages').length > 0){
         
-        // Handle the indent page action
-        $('a.indent').click(function(e){
-            e.preventDefault();
-            indentPage(this, e);
-        })
-        
-        // Handle the outdent page action
-        $('a.outdent').click(function(e){
-            e.preventDefault();
-            outdentPage(this, e);
-        })
-        
-        
-        $('#pages').sortable({opacity: 0.6});
-        $('#pages ul.sortable').sortable({opacity: 0.6});
+        settupPages();
         
         // Controlls to toggle list view and full view of pages
         $('#page-alt-view').click(function(e){

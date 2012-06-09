@@ -393,16 +393,14 @@ ul#pages li ul li a.active{
     color:#fff;
 }
 
-ul#pages li.page-item ul li.page-item{
-    margin-top:10px;
-}
 
 ul#pages ul.sortable{
-    margin-top:10px;
+    margin-top:0px;
     margin-bottom:0px;
 }
 
 ul#pages ul.sortable li{
-    margin-bottom:10px;
+    margin-top:10px;
+    margin-bottom:0px;
 }
 
