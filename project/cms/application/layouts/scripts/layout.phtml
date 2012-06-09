@@ -37,8 +37,6 @@
         
         $this->headScript()->appendFile('/cms/assets/js/desktop/script.js');
         
-        echo $this->headLink();
-        echo $this->headScript();
     ?>
     
     <title>Jiggly CMS<?php if($this->pageTitle){ echo ' | '.$this->pageTitle; }?></title>
@@ -48,10 +46,18 @@
         <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
     <![endif]-->
     
+    <!--[if lt IE 9]>
+        <?php $this->headScript()->appendFile('/cms/assets/js/libs/html5shiv.js'); ?>>
+    <![endif]-->
+        
+    <?php
+        echo $this->headLink();
+        echo $this->headScript();
+    ?>
+    
     <meta name="description" content="Jiggly CMS, content management for the people!">
     <meta name="author" content="Gareth Fuller">
 
-    <!-- Mobile viewport optimized: j.mp/bplateviewport -->
     <meta name="viewport" content="width=device-width,initial-scale=1">
     
     
