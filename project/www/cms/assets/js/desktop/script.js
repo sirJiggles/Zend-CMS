@@ -6,9 +6,9 @@
 // Function to indent the pages
 function indentPage(object, event){
     // if there is a page above this one o{n the same level
-    var previousPage = $(object).parent().parent().prev()[0];
+    var previousPage = $(object).parent().parent().parent().prev()[0];
     if (typeof previousPage !== 'undefined'){
-        var parent = $(object).parent().parent();
+        var parent = $(object).parent().parent().parent();
         
         // Check of the previous page contains a sub ul
         var ulCheck = $(previousPage).find('ul.sortable');
@@ -34,10 +34,10 @@ function indentPage(object, event){
 
 // Function to outdent the pages
 function outdentPage(object, event){
-    var containerPage = $(object).parent().parent().parent().parent();
+    var containerPage = $(object).parent().parent().parent().parent().parent();
 
     if (typeof containerPage !== 'undefined' && $(containerPage).hasClass('page-item')){
-        var wrapper = $(object).parent().parent();
+        var wrapper = $(object).parent().parent().parent();
         // add this item after current wrapping page
         $('<li class="page-item">'+$(wrapper).html()+'</li>').insertAfter($(containerPage));
         // Remove this item from current page
