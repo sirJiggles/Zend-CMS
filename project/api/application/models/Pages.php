@@ -79,6 +79,31 @@ class Application_Model_Pages extends Zend_Db_Table{
             $where = $this->getAdapter()->quoteInto('id = ?', $id);
             $result = $this->delete($where);
             
+            // Remove page from structure
+            $structureModel = new Application_Model_Structure();
+            $currentStructure = $structureModel->getStructure();
+
+            $structure = unserialize($currentStructure->structure);
+            $pages = explode(':', $structure);
+            // Remove last one as no value
+            array_pop($pages);
+            // var to store new structure string
+            $structureNew = '';
+            
+            // Loop through the structure and re-assemble without the page we want to remove
+            foreach($pages as $page){
+
+                $parts = explode('-', $page);
+                $pageId = $parts[1];
+                $level = $parts[0];
+                if ($pageId != $id){
+                    $structureNew .= ':'.$level.'-'.$pageId;
+                }
+                
+            }
+            // Save the new structure using string generated
+            $structureModel->updateStructure($structureNew);
+            
             // return the right result based on weather we could remove it
             if ($result){
                 return true;
@@ -250,6 +275,18 @@ class Application_Model_Pages extends Zend_Db_Table{
                     
                     $newRow = $this->createRow($formData);
                     $newRow->save();
+                    
+                    $lastInsertId = $this->getAdapter()->lastInsertId();
+                    
+                    // Add the page to the site structure (at the top of the tree)
+                    $structureModel = new Application_Model_Structure();
+                    $currentStructure = $structureModel->getStructure();
+                    
+                    $structure = unserialize($currentStructure->structure);
+                    $structure = '0-'.$lastInsertId.':'. $structure;
+                    
+                    // Save the new structure
+                    $structureModel->updateStructure($structure);
                     
                     return true;
                 }else{

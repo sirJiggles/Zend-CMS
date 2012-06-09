@@ -144,6 +144,7 @@ class IndexController extends Cms_Controllers_Default
                 // Run the add template function response from the api
                 $addAction = $this->postToApi('/pages', 'add', $pageForm->getValues());
                 
+               
                 // Error checking
                 if ($addAction != 1){
                     
