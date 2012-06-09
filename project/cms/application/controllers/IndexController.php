@@ -32,17 +32,76 @@ class IndexController extends Cms_Controllers_Default
         // Get all of the pages from the system
         $pages = $this->getFromApi('/pages');
         
+
         if ($pages !== null){
-            
-            $this->view->pages = $pages;
             
             // Get all content types from the API to reduce the amount of calls
             $contentTypes = $this->getFromApi('contenttypes');
-
-            $this->view->contentTypes = $contentTypes;
- 
             
-        }
+            // Get the page structure from the API and reshuffle the pages
+            $structure = $this->getFromApi('/structure');
+            $structure = unserialize($structure->structure);
+            
+            // Break them down into pages
+            $structurePages = explode(':', $structure);
+            
+            // Remove the last one
+            array_pop($structurePages);
+            
+            
+            // Should not rly do html in the view, i know i know but there is enough logic to justify it ...
+            $finalString = '<ul id="pages">';
+            
+            $i = 0;
+            $ulOpen = false;
+            
+            foreach($structurePages as $structurePage){
+                
+                $partsCurrent = explode('-', $structurePage);
+                $currentLevel = $partsCurrent[0];
+                $pageId = $partsCurrent[1];
+                
+                $nextLevel = '';
+                
+                if (isset($structurePages[$i +1])){
+                    $partsNext = explode('-', $structurePages[$i +1]);
+                    $nextLevel = $partsNext[0];
+                }
+                
+                $element = $this->_generatePageElement($pages, $pageId, $contentTypes);
+                
+                if (is_string($element)){
+                    
+                    // Add element
+                    $finalString .= '<li class="page-item">';
+                    $finalString .= $element;
+                    
+                    // Work out if sub pages next
+                    if ($nextLevel != ''){
+                        if ($nextLevel > $currentLevel){
+                            $finalString .= '<ul class="sortable">';
+                            $ulOpen = true;
+                        }elseif($nextLevel == $currentLevel){
+                            $finalString .= '</li>';
+                        }
+                        else{
+                            $finalString .= '</ul></li>';
+                        }
+                    }
+
+                }
+               
+                
+                $i ++;
+                
+            } // End for each struture page
+            
+            $finalString .= '</ul>';
+            
+            $this->view->pageListString = $finalString;
+        
+        }// End if pages
+        
         
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
         
@@ -294,7 +353,80 @@ class IndexController extends Cms_Controllers_Default
         return $files;
         
     }
+    
+    /*
+     * This function takes the page id from the struture array and gives us the html
+     * for the page element in the list
+     * 
+     * As a note when we get the content map the format of the dat returned is as follows 
+     * gives us something like 
+     * 
+     * array[0] = array('type' = 7, 'value' = 0)
+     *      [1] = array('type' = 7, 'value' = 0)
+     *      [2] = array('type' = 3, 'value' = 0);
+     * 
+     * where type is the type of content and value is the content id
+     * assigned to that type for this page (based on the template)
+     * 
+     * @param object $pages
+     * @param int $pageId
+     * @param object $contenTypes
+     * @return string $element
+     */
+    public function _generatePageElement($pages, $pageId, $contentTypes){
+        // First generate the page element, for this we will need the page object by this ID
+        $pageFound = '';
+        foreach($pages as $page){
+            if ($page->id == $pageId){
+                $pageFound = $page;
+                break;
+            }
+        }
 
+        // Should never happen
+        if ($pageFound == ''){
+            return false;
+        }
+
+        
+        $element = '<span class="item-wrapper" id="'. $pageFound->id .'">';
+        $element .=     '<div class="page-level-controlls">';
+        $element .=         '<a class="indent" href="#">in</a> | <a class="outdent" href="#">out</a> | <a class="content-button-toggle" href="#" title="content assignment">Content</a>';                    
+        $element .=     '</div>';
+        $element .=     '<h4>'.$pageFound->name.'</h4>';
+
+        $currentMapping = unserialize($pageFound->content_assigned);
+
+        $i = 0;
+        $element .=     '<ul class="content-buttons">';
+
+        foreach($currentMapping as $map){
+            $element .=     '<li class="lock">';
+            $element .=         '<span>';
+
+            $name = '';
+
+            // get the name of the content type
+            foreach($contentTypes as $contentType){
+                if ($contentType->id == $map['type']){
+                    $name = $contentType->name;
+                    break;
+                }
+            }
+            if ($name != ''){
+                $class = ($map['value'] != 0) ? 'class="content-button active"' : 'class="content-button"';
+                $element .= '<a href="index/editassignment/page/'.$pageFound->id.'/id/'.$i.'" title="'.$name.'" '.$class.'>'.$name.'</a>';
+            }
+            $i ++;
+            $element .=     '</span>';
+            $element .= '</li>';
+
+        }
+        $element .= '</ul>';
+        $element .= '</span>';
+ 
+        return $element;
+    }
 
 
 }

@@ -1,71 +1,9 @@
 <h2>Pages</h2>
 
 <a href="index/add" title="Add Page" id="add-page-button">Add Page</a>
-<a href="#" title="Change View" id="page-alt-view">Change view</a>
 
 <div class="clear-both"></div>
 
-<?php if ($this->pages) : ?>
-    <ul id="pages">
-
-        <?php
-            $i = 0;
-            foreach($this->pages as $page):
-        ?>
-                
-            <li class="page-item">
-                <span class="item-wrapper" id="<?php echo $page->id; ?>">
-                    <div class="page-level-controlls">
-                        <a class="indent" href="#">indent</a> | <a class="outdent" href="#">Outdent</a>
-                    </div>
-                    <h4><?php echo $page->name; ?></h4>
-
-                    <?php 
-                        $currentMapping = unserialize($page->content_assigned);
-                        /* 
-                        * gives us something like 
-                        * 
-                        * array[0] = array('type' = 7, 'value' = 0)
-                        *      [1] = array('type' = 7, 'value' = 0)
-                        *      [2] = array('type' = 3, 'value' = 0);
-                        * 
-                        * where type is the type of content and value is the content id
-                        * assigned to that type for this page (based on the template)
-                        */
-
-                        $i = 0;
-                        echo '<ul class="content-buttons">';
-                        foreach($currentMapping as $map){
-                            echo '<li class="lock">';
-                            echo '<span>';
-                            $name = '';
-
-                            // get the name of the content type
-                            foreach($this->contentTypes as $contentType){
-                                if ($contentType->id == $map['type']){
-                                    $name = $contentType->name;
-                                    break;
-                                }
-                            }
-                            if ($name != ''){
-                                $class = ($map['value'] != 0) ? 'class="content-button active"' : 'class="content-button"';
-                                echo '<a href="index/editassignment/page/'.$page->id.'/id/'.$i.'" title="'.$name.'" '.$class.'>'.$name.'</a>';
-                            }
-                            $i ++;
-                        echo '</span>';
-                        echo '</li>';
-                       
-                    }
-                    echo '</ul>';
-                ?>
-                </span>
-            </li>
-            
-        
-        <?php
-            $i ++;
-            endforeach; 
-        ?>
-
-    </ul>
+<?php if ($this->pageListString) : ?>
+    <?php echo $this->pageListString; ?>
 <?php endif; ?>

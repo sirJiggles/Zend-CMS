@@ -30,6 +30,7 @@ class Access_Config extends Zend_Acl {
             'contenttypes', 
             'contenttypefields', 
             'templates',
+            'structure'
             );
         
         // Loop through the rolse and controllers and add them to the system

@@ -326,6 +326,10 @@ ul#pages li.page-item{
     
 }
 
+ul#pages .item-wrapper{
+    cursor: move;
+}
+
 ul#pages li.page-item span.item-wrapper{
      background-color: #fff;
     -webkit-border-radius: 5px;
@@ -372,6 +376,10 @@ ul#pages a.outdent{
 }
 
 ul#pages a.indent{
+    color:#000;
+}
+
+ul#pages a.content-button-toggle{
     color:#000;
 }
 

@@ -16,8 +16,8 @@ function indentPage(object, event){
         if (typeof ulCheck[0] === 'undefined'){
             $(previousPage).append('<ul class="sortable"></ul>');
         }
+        $(previousPage).find('> ul.sortable').append('<li class="page-item">'+parent.html()+'</li>');
         
-        $(previousPage).find('ul.sortable').append('<li class="page-item">'+parent.html()+'</li>');
         // remove the old element
         parent.remove();
         saveStructure();
@@ -51,37 +51,37 @@ function saveStructure(){
     // Level one check 
     for(var i = 0; i < mainPages.length; i++){
         var mainPageId = $(mainPages[i]).find('.item-wrapper').attr('id');
-        structure = structure +'[1-'+mainPageId+']';
+        structure = structure +'0-'+mainPageId+':';
         var pagesLvlTwo = $(mainPages[i]).children().find('> .page-item');
         
         // Level Two check
         for (var j = 0; j < pagesLvlTwo.length; j++){
             var pageLvlTwoId = $(pagesLvlTwo[j]).find('.item-wrapper').attr('id');
-            structure = structure +'[2-'+pageLvlTwoId+']';
+            structure = structure +'1-'+pageLvlTwoId+':';
             var pagesLvlThree = $(pagesLvlTwo[j]).children().find('> .page-item');
             
             // Level Three check
             for (var k = 0; k < pagesLvlThree.length; k++){
                 var pageLvlThreeId = $(pagesLvlThree[k]).find('.item-wrapper').attr('id');
-                structure = structure +'[3-'+pageLvlThreeId+']';
+                structure = structure +'2-'+pageLvlThreeId+':';
                 var pagesLvlFour = $(pagesLvlThree[k]).children().find('> .page-item');
                 
                 // Level Four check
                 for (var l = 0; l < pagesLvlFour.length; l++){
                     var pageLvlFourId = $(pagesLvlFour[l]).find('.item-wrapper').attr('id');
-                    structure = structure +'[4-'+pageLvlFourId+']';
+                    structure = structure +'3-'+pageLvlFourId+':';
                     var pagesLvlFive = $(pagesLvlFour[l]).children().find('> .page-item');
                     
                     // Level Five check
                     for (var m = 0; m < pagesLvlFive.length; m++){
                         var pageLvlFiveId = $(pagesLvlFive[m]).find('.item-wrapper').attr('id');
-                        structure = structure +'[5-'+pageLvlFiveId+']';
+                        structure = structure +'4-'+pageLvlFiveId+':';
                         var pagesLvlSix = $(pagesLvlFive[m]).children().find('> .page-item');
                         
                         // Level Five check
                         for (var n = 0; n < pagesLvlSix.length; n++){
                             var pageLvlSixId = $(pagesLvlSix[n]).find('.item-wrapper').attr('id');
-                            structure = structure +'[6-'+pageLvlSixId+']';
+                            structure = structure +'5-'+pageLvlSixId+':';
                             
                         } // End pages lvl 6
                     } // End pages lvl 5
@@ -90,9 +90,24 @@ function saveStructure(){
         }// End pages lvl two
     } // End top lvl pages
     
-    console.log(structure);
+    // Make an ajax request to the system saving the page structure
     
-    //console.log(structureArray);
+    // First get the domain including the protocol
+    var url = window.location.href;
+    url = url.split('/');
+    url = url[0] + '//' + url[2];
+    
+    // make the request
+    $.ajax({
+        url: url+'/cms/structure?structure='+structure,
+        statusCode: {
+            404: function() {
+            alert("unable to save to API");
+            }
+        }
+    }).done(function() { 
+        // complete
+    });
 }
 
 function settupPages(){
@@ -113,6 +128,14 @@ function settupPages(){
         e.preventDefault();
         outdentPage(this, e);
     })
+    
+    // Controlls to toggle list view and full view of pages
+    $('.content-button-toggle').unbind("click");
+    $('.content-button-toggle').click(function(e){
+        e.preventDefault();
+        $(this).parent().parent().find('.content-buttons').toggle('slow', function() {});
+
+    })
 }
 
 $(document).ready(function () {
@@ -129,15 +152,8 @@ $(document).ready(function () {
     if ($('#pages').length > 0){
         
         settupPages();
-        
-        // Controlls to toggle list view and full view of pages
-        $('#page-alt-view').click(function(e){
-            e.preventDefault();
-            $('.content-buttons').toggle('slow', function() {
-            });
-                
-        })
-       
+        $('.content-buttons').toggle('fast', function() {});
+
     }
    
 })
