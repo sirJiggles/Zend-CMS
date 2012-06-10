@@ -32,74 +32,76 @@ class IndexController extends Cms_Controllers_Default
         // Get all of the pages from the system
         $pages = $this->getFromApi('/pages');
         
+        if ($pages === null){
+            $this->_helper->flashMessenger->addMessage('No pages set up yet');
+            $this->view->messages = $this->_helper->flashMessenger->getMessages();
+            return;
+        }
 
-        if ($pages !== null){
             
-            // Get all content types from the API to reduce the amount of calls
-            $contentTypes = $this->getFromApi('contenttypes');
-            
-            // Get the page structure from the API and reshuffle the pages
-            $structure = $this->getFromApi('/structure');
-            $structure = unserialize($structure->structure);
-            
-            // Break them down into pages
-            $structurePages = explode(':', $structure);
-            
-            // Remove the last one
-            array_pop($structurePages);
-            
-            
-            // Should not rly do html in the view, i know i know but there is enough logic to justify it ...
-            $finalString = '<ul id="pages">';
-            
-            $i = 0;
-            
-            foreach($structurePages as $structurePage){
-                
-                $partsCurrent = explode('-', $structurePage);
-                $currentLevel = $partsCurrent[0];
-                $pageId = $partsCurrent[1];
-                
-                $nextLevel = '';
-                
-                if (isset($structurePages[$i +1])){
-                    $partsNext = explode('-', $structurePages[$i +1]);
-                    $nextLevel = $partsNext[0];
-                }
-                
-                $element = $this->_generatePageElement($pages, $pageId, $contentTypes);
-                
-                if (is_string($element)){
-                    
-                    // Add element
-                    $finalString .= '<li class="page-item">';
-                    $finalString .= $element;
-                    
-                    // Work out if sub pages next
-                    if ($nextLevel != ''){
-                        if ($nextLevel > $currentLevel){
-                            $finalString .= '<ul class="sortable">';
-                        }elseif($nextLevel == $currentLevel){
-                            $finalString .= '</li>';
-                        }else{
-                            $finalString .= '</ul></li>';
-                        }
+        // Get all content types from the API to reduce the amount of calls
+        $contentTypes = $this->getFromApi('contenttypes');
+
+        // Get the page structure from the API and reshuffle the pages
+        $structure = $this->getFromApi('/structure');
+        $structure = unserialize($structure->structure);
+
+        // Break them down into pages
+        $structurePages = explode(':', $structure);
+
+        // Remove the last one
+        array_pop($structurePages);
+
+
+        // Should not rly do html in the view, i know i know but there is enough logic to justify it ...
+        $finalString = '<ul id="pages">';
+
+        $i = 0;
+
+        foreach($structurePages as $structurePage){
+
+            $partsCurrent = explode('-', $structurePage);
+            $currentLevel = $partsCurrent[0];
+            $pageId = $partsCurrent[1];
+
+            $nextLevel = '';
+
+            if (isset($structurePages[$i +1])){
+                $partsNext = explode('-', $structurePages[$i +1]);
+                $nextLevel = $partsNext[0];
+            }
+
+            $element = $this->_generatePageElement($pages, $pageId, $contentTypes);
+
+            if (is_string($element)){
+
+                // Add element
+                $finalString .= '<li class="page-item">';
+                $finalString .= $element;
+
+                // Work out if sub pages next
+                if ($nextLevel != ''){
+                    if ($nextLevel > $currentLevel){
+                        $finalString .= '<ul class="sortable">';
+                    }elseif($nextLevel == $currentLevel){
+                        $finalString .= '</li>';
+                    }else{
+                        $finalString .= '</ul></li>';
                     }
-
                 }
-               
-                
-                $i ++;
-                
-            } // End for each struture page
-            
-            $finalString .= '</ul>';
-            
-            $this->view->pageListString = $finalString;
+
+            }
+
+
+            $i ++;
+
+        } // End for each struture page
+
+        $finalString .= '</ul>';
+
+        $this->view->pageListString = $finalString;
         
-        }// End if pages
-        
-        
+
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
         
     }

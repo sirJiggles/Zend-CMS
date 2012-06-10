@@ -69,6 +69,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
 
         $this->request->setPost(array());
         $this->request->setQuery(array());
+        
+        // Close the db connection (to stop overloading the database)
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->closeConnection();
     }
     
     /*

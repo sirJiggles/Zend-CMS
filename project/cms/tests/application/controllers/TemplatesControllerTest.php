@@ -323,6 +323,7 @@ class TemplatesControllerTest extends ControllerTestCase
         // Check the content has been removed
         $template = $this->_templateModel->getTemplateByName('testTemplateTwoPhpUnit');
         $this->assertEquals(null, $template, 'Template still exists in system should have been removed');
+
     }
     
 
