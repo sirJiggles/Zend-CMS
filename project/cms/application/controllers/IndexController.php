@@ -264,7 +264,7 @@ class IndexController extends Cms_Controllers_Default
         // First check to make sure we got the id correctly for the page
         $pageId = $this->getRequest()->getParam('page');
         
-        // The type id is wo we know whcih item they have clicked on 0 for first 1 for second etc
+        // The type id is so we know which item they have clicked on 0 for first 1 for second etc
         $slot = $this->getRequest()->getParam('id');
         
         if (!isset($pageId) || !is_numeric($pageId)){
@@ -289,12 +289,19 @@ class IndexController extends Cms_Controllers_Default
         
         // Work out based on the type and the page what content is availible to them
         $contentAssignment = unserialize($currentPage->content_assigned);
+        
+        // Check that the page has the slot passed
+        if (!isset($contentAssignment[$slot])){
+            $this->_helper->flashMessenger->addMessage('Cannot assign content into a slot that does not exist');
+            $this->_redirect('/');
+            return;
+        }
+        
         $currentItem = $contentAssignment[$slot];
         $currentActive = $contentAssignment[$slot]['value'];
         $contentTypeId = $currentItem['type'];
         
-        
-        // Nw get all content for content type from system
+        // Now get all content for content type from system
         $content = $this->getFromApi('/content/type/'.$contentTypeId);
 
         // Get an instance of the edit assignment form

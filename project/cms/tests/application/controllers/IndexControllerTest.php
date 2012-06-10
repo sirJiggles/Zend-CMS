@@ -19,6 +19,9 @@ require_once '../../api/application/models/Templates.php';
 // Require the pages model file
 require_once '../../api/application/models/Pages.php';
 
+// Require the content model from the API
+require_once '../../api/application/models/Content.php';
+
 
 class IndexControllerTest extends ControllerTestCase
 {
@@ -28,16 +31,29 @@ class IndexControllerTest extends ControllerTestCase
     // variable to hold the model instance for pages 
     protected $_pagesModel = '';
     
+    // variable to hold the model instance for content
+    protected $_contentModel = '';
+    
     
     public function setUp(){
-       // Set the parent up
-       parent::setUp();
+        // Set the parent up
+        parent::setUp();
        
-       // Get an instance of the templates model
-       $this->_templateModel = new Application_Model_Templates();
+        // Only get new instances of these if they have not been previously settup
+        if ($this->_templateModel == '' 
+            && $this->_pagesModel == '' 
+            && $this->_contentModel == ''){
+            
+            // Get an instance of the templates model
+            $this->_templateModel = new Application_Model_Templates();
+
+            // Get an instance of the pages model
+            $this->_pagesModel = new Application_Model_Pages();
+
+            // Get an instance of the conntent model
+            $this->_contentModel = new Application_Model_Content();
+        }
        
-       // Get an instance of the pages model
-       $this->_pagesModel = new Application_Model_Pages();
        
     }
     
@@ -308,6 +324,98 @@ class IndexControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/');
     }
     
+    
+    // Test editor has access to the ability to edit content assignment for a page
+    public function testEditorAbleToEditAssignment(){
+        $this->loginEditor();
+        // Get the page by page name
+        $page = $this->_pagesModel->getPageByName('pageRename');
+        // Check it is correct
+        $this->assertNotEquals(null, $page, 'Could not get the fake page from the database, test editor access content assignment failed');
+        
+        $this->dispatch('/index/editassignment/page/'.$page->id.'/id/0');
+        $this->assertController('index');
+        $this->assertAction('editassignment');
+        $this->assertResponseCode(200);
+    }
+    
+    // Test that the superadmin has the ability to edit the content assignment on a page
+    public function testSuperAdminAbleToEditAssignment(){
+        $this->loginSuperAdmin();
+        // Get the page by page name
+        $page = $this->_pagesModel->getPageByName('pageRename');
+        // Check it is correct
+        $this->assertNotEquals(null, $page, 'Could not get the fake page from the database, test superadmin access content assignment failed');
+        
+        $this->dispatch('/index/editassignment/page/'.$page->id.'/id/0');
+        $this->assertController('index');
+        $this->assertAction('editassignment');
+        $this->assertResponseCode(200);
+    }
+    
+    // Test that we can edit the content assignment for a page correctly
+    public function testEditAssignmentCorrect(){
+        // Get the page by page name
+        $page = $this->_pagesModel->getPageByName('pageRename');
+        // Check it is correct
+        $this->assertNotEquals(null, $page, 'Could not get the fake page from the database, test superadmin access content assignment failed');
+        
+        // Need to get all the content that is availible for this type from the api
+        $contentAssignment = unserialize($page->content_assigned);
+        $currentItem = $contentAssignment[0];
+        $contentTypeId = $currentItem['type'];
+        
+        // Now get all content for content type from system
+        $content = $this->_contentModel->getContentByType($contentTypeId);
+       
+        // Get the id of the first bit of availible content and set it so we use that one
+        $fakeData = array('assignment' => $content[0]->id);
+        
+        // Set the post
+        $this->request->setMethod('POST')
+             ->setPost($fakeData);
+        
+        $this->dispatch('/index/editassignment/page/'.$page->id.'/id/0');
+        $this->assertController('index');
+        $this->assertAction('editassignment');
+        
+        $this->assertRedirectTo('/');
+        
+        // Check the database to make sure we have saved the content assignment
+        $page = $this->_pagesModel->getPageByName('pageRename');
+        $contentAssignment = unserialize($page->content_assigned);
+        $currentItem = $contentAssignment[0];
+        
+        $this->assertEquals($content[0]->id, $currentItem['value'], 'Content assigned is different to what it should be: Edit assignment correct failed');
+        
+    }
+    
+    // Test passing in a incorrectly formated page to the edit assignment action
+    public function testIncorrectFormatArgumentEditAssignment(){
+        $this->dispatch('/index/editassignment/page/someIncorrectData/id/0');
+        $this->assertRedirectTo('/');
+    }
+    
+    // Test passing correct format but page not found to edit content assignment action
+    public function testPageNotFoundEditAssignment(){
+        $this->dispatch('/index/editassignment/page/999999999999999999/id/0');
+        $this->assertRedirectTo('/');
+    }
+    
+    // Test passing an incorrectly formated id to editassignment
+    public function testParseIncorrectFormatSlotEditAssignment(){
+        $page = $this->_pagesModel->getPageByName('pageRename');
+        $this->dispatch('/index/editassignment/page/'.$page->id.'/id/someIncorrectFormat');
+        $this->assertRedirectTo('/');
+    }
+    
+    // Test passing correctly formated slot id but slot not found edit assinment action
+    public function testParseSlotNotFoundEditAssignment(){
+        $page = $this->_pagesModel->getPageByName('pageRename');
+        $this->dispatch('/index/editassignment/page/'.$page->id.'/id/99999999999999999999');
+        $this->assertRedirectTo('/');
+    }
+    
     // Test the remove Editor has access to the remove confirm action
     public function testEditorCanRemoveConfirm(){
         $this->loginEditor();
@@ -356,7 +464,7 @@ class IndexControllerTest extends ControllerTestCase
     }
     
     // Test passing in a number but for a page that cant be found on remove confirm
-    public function testTemplateNotFoundRemoveConfirm(){
+    public function testPageNotFoundRemoveConfirm(){
         $this->dispatch('/index/remove-confirm/id/999999999999999999');
         $this->assertRedirectTo('/');
     }
