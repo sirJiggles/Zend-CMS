@@ -37,9 +37,7 @@ class ApiController extends Api_Default
             $this->returnData($data);
             
         }else{
-            $this->getResponse()
-            ->setHttpResponseCode(403)
-            ->appendBody("You do not have access to this data");
+            $this->returnNoAuth();
         }
 
     }
@@ -71,9 +69,7 @@ class ApiController extends Api_Default
             
         }else{
             
-            $this->getResponse()
-            //->setHttpResponseCode(403)
-            ->appendBody("You do not have access to this data");
+           $this->returnNoAuth();
         }
         
         
@@ -102,14 +98,10 @@ class ApiController extends Api_Default
                     break;
             }
             
-            $this->getResponse()
-                ->setHttpResponseCode(200)
-                ->appendBody($data);
+            $this->returnPostResult($data);
             
         }else{
-            $this->getResponse()
-            ->setHttpResponseCode(403)
-            ->appendBody("You do not have access to this data");
+            $this->returnNoAuth();
         }
 
     }

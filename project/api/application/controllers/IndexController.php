@@ -11,19 +11,21 @@
  * @package Controllers
  */
 
-class IndexController extends Zend_Controller_Action
+class IndexController extends Api_Default
 {
 
-    public function init()
-    {
-        /* Initialize action controller here */
+    public function init(){
+        
+        // Set up the Deafult controller 
+        parent::init();
+        $this->_helper->viewRenderer->setNoRender(true); 
     }
     
    
     public function indexAction()
     {
 
-        
+        $this->returnNoAuth();
         
     }
 

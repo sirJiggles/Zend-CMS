@@ -36,40 +36,45 @@ class ContentController extends Api_Default
 
     public function getAction()
     {
-
-        $data = 'Operation not found';
-
-        // Try Getting the Content by id, can also pass param to get part of content
-        if ($this->getRequest()->getParam('id')){
-
-            $data = $this->_contentModel->getContentById($this->getRequest()->getParam('id'));
+        if ($this->_isAdmin || $this->_isNormalUser){
             
-             // If the user wants to break the data down further they can here
-            if ($this->getRequest()->getParam('param')){
-                
-                $requestParam = $this->getRequest()->getParam('param');
-                
-                // if we have some data
-                if ($data !== null){
-                    $data = $data->toArray();
-                    $content = unserialize($data['content']);
-                    if (isset($content[$requestParam])){
-                        $returnData = $content[$requestParam];
+            $data = 'Operation not found';
+
+            // Try Getting the Content by id, can also pass param to get part of content
+            if ($this->getRequest()->getParam('id')){
+
+                $data = $this->_contentModel->getContentById($this->getRequest()->getParam('id'));
+
+                // If the user wants to break the data down further they can here
+                if ($this->getRequest()->getParam('param')){
+
+                    $requestParam = $this->getRequest()->getParam('param');
+
+                    // if we have some data
+                    if ($data !== null){
+                        $data = $data->toArray();
+                        $content = unserialize($data['content']);
+                        if (isset($content[$requestParam])){
+                            $returnData = $content[$requestParam];
+                        }
+
+                        // turn the data into a class
+                        $data = new stdClass();
+                        $data->data = $returnData;
                     }
-                    
-                    // turn the data into a class
-                    $data = new stdClass();
-                    $data->data = $returnData;
                 }
             }
-        }
 
-        // Get content by content type (returns all news articles for example)
-        if ($this->getRequest()->getParam('type')){
-            $data = $this->_contentModel->getContentByType($this->getRequest()->getParam('type')); 
-        }
+            // Get content by content type (returns all news articles for example)
+            if ($this->getRequest()->getParam('type')){
+                $data = $this->_contentModel->getContentByType($this->getRequest()->getParam('type')); 
+            }
 
-        $this->returnData($data);
+            $this->returnData($data);
+            
+        }else{
+            $this->returnNoAuth();
+        }
  
     }
     
@@ -96,14 +101,10 @@ class ContentController extends Api_Default
                     break;
             }
             
-            $this->getResponse()
-                ->setHttpResponseCode(200)
-                ->appendBody($data);
+            $this->returnPostResult($data);
             
         }else{
-            $this->getResponse()
-            ->setHttpResponseCode(403)
-            ->appendBody("You do not have access to this data");
+           $this->returnNoAuth();
         }
 
     }

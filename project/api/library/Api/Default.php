@@ -15,6 +15,7 @@ abstract class Api_Default extends Zend_Controller_Action{
     
     protected $_apiUsers = '';
     public $_isAdmin = false;
+    public $_isNormalUser = false;
     
     public function init(){
         // Get instance of the API model
@@ -23,6 +24,8 @@ abstract class Api_Default extends Zend_Controller_Action{
         $this->_apiUsers = $apiModel->getKeys();
         // Check if admin
         $this->checkIfAdmin();
+        // Check if normal user
+        $this->checkIfNormalUser();
     }
     
     
@@ -50,6 +53,33 @@ abstract class Api_Default extends Zend_Controller_Action{
         }
 
     }
+    
+    /*
+     * This function is used to check if the users is a normal user
+     */
+    public function checkIfNormalUser(){
+        
+        $apiKey = $this->getRequest()->getParam('key');
+
+        $foundUser = null;
+        
+        foreach ($this->_apiUsers as $user){
+            if ($apiKey == $user['key']){
+                $foundUser = $user;
+                break;
+            }
+        }
+        if ($foundUser !== null){
+            if ($foundUser['type'] == 2){
+                $this->_isNormalUser = true;
+            }else{
+                $this->_isNormalUser = false;
+            }
+        }
+        
+        
+    }
+    
     
     /*
      * This fucntion handles returning the data from the API
@@ -82,7 +112,7 @@ abstract class Api_Default extends Zend_Controller_Action{
             ->appendBody($data);
         }else{
             $this->getResponse()
-            ->setHttpResponseCode(200)
+            ->setHttpResponseCode(400)
             ->appendBody('No Content Found');
         }
                 
@@ -110,6 +140,28 @@ abstract class Api_Default extends Zend_Controller_Action{
             return $formattedData;
         }
     }
+    
+    /*
+     * This is the functon for returning all 403 errors from the API
+     */
+    public function returnNoAuth(){
+        $this->getResponse()
+            ->setHttpResponseCode(403)
+            ->appendBody("You do not have access to this data");
+    }
+    
+    /*
+     * This is function for returning the post data from the API
+     * the reason this is seperate is because it is usually just the 
+     * response like 1 for success or an error message etc
+     * 
+     * @param mixed $data
+     */
+    public function returnPostResult($data){
+        $this->getResponse()
+            ->setHttpResponseCode(200)
+            ->appendBody($data);
+    } 
     
     
 }

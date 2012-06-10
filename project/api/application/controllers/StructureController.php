@@ -30,9 +30,12 @@ class StructureController extends Api_Default
     // This function gets the structure of the pages
     public function indexAction()
     {
-        
-        $data = $this->_structureModel->getStructure();
-        $this->returnData($data);
+        if ($this->_isAdmin){
+            $data = $this->_structureModel->getStructure();
+            $this->returnData($data);
+        }else{
+            $this->returnNoAuth();
+        }
 
     }
 
@@ -43,20 +46,22 @@ class StructureController extends Api_Default
     
     public function postAction()
     {
+        if ($this->_isAdmin){
+            // Work out the type of action they want to perform
+            switch($_POST['operation']){
+                case 'update':
+                    $data = $this->_structureModel->updateStructure(unserialize(base64_decode($_POST['data'])));
+                    break;
+                default:
+                    $data = 'Operation not found';
+                    break;
+            }
+            
+            $this->returnPostResult($data);
 
-        // Work out the type of action they want to perform
-        switch($_POST['operation']){
-            case 'update':
-                $data = $this->_structureModel->updateStructure(unserialize(base64_decode($_POST['data'])));
-                break;
-            default:
-                $data = 'Operation not found';
-                break;
+        }else{
+            $this->returnNoAuth();
         }
-
-        $this->getResponse()
-            ->setHttpResponseCode(200)
-            ->appendBody($data);
 
     }
     
