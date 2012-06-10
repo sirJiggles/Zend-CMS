@@ -7,12 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <?php 
-        $this->headLink()->prependStylesheet('/cms/assets/css/mobile/jiggly.min.css')
-                         ->prependStylesheet('http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css')
-                         ->prependStylesheet("/cms/assets/css/style.css");
+        $this->headLink()->appendStylesheet('http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css')
+                         ->appendStylesheet('/cms/assets/css/mobile/jiggly.min.css')
+                         ->appendStylesheet("/cms/assets/css/style.css")
+                         ->appendStylesheet("/cms/assets/css/desktop/desktop.css");
 
-        $this->headScript()->prependFile("http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js")
-                           ->prependFile('/cms/assets/js/libs/jquery-1.6.2.min.js');
+        $this->headScript()->appendFile('/cms/assets/js/libs/jquery-1.6.2.min.js')
+                           ->appendFile("http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js");
+                           
 
         
         // Check if the current controller is content, if it is include the ckeditor shizzle
@@ -28,13 +30,11 @@
         }
         
         if ($currentController == 'index' && $currentAction == 'index'){
-            $this->headScript()->appendFile('http://code.jquery.com/ui/1.8.17/jquery-ui.min.js');
-            
-            //$this->headScript()->appendFile('/cms/assets/js/libs/nested-sortables.js');
+            $this->headScript()->appendFile('/cms/assets/js/libs/jquery-ui-custom.min.js');
             $this->headScript()->appendFile('/cms/assets/js/libs/touchpunch.js');
             
         }
-        
+        $this->headScript()->appendFile('/cms/assets/js/libs/global.js');
         $this->headScript()->appendFile('/cms/assets/js/desktop/script.js');
         
     ?>

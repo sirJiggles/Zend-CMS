@@ -16,13 +16,14 @@ if ($auth->hasIdentity()){
         
         $navForm = new Application_Form_MobileNavForm();
         
+        if ($identity->role == 'superadmin'){
+            $navForm->getElement('nav')->addMultiOption('contenttypes', 'Content Types');
+            $navForm->getElement('nav')->addMultiOption('templates', 'Templates');
+        }
+        
         if ($identity->role == 'admin' || $identity->role == 'superadmin'){
             $navForm->getElement('nav')->addMultiOption('user', 'Users');
             $navForm->getElement('nav')->addMultiOption('api', 'Api Users');
-        }
-        
-        if ($identity->role == 'superadmin'){
-            $navForm->getElement('nav')->addMultiOption('datatypes', 'Content Types');
         }
         
         // Need an instance of the controller to get acces to this
@@ -56,8 +57,8 @@ if ($auth->hasIdentity()){
                     case 'content':
                         $redirect = '/cms/content';
                         break;
-                    case 'datatypes':
-                        $redirect = '/cms/datatypes';
+                    case 'contenttypes':
+                        $redirect = '/cms/contenttypes';
                         break;
                     case 'user':
                         $redirect = '/cms/user';
@@ -68,8 +69,11 @@ if ($auth->hasIdentity()){
                     case 'logout':
                         $redirect = '/cms/user/logout';
                         break;
+                    case 'templates':
+                        $redirect = '/cms/templates';
+                        break;
                     default:
-                        $redirect = '/cms/home';
+                        $redirect = '/cms/';
                         break;
                 }
                 

@@ -35,7 +35,7 @@ CKEDITOR.editorConfig = function( config )
 
         config.toolbar_Basic =
         [
-            { name: 'bar two', items : ['Format', 'Paste', '-', 'PasteFromWord', '-', 'Table']},
+            { name: 'bar two', items : ['Format', 'Paste', '-', 'PasteFromWord', '-', 'Table', '-', 'Image']},
             '/',
             { name: 'bar one', items : ['Bold', 'Italic', 'Underline', '-', 'NumberedList', 'BulletedList', '-', 'JustifyLeft','JustifyCenter','JustifyRight', '-', 'Link', 'Unlink']}
         ];

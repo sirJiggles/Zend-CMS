@@ -23,7 +23,7 @@ class Application_Form_MobileNavForm extends Zend_Form
         $nav = new Zend_Form_Element_Select('nav');
         $nav->setLabel('Select page:')
                 ->addMultiOption('index', 'Home')
-                ->addMultiOption('content', 'Add Content')
+                ->addMultiOption('content', 'Content')
                 ->setAttrib('data-native-menu', 'false')
                 ->setAttrib('data-theme', 'a');
        

@@ -17,9 +17,9 @@
             <?php foreach($this->contentTypes as $contentType): ?>
                 <tr <?php echo ($i %2 ) ? 'class="odd"' : ''; ?> >
                     <td><?php echo $contentType->name; ?></td>
-                    <td class="center"><a data-role="button" data-theme="a" href="/cms/contenttypes/edit/id/<?php echo $contentType->id; ?>" title="Rename <?php echo $contentType->name; ?>">Rename</a></td>
-                    <td class="center"><a data-role="button" data-theme="a" data-icon="gear" href="/cms/contenttypefields/index/id/<?php echo $contentType->id; ?>" title="Edit Fields">Fields</a></td>
-                    <td class="center"><a data-role="button" data-theme="a" data-rel="dialog" data-icon="delete" id="<?php echo $contentType->name; ?>" href="/cms/contenttypes/remove-confirm/id/<?php echo $contentType->id; ?>" title="Remove <?php echo $contentType->name; ?>">Remove</a></td>
+                    <td class="center"><a data-role="button" data-iconpos="notext" data-theme="a" data-icon="gear" href="/cms/contenttypes/edit/id/<?php echo $contentType->id; ?>" title="Rename <?php echo $contentType->name; ?>"></a></td>
+                    <td class="center"><a data-role="button" data-iconpos="notext" data-theme="a" data-icon="gear" href="/cms/contenttypefields/index/id/<?php echo $contentType->id; ?>" title="Edit Fields"></a></td>
+                    <td class="center"><a data-role="button" data-iconpos="notext" data-theme="a" data-rel="dialog" data-icon="delete" id="<?php echo $contentType->name; ?>" href="/cms/contenttypes/remove-confirm/id/<?php echo $contentType->id; ?>" title="Remove <?php echo $contentType->name; ?>"></a></td>
                 </tr>
                 <?php $i ++; ?>
             <?php endforeach; ?>

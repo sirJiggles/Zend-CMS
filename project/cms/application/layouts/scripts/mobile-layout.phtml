@@ -1,34 +1,57 @@
-<!DOCTYPE html>
-<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
-<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
-<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
-
+<html>
 <head>
     <meta charset="utf-8">
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <?php 
-        $this->headLink()->prependStylesheet('/cms/assets/css/mobile/jiggly.min.css')
-                         ->prependStylesheet('http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css')
-                         ->prependStylesheet("/cms/assets/css/mobile/style.css");
-        echo $this->headLink();
-        $this->headScript()->prependFile("/cms/assets/js/mobile/script.js")
-                           ->prependFile("http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js")
-                           ->prependFile("/cms/assets/js/libs/jquery-1.6.2.min.js")
-                           ->prependFile("/cms/assets/js/libs/modernizr-2.0.6.min.js");
-        echo $this->headScript();
+        $this->headLink()->appendStylesheet('http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css')
+                         ->appendStylesheet('/cms/assets/css/mobile/jiggly.min.css')
+                         ->appendStylesheet("/cms/assets/css/style.css")
+                         ->appendStylesheet("/cms/assets/css/mobile/mobile.css");
+
+        $this->headScript()->appendFile('/cms/assets/js/libs/jquery-1.6.2.min.js')
+                           ->appendFile("http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js");
+                           
+
+        
+        // Check if the current controller is content, if it is include the ckeditor shizzle
+        $currentController = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+        $currentAction = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
+        
+        if ($currentController == 'content'){
+
+            $this->headScript()->appendFile('/cms/assets/ckeditor/ckeditor.js')
+                                ->appendFile('/cms/assets/ckeditor/config.js')
+                                ->appendFile('/cms/assets/ckeditor/lang/en-gb.js');
+            
+        }
+        
+        if ($currentController == 'index' && $currentAction == 'index'){
+            $this->headScript()->appendFile('/cms/assets/js/libs/jquery-ui-custom.min.js');
+            $this->headScript()->appendFile('/cms/assets/js/libs/touchpunch.js');
+            
+        }
+        $this->headScript()->appendFile('/cms/assets/js/libs/global.js');
+        $this->headScript()->appendFile('/cms/assets/js/mobile/script.js');
     ?>
     
     <title>Jiggly CMS<?php if($this->pageTitle){ echo ' | '.$this->pageTitle; }?></title>
     
-    <!--[if lt IE 7 ]>
+   <!--[if lt IE 7 ]>
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
         <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
     <![endif]-->
+    
+    <!--[if lt IE 9]>
+        <?php $this->headScript()->appendFile('/cms/assets/js/libs/html5shiv.js'); ?>>
+    <![endif]-->
+        
+    <?php
+        echo $this->headLink();
+        echo $this->headScript();
+    ?>
+    
     
     <meta name="description" content="Jiggly CMS, content management for the people!">
     <meta name="author" content="Gareth Fuller">

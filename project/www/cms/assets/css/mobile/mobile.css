@@ -1,0 +1,12 @@
+/*===================== Mobile specific styles =================*/
+
+table.generic td.center{
+    padding-left:9%;
+}
+
+form.nav-mobile{
+    float: right;
+    margin-right: 10px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}

@@ -124,11 +124,11 @@ ul.errors{
 }
 
 #page-wrapper{
-    height:100%;
+    
 }
 
 #content{
-    height:87%;
+    
 }
 
 
@@ -157,7 +157,7 @@ ul.errors{
 
 /*=============== Headings ==============*/
 h1{
-    font-size:20px !important;
+    font-size:20px;
 }
 
 h1 a{
@@ -169,6 +169,9 @@ h1 a{
 
 h2{
     color:#a5eeda;
+    font-size:18px;
+    margin-top:10px;
+    margin-bottom:10px;
 }
 
 
@@ -205,7 +208,7 @@ table.generic td.center{
 }
 
 table.generic td a{
-    margin:-5px !important;
+    margin:-5px;
 }
 
 /*==================== Form styes ====================*/
@@ -258,7 +261,7 @@ form input.submit{
 }
 
 form textarea{
-    background-color:#fff!important;
+    background-color: #fff!important;
     float:left;
     font-size: 16px;
     padding-left:10px;
@@ -285,11 +288,10 @@ form select{
     font-size: 16px;
     padding-left:10px;
     height:30px;
-    color: #f990d2;
     width:150px;
 }
 
-/*=== Content assignment form styles ==============*/
+/*======== Content assignment form styles ==============*/
 
 form#conentAssignment{
     width:100%;
