@@ -97,7 +97,7 @@ class Application_Model_Pages extends Zend_Db_Table{
                 $pageId = $parts[1];
                 $level = $parts[0];
                 if ($pageId != $id){
-                    $structureNew .= ':'.$level.'-'.$pageId;
+                    $structureNew .= $level.'-'.$pageId.':';
                 }
                 
             }
@@ -150,13 +150,8 @@ class Application_Model_Pages extends Zend_Db_Table{
                 if (!$nameTaken){
                     
                     $where = $this->getAdapter()->quoteInto('id = ?', $id);
-                   
-                    if (!isset($formData['content_assigned'])){
-                        // fake the data here (reconstruction)
                     
-                        // spoof the content_types value
-                        $formData['content_assigned'] = 'something';
-                    }
+                    unset($formData['template']);
                     
                     $this->update($formData, $where);
                     

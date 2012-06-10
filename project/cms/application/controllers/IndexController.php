@@ -2,7 +2,7 @@
 
 /*
  * This is where users can assign content to pages based on the content types allowed
- * within the template
+ * within the template, add pages, remove pages and edit pages
  * 
  * All code in this project is under the GNU general public licence, full 
  * terms and conditions can be found online: http://www.gnu.org/copyleft/gpl.html
@@ -53,7 +53,6 @@ class IndexController extends Cms_Controllers_Default
             $finalString = '<ul id="pages">';
             
             $i = 0;
-            $ulOpen = false;
             
             foreach($structurePages as $structurePage){
                 
@@ -80,11 +79,9 @@ class IndexController extends Cms_Controllers_Default
                     if ($nextLevel != ''){
                         if ($nextLevel > $currentLevel){
                             $finalString .= '<ul class="sortable">';
-                            $ulOpen = true;
                         }elseif($nextLevel == $currentLevel){
                             $finalString .= '</li>';
-                        }
-                        else{
+                        }else{
                             $finalString .= '</ul></li>';
                         }
                     }
@@ -170,6 +167,92 @@ class IndexController extends Cms_Controllers_Default
     }
     
     /*
+     * This is where users can edit pages (just the name) in the system
+     */
+    public function editAction(){
+        
+        
+        $this->view->pageTitle = 'Edit Page';
+        
+        // Get the id param (page id)
+        $id = $this->getRequest()->getParam('id');
+        
+        // If the get param was sent and is in the correct format
+        if (!isset($id) || !is_numeric($id)){
+            $this->_helper->flashMessenger->addMessage('Need page id to edit a page');
+            $this->view->messages = $this->_helper->flashMessenger->getMessages();
+            $this->_redirect('/');
+            return;
+        }
+        
+        // Get the page by the id from the API
+        $page = $this->getFromApi('/pages/'.$id);
+        if ($page === null){
+            $this->_helper->flashMessenger->addMessage('Unable to find page from API');
+            $this->view->messages = $this->_helper->flashMessenger->getMessages();
+            $this->_redirect('/');
+            return;
+        }
+        
+        // Get all the templates form the API
+        $templates = $this->getFromApi('/templates');
+        
+        if ($templates === null){
+            $this->_helper->flashMessenger->addMessage('No templates defined in the system');
+            $this->view->messages = $this->_helper->flashMessenger->getMessages();
+            $this->_redirect('/');
+            return;
+        }
+        
+        
+        // Get an instance of the page form
+        $pageForm = new Application_Form_PageForm();
+        $pageForm->setValues($templates);
+        $pageForm->startForm();
+
+        $pageForm->setElementDecorators($this->_formDecorators);
+        
+
+        // Add the template based on the form post
+        if ($this->getRequest()->isPost()){
+           
+            // Check if the form data is valid
+            if ($pageForm->isValid($_POST)) {
+                
+                // Run the edit template function response from the api
+                $updateAction = $this->postToApi('/pages', 'update', $pageForm->getValues(), $page->id);
+
+                // Error checking
+                if ($updateAction != 1){
+                    
+                    if ($updateAction == 'Name Taken'){
+                        $this->_helper->flashMessenger->addMessage('That page name is already taken, please try again');
+                    }else{
+                        $this->_helper->flashMessenger->addMessage('Could not edit page, please try again');
+                    }
+                    $this->view->messages = $this->_helper->flashMessenger->getCurrentMessages();
+
+                }else{
+                     // Set the flash message
+                    $this->_helper->flashMessenger->addMessage('Page edited');
+                    $this->view->messages = $this->_helper->flashMessenger->getMessages();
+                    $this->_redirect('/');
+                    return;
+                }
+                
+                return;
+            }
+        }
+
+        // Populate the page form with the name of the page
+        $pageForm->populate(array('name' => $page->name));
+        
+        // Send the form to the view
+        $this->view->pageForm = $pageForm;
+        
+    }
+    
+    /*
      * This is where users can actually assign content to content slots
      */
     public function editassignmentAction(){
@@ -245,18 +328,6 @@ class IndexController extends Cms_Controllers_Default
             }       
         }
         
-        // Sort the content_assigned before adding it back to the form
-        /*$currentData = unserialize($page->content_assigned);
-        $newFormData = array();
-        foreach ($currentData as $map){
-            $newFormData['content_'.$key] = $val[0];
-        }
-        $newFormData['name'] = $currentTemplate->name;
-        $newFormData['file'] = $currentTemplate->file;
-        
-        // add template data back to the form
-        $assignmentForm->populate($newFormData);*/
-        
         // send the form to the view
         $this->view->assignmentForm = $assignmentForm;
         
@@ -264,27 +335,27 @@ class IndexController extends Cms_Controllers_Default
     
    
     /*
-     * This is the view for confirming of the user wants to remove a template
+     * This is the view for confirming of the user wants to remove a page
      */
     public function removeConfirmAction(){
         
-        $this->view->pageTitle = 'Remove Template';
+        $this->view->pageTitle = 'Remove Page';
         
-        // Get the content by id
+        // Check to make sure get aram is set
         $id = $this->getRequest()->getParam('id');
         
         if (!isset($id) || !is_numeric($id)){
-            $this->_helper->flashMessenger->addMessage('You must pass a valid template id');
-            $this->_redirect('/templates');
+            $this->_helper->flashMessenger->addMessage('You must pass a valid page id');
+            $this->_redirect('/');
             return;
         }
         
-        // Get the content from the api based on the id
-        $template = $this->getFromApi('/templates/'.$id);
+        // Get the page from the api based on the id
+        $page = $this->getFromApi('/pages/'.$id);
         
-        if ($template === null){
-            $this->_helper->flashMessenger->addMessage('Unable to find template in API');
-            $this->_redirect('/templates');
+        if ($page === null){
+            $this->_helper->flashMessenger->addMessage('Unable to find page in API');
+            $this->_redirect('/');
             return;
         }
         
@@ -293,35 +364,36 @@ class IndexController extends Cms_Controllers_Default
         }else{
             $this->_helper->layout->setLayout('dialog');
         }
-
-        $this->view->template = $template;
+        
+        // Send the page to the view
+        $this->view->page = $page;
     }
     
     
     /*
-     * This is the actual process of removing a template from the system
+     * This is the actual process of removing a page from the system
      */
     public function removeAction(){
         
-        // get the id param passed
+        // Get the id param passed
         $id = $this->getRequest()->getParam('id');
         
         // Sanity check the param
         if (!isset($id) || !is_numeric($id)){
-            $this->_helper->flashMessenger->addMessage('You must pass a valid id to remove a template');
-            $this->_redirect('/templates');
+            $this->_helper->flashMessenger->addMessage('You must pass a valid id to remove a page');
+            $this->_redirect('/');
             return;
         }
         
-        // Attempt to remove the content from the api
-        $removeAction = $this->postToApi('/templates', 'remove', $id);
+        // Attempt to remove the page from the api
+        $removeAction = $this->postToApi('/pages', 'remove', $id);
 
         if ($removeAction == 1){
-            $this->_helper->flashMessenger->addMessage('Template removed from the system');
+            $this->_helper->flashMessenger->addMessage('Page removed from the system');
         }else{
-            $this->_helper->flashMessenger->addMessage('Could not find the template to remove');
+            $this->_helper->flashMessenger->addMessage('Could not find the page to remove');
         }
-        $this->_redirect('/templates');
+        $this->_redirect('/');
         return;
             
 
@@ -392,7 +464,11 @@ class IndexController extends Cms_Controllers_Default
         
         $element = '<span class="item-wrapper" id="'. $pageFound->id .'">';
         $element .=     '<div class="page-level-controlls">';
-        $element .=         '<a class="indent" href="#">in</a> | <a class="outdent" href="#">out</a> | <a class="content-button-toggle" href="#" title="content assignment">Content</a>';                    
+        $element .=         '<a class="indent" href="#">in</a> | ';
+        $element .=         '<a class="outdent" href="#">out</a> | ';
+        $element .=         '<a class="content-button-toggle" href="#" title="content assignment">C</a> | ';
+        $element .=         '<a title="Remove page" href="index/remove-confirm/id/'.$pageFound->id.'">R</a> | ';
+        $element .=         '<a title="Edit page" href="index/edit/id/'.$pageFound->id.'">E</a>';
         $element .=     '</div>';
         $element .=     '<h4>'.$pageFound->name.'</h4>';
 

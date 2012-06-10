@@ -28,6 +28,7 @@ class Application_Form_PageForm extends Zend_Form
     public function startForm(){
     
         if ($this->_templates){
+            
             $this->setAttrib('class', 'page');
             $this->setAttrib('id', 'pageForm');
 
@@ -39,28 +40,36 @@ class Application_Form_PageForm extends Zend_Form
                     ->setLabel('Page name:');
 
             $this->addElement($name);
+            
+            
+            $currentAction = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
+            
+            // Only show template assignment on add page not edit else content
+            // assignments get mesed up
+            if ($currentAction == 'add'){
+            
+                $templateElement = new Zend_Form_Element_Select('template');
+                $templateElement->setLabel('Template:')
+                        ->setAttrib('data-native-menu', 'false')
+                        ->setAttrib('data-theme', 'a');
 
+                // Loop through all of the files in the templates directory and add
+                // them to the select box for template file
+                foreach ($this->_templates as $template){
 
-            $templateElement = new Zend_Form_Element_Select('template');
-            $templateElement->setLabel('Template:')
-                    ->setAttrib('data-native-menu', 'false')
-                    ->setAttrib('data-theme', 'a');
+                    $templateElement->addMultiOption($template->id, $template->name);
 
-            // Loop through all of the files in the templates directory and add
-            // them to the select box for template file
-            foreach ($this->_templates as $template){
-
-                $templateElement->addMultiOption($template->id, $template->name);
-
+                }
+                // add to the form
+                $this->addElement($templateElement);
             }
-            // add to the form
-            $this->addElement($templateElement);
 
             // Submit input field
             $submit = new Zend_Form_Element_Submit('Save');
             $submit->setValue('Save')
                     ->setAttrib('data-theme', 'e')
                     ->setAttrib('class', 'submit');
+            
 
             // add the save button
             $this->addElement($submit);

@@ -371,17 +371,10 @@ ul#pages .page-level-controlls{
     margin-top:10px;
 }
 
-ul#pages a.outdent{
+ul#pages .page-level-controlls a{
     color:#000;
 }
 
-ul#pages a.indent{
-    color:#000;
-}
-
-ul#pages a.content-button-toggle{
-    color:#000;
-}
 
 ul#pages li ul li a.content-button{
     color:#000;
