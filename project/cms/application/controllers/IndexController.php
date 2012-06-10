@@ -401,33 +401,6 @@ class IndexController extends Cms_Controllers_Default
 
     }
     
-    /*
-     * This fucntion is used to get all the files in the templates directory
-     */
-    public function _getFiles(){
-        
-        // Get a list of all the files in the template directory
-        $directory = realpath($_SERVER['DOCUMENT_ROOT'].'/../cms/templates');
-
-        $handler = opendir($directory);
-        $files = array();
-
-        // open directory and walk through the filenames
-        while ($file = readdir($handler)) {
-            // if file isn't this directory or its parent, add it to the results
-            if ($file != "." && $file != "..") {
-                // check to make sure not file with . at start
-                if (substr($file, 0, 1) != "."){
-                    $files[] = $file;
-                }
-            }
-        }
-        // tidy up: close the handler
-        closedir($handler);
-        
-        return $files;
-        
-    }
     
     /*
      * This function takes the page id from the struture array and gives us the html
